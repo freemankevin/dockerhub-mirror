@@ -38,7 +38,7 @@
       "source": "library/nginx:1.29.4-alpine",
       "target": "ghcr.io/freemankevin/library__nginx:1.29.4-alpine",
       "version": "1.29.4-alpine",
-      "description": "Nginx 高性能 Web 服务器 (Alpine 版本)",
+      "description": "Nginx 高性能 Web 服务器",
       "repository": "library__nginx",
       "synced_at": "2026-01-22T06:11:43.950334+00:00"
     },
@@ -47,7 +47,7 @@
       "source": "library/rabbitmq:4.2.2-management-alpine",
       "target": "ghcr.io/freemankevin/library__rabbitmq:4.2.2-management-alpine",
       "version": "4.2.2-management-alpine",
-      "description": "RabbitMQ 消息队列管理版本",
+      "description": "RabbitMQ 消息队列管理",
       "repository": "library__rabbitmq",
       "synced_at": "2026-01-22T06:11:45.863670+00:00"
     },
