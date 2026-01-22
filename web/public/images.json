@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-01-22T03:43:43.313954+00:00",
+  "updated_at": "2026-01-22T06:12:10.185148+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
-  "total_count": 8,
-  "success_count": 8,
+  "total_count": 9,
+  "success_count": 9,
   "fail_count": 0,
   "images": [
     {
@@ -13,7 +13,7 @@
       "version": "9.2.4",
       "description": "Elasticsearch 搜索引擎和分析引擎",
       "repository": "library__elasticsearch",
-      "synced_at": "2026-01-22T03:43:07.043486+00:00"
+      "synced_at": "2026-01-22T06:11:39.230044+00:00"
     },
     {
       "name": "derklaro/minio",
@@ -22,7 +22,7 @@
       "version": "RELEASE.2025-10-15T17-29-55Z",
       "description": "MinIO 高性能对象存储",
       "repository": "derklaro__minio",
-      "synced_at": "2026-01-22T03:43:10.069315+00:00"
+      "synced_at": "2026-01-22T06:11:40.619388+00:00"
     },
     {
       "name": "nacos/nacos-server",
@@ -31,7 +31,7 @@
       "version": "v3.1.1",
       "description": "Nacos 服务发现和配置中心",
       "repository": "nacos__nacos-server",
-      "synced_at": "2026-01-22T03:43:13.098639+00:00"
+      "synced_at": "2026-01-22T06:11:42.036860+00:00"
     },
     {
       "name": "library/nginx",
@@ -40,7 +40,7 @@
       "version": "1.29.4-alpine",
       "description": "Nginx 高性能 Web 服务器 (Alpine 版本)",
       "repository": "library__nginx",
-      "synced_at": "2026-01-22T03:43:20.031851+00:00"
+      "synced_at": "2026-01-22T06:11:43.950334+00:00"
     },
     {
       "name": "library/rabbitmq",
@@ -49,7 +49,7 @@
       "version": "4.2.2-management-alpine",
       "description": "RabbitMQ 消息队列管理版本",
       "repository": "library__rabbitmq",
-      "synced_at": "2026-01-22T03:43:27.680937+00:00"
+      "synced_at": "2026-01-22T06:11:45.863670+00:00"
     },
     {
       "name": "library/redis",
@@ -58,7 +58,7 @@
       "version": "8.4.0",
       "description": "Redis 内存数据库",
       "repository": "library__redis",
-      "synced_at": "2026-01-22T03:43:33.856209+00:00"
+      "synced_at": "2026-01-22T06:11:47.731697+00:00"
     },
     {
       "name": "kartoza/geoserver",
@@ -67,7 +67,7 @@
       "version": "2.28.0",
       "description": "GeoServer 地理信息服务",
       "repository": "kartoza__geoserver",
-      "synced_at": "2026-01-22T03:43:39.027437+00:00"
+      "synced_at": "2026-01-22T06:11:49.126092+00:00"
     },
     {
       "name": "freelabspace/postgresql-postgis",
@@ -76,7 +76,16 @@
       "version": "18.1",
       "description": "PostgreSQL 数据库 with PostGIS 扩展",
       "repository": "freelabspace__postgresql-postgis",
-      "synced_at": "2026-01-22T03:43:43.313939+00:00"
+      "synced_at": "2026-01-22T06:11:50.652212+00:00"
+    },
+    {
+      "name": "freelabspace/postgresql-backup",
+      "source": "freelabspace/postgresql-backup:latest",
+      "target": "ghcr.io/freemankevin/freelabspace__postgresql-backup:latest",
+      "version": "latest",
+      "description": "PostgreSQL 备份工具",
+      "repository": "freelabspace__postgresql-backup",
+      "synced_at": "2026-01-22T06:12:10.185132+00:00"
     }
   ]
 }
