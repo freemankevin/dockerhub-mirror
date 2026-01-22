@@ -1,59 +1,40 @@
-# Docker 镜像清单配置
-# 每个镜像都需要配置 tag_pattern 来匹配版本号
-# 脚本会自动获取符合模式的最新版本
-
 images:
-  # 搜索引擎和数据库
-  - source: library/elasticsearch:9.2.3
-    enabled: true
-    description: Elasticsearch 搜索引擎和分析引擎
-    tag_pattern: '^[0-9]+\.[0-9]+\.[0-9]+$'
-
-  - source: derklaro/minio:RELEASE.2025-10-15T17-29-55Z
-    enabled: true
-    description: MinIO 高性能对象存储
-    tag_pattern: '^RELEASE\.[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}-[0-9]{2}-[0-9]{2}Z$'
-
-  - source: nacos/nacos-server:v3.1.1
-    enabled: true
-    description: Nacos 服务发现和配置中心
-    tag_pattern: '^v[0-9]+\.[0-9]+\.[0-9]+$'
-    exclude_pattern: '.*BETA.*|.*RC.*|.*SNAPSHOT.*'
-
-  # Web 服务
-  - source: library/nginx:1.29.4-alpine
-    enabled: true
-    description: Nginx 高性能 Web 服务器 (Alpine 版本)
-    tag_pattern: '^[0-9]+\.[0-9]+\.[0-9]+-alpine$'
-
-  # 消息队列
-  - source: library/rabbitmq:4.2.2-management-alpine
-    enabled: true
-    description: RabbitMQ 消息队列管理版本
-    tag_pattern: '^[0-9]+\.[0-9]+\.[0-9]+-management-alpine$'
-
-  # 缓存数据库
-  - source: library/redis:8.4.0
-    enabled: true
-    description: Redis 内存数据库
-    tag_pattern: '^[0-9]+\.[0-9]+\.[0-9]+$'
-    exclude_pattern: '.*bookworm.*|.*bullseye.*|.*alpine.*'
-
-  # GIS 地理信息
-  - source: kartoza/geoserver:2.28.0
-    enabled: true
-    description: GeoServer 地理信息服务
-    tag_pattern: '^[0-9]+\.[0-9]+\.[0-9]+$'
-    exclude_pattern: '.*--.*'
-
-  # 地理空间数据库
-  - source: freelabspace/postgresql-postgis:18.1
-    enabled: true
-    description: PostgreSQL 数据库 with PostGIS 扩展
-    tag_pattern: '^[0-9]+\.[0-9]+$'
-    exclude_pattern: '^buildcache-.*|^13\..*|^14\..*|^15\..*|^16\..*|^17\..*'
-
-# 配置选项
+- source: library/elasticsearch:9.2.4
+  enabled: true
+  description: Elasticsearch 搜索引擎和分析引擎
+  tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
+- source: derklaro/minio:RELEASE.2025-10-15T17-29-55Z
+  enabled: true
+  description: MinIO 高性能对象存储
+  tag_pattern: ^RELEASE\.[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}-[0-9]{2}-[0-9]{2}Z$
+- source: nacos/nacos-server:v3.1.1
+  enabled: true
+  description: Nacos 服务发现和配置中心
+  tag_pattern: ^v[0-9]+\.[0-9]+\.[0-9]+$
+  exclude_pattern: .*BETA.*|.*RC.*|.*SNAPSHOT.*
+- source: library/nginx:1.29.4-alpine
+  enabled: true
+  description: Nginx 高性能 Web 服务器 (Alpine 版本)
+  tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+-alpine$
+- source: library/rabbitmq:4.2.2-management-alpine
+  enabled: true
+  description: RabbitMQ 消息队列管理版本
+  tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+-management-alpine$
+- source: library/redis:8.4.0
+  enabled: true
+  description: Redis 内存数据库
+  tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
+  exclude_pattern: .*bookworm.*|.*bullseye.*|.*alpine.*
+- source: kartoza/geoserver:2.28.0
+  enabled: true
+  description: GeoServer 地理信息服务
+  tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
+  exclude_pattern: .*--.*
+- source: freelabspace/postgresql-postgis:18.1
+  enabled: true
+  description: PostgreSQL 数据库 with PostGIS 扩展
+  tag_pattern: ^[0-9]+\.[0-9]+$
+  exclude_pattern: ^buildcache-.*|^13\..*|^14\..*|^15\..*|^16\..*|^17\..*
 config:
   registry: ghcr.io
   owner: freemankevin
