@@ -1,0 +1,45 @@
+2026-01-22 18:40:59 - INFO - [92m✓[0m 加载清单文件: images-manifest.yml
+2026-01-22 18:40:59 - DEBUG - 获取 library/elasticsearch 的标签列表，页面: 1
+2026-01-22 18:41:02 - DEBUG - 获取 library/elasticsearch 的标签列表，页面: 2
+2026-01-22 18:41:03 - DEBUG - 获取 library/elasticsearch 的标签列表，页面: 3
+2026-01-22 18:41:04 - DEBUG - 获取 library/elasticsearch 的标签列表，页面: 4
+2026-01-22 18:41:05 - DEBUG - 找到 301 个匹配标签
+2026-01-22 18:41:05 - DEBUG - 找到 301 个匹配标签，最新: 9.2.4
+2026-01-22 18:41:05 - DEBUG - 获取 derklaro/minio 的标签列表，页面: 1
+2026-01-22 18:41:05 - DEBUG - 找到 1 个匹配标签
+2026-01-22 18:41:05 - DEBUG - 找到 1 个匹配标签，最新: RELEASE.2025-10-15T17-29-55Z
+2026-01-22 18:41:05 - DEBUG - 获取 nacos/nacos-server 的标签列表，页面: 1
+2026-01-22 18:41:06 - DEBUG - 找到 31 个匹配标签
+2026-01-22 18:41:06 - DEBUG - 找到 31 个匹配标签，最新: v3.1.1
+2026-01-22 18:41:06 - DEBUG - 获取 library/nginx 的标签列表，页面: 1
+2026-01-22 18:41:07 - DEBUG - 获取 library/nginx 的标签列表，页面: 2
+2026-01-22 18:41:08 - DEBUG - 获取 library/nginx 的标签列表，页面: 3
+2026-01-22 18:41:10 - DEBUG - 获取 library/nginx 的标签列表，页面: 4
+2026-01-22 18:41:11 - DEBUG - 获取 library/nginx 的标签列表，页面: 5
+2026-01-22 18:41:12 - DEBUG - 找到 19 个匹配标签
+2026-01-22 18:41:12 - DEBUG - 找到 19 个匹配标签，最新: 1.29.4-alpine
+2026-01-22 18:41:12 - DEBUG - 获取 library/rabbitmq 的标签列表，页面: 1
+2026-01-22 18:41:13 - DEBUG - 获取 library/rabbitmq 的标签列表，页面: 2
+2026-01-22 18:41:15 - DEBUG - 获取 library/rabbitmq 的标签列表，页面: 3
+2026-01-22 18:41:16 - DEBUG - 获取 library/rabbitmq 的标签列表，页面: 4
+2026-01-22 18:41:18 - DEBUG - 获取 library/rabbitmq 的标签列表，页面: 5
+2026-01-22 18:41:19 - DEBUG - 找到 69 个匹配标签
+2026-01-22 18:41:19 - DEBUG - 找到 69 个匹配标签，最新: 4.2.2-management-alpine
+2026-01-22 18:41:19 - DEBUG - 获取 library/redis 的标签列表，页面: 1
+2026-01-22 18:41:20 - DEBUG - 获取 library/redis 的标签列表，页面: 2
+2026-01-22 18:41:21 - DEBUG - 获取 library/redis 的标签列表，页面: 3
+2026-01-22 18:41:22 - DEBUG - 获取 library/redis 的标签列表，页面: 4
+2026-01-22 18:41:22 - DEBUG - 获取 library/redis 的标签列表，页面: 5
+2026-01-22 18:41:23 - DEBUG - 找到 68 个匹配标签
+2026-01-22 18:41:23 - DEBUG - 找到 68 个匹配标签，最新: 8.4.0
+2026-01-22 18:41:23 - DEBUG - 获取 kartoza/geoserver 的标签列表，页面: 1
+2026-01-22 18:41:24 - DEBUG - 获取 kartoza/geoserver 的标签列表，页面: 2
+2026-01-22 18:41:24 - DEBUG - 找到 49 个匹配标签
+2026-01-22 18:41:24 - DEBUG - 找到 49 个匹配标签，最新: 2.28.0
+2026-01-22 18:41:24 - DEBUG - 获取 freelabspace/postgresql-postgis 的标签列表，页面: 1
+2026-01-22 18:41:25 - DEBUG - 找到 16 个匹配标签
+2026-01-22 18:41:25 - DEBUG - 获取 freelabspace/postgresql-backup 的标签列表，页面: 1
+2026-01-22 18:41:25 - DEBUG - 找到 1 个匹配标签
+2026-01-22 18:41:25 - DEBUG - 找到 1 个匹配标签，最新: latest
+2026-01-22 18:41:42 - INFO - [92m✓[0m 加载清单文件: images-manifest.yml
+2026-01-22 18:42:03 - INFO - [92m✓[0m 清单已保存: images-manifest.yml

@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 动态镜像列表更新脚本
 自动检查 Docker Hub 中镜像的最新版本，并更新 images-manifest.yml
 """
 
 import sys
+import os
+
+# 设置标准输出编码为 UTF-8（解决 Windows 终端编码问题）
+if sys.platform == 'win32':
+    import codecs
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict')
+    sys.stderr = codecs.getwriter('utf-8')(sys.stderr.buffer, 'strict')
+
 import yaml
 import logging
 import argparse
@@ -120,14 +129,14 @@ class DockerHubAPI:
             self.logger.debug(f"版本号解析出错 {version_str}: {str(e)}")
             return (0, 0, 0)
     
-    def get_latest_version(self, repository: str, tag_pattern: str, 
-                          exclude_pattern: Optional[str] = None) -> Optional[str]:
-        """获取符合模式的最新版本"""
+    def get_all_matching_versions(self, repository: str, tag_pattern: str,
+                                   exclude_pattern: Optional[str] = None) -> list:
+        """获取符合模式的所有版本"""
         try:
             matching_tags = []
             page = 1
-            max_pages = 3  # 限制最大页数，避免过度请求
-            
+            max_pages = 5  # 限制最大页数，避免过度请求
+
             while page <= max_pages:
                 url = f"{self.base_url}/repositories/{repository}/tags"
                 params = {
@@ -135,17 +144,17 @@ class DockerHubAPI:
                     'page': page,
                     'ordering': 'last_updated'
                 }
-                
+
                 self.logger.debug(f"获取 {repository} 的标签列表，页面: {page}")
-                
+
                 response = self.session.get(url, params=params, timeout=30)
                 response.raise_for_status()
                 data = response.json()
-                
+
                 results = data.get('results', [])
                 if not results:
                     break
-                
+
                 # 筛选符合模式的版本
                 for tag in results:
                     tag_name = tag['name']
@@ -156,30 +165,42 @@ class DockerHubAPI:
                     if exclude_pattern and re.match(exclude_pattern, tag_name):
                         continue
                     matching_tags.append(tag_name)
-                
+
                 # 检查是否有下一页
                 if not data.get('next'):
                     break
-                
+
                 page += 1
-            
+
             if not matching_tags:
                 self.logger.warning(f"未找到符合模式的标签: {repository}")
-                return None
-            
-            # 排序并返回最新版本
+                return []
+
+            # 去重并排序
+            matching_tags = list(set(matching_tags))
             matching_tags.sort(key=self.version_key)
-            latest = matching_tags[-1]
-            
-            self.logger.debug(f"找到 {len(matching_tags)} 个匹配标签，最新: {latest}")
-            return latest
-            
+
+            self.logger.debug(f"找到 {len(matching_tags)} 个匹配标签")
+            return matching_tags
+
         except requests.RequestException as e:
             self.logger.error(f"获取版本信息失败 {repository}: {str(e)}")
-            return None
+            return []
         except Exception as e:
             self.logger.error(f"未知错误 {repository}: {str(e)}")
+            return []
+
+    def get_latest_version(self, repository: str, tag_pattern: str,
+                          exclude_pattern: Optional[str] = None) -> Optional[str]:
+        """获取符合模式的最新版本"""
+        matching_tags = self.get_all_matching_versions(repository, tag_pattern, exclude_pattern)
+
+        if not matching_tags:
             return None
+
+        latest = matching_tags[-1]
+        self.logger.debug(f"找到 {len(matching_tags)} 个匹配标签，最新: {latest}")
+        return latest
 
 # ==================== 清单管理 ====================
 
@@ -258,23 +279,52 @@ class ManifestManager:
             print(f"{COLOR_CYAN}[{idx}] {repository}{COLOR_RESET}")
             print(f"  📝 {description}")
             print(f"  📌 当前版本: {COLOR_YELLOW}{current_version}{COLOR_RESET}")
-            
-            # 获取最新版本
-            latest_version = api.get_latest_version(repository, tag_pattern, exclude_pattern)
-            
-            if latest_version:
-                if current_version != latest_version:
-                    print(f"  {COLOR_GREEN}🔄 发现更新: {latest_version}{COLOR_RESET}")
-                    if not dry_run:
-                        img['source'] = f"{repository}:{latest_version}"
-                    updated_count += 1
+
+            # 检查是否需要同步所有匹配版本
+            sync_all = img.get('sync_all_matching', False)
+
+            if sync_all:
+                # 获取所有匹配版本
+                all_versions = api.get_all_matching_versions(repository, tag_pattern, exclude_pattern)
+
+                if all_versions:
+                    # 检查 versions 是否有变化
+                    current_versions = img.get('versions', [])
+                    versions_changed = current_versions != all_versions
+
+                    if versions_changed:
+                        print(f"  {COLOR_GREEN}📋 找到 {len(all_versions)} 个匹配版本{COLOR_RESET}")
+                        print(f"  {COLOR_CYAN}  版本列表: {', '.join(all_versions)}{COLOR_RESET}")
+                        if not dry_run:
+                            img['versions'] = all_versions
+                            # 同时更新 source 为最新版本
+                            latest_version = all_versions[-1]
+                            img['source'] = f"{repository}:{latest_version}"
+                            print(f"  {COLOR_GREEN}🔄 已更新 versions 字段{COLOR_RESET}")
+                        updated_count += 1
+                    else:
+                        print(f"  {COLOR_GREEN}✓ versions 字段已是最新{COLOR_RESET}")
+                        unchanged_count += 1
                 else:
-                    print(f"  {COLOR_GREEN}✓ 已是最新版本{COLOR_RESET}")
-                    unchanged_count += 1
+                    print(f"  {COLOR_RED}✗ 无法获取匹配版本{COLOR_RESET}")
+                    failed_count += 1
             else:
-                print(f"  {COLOR_RED}✗ 无法获取最新版本{COLOR_RESET}")
-                failed_count += 1
-            
+                # 获取最新版本
+                latest_version = api.get_latest_version(repository, tag_pattern, exclude_pattern)
+
+                if latest_version:
+                    if current_version != latest_version:
+                        print(f"  {COLOR_GREEN}🔄 发现更新: {latest_version}{COLOR_RESET}")
+                        if not dry_run:
+                            img['source'] = f"{repository}:{latest_version}"
+                        updated_count += 1
+                    else:
+                        print(f"  {COLOR_GREEN}✓ 已是最新版本{COLOR_RESET}")
+                        unchanged_count += 1
+                else:
+                    print(f"  {COLOR_RED}✗ 无法获取最新版本{COLOR_RESET}")
+                    failed_count += 1
+
             print()
         
         # 更新配置

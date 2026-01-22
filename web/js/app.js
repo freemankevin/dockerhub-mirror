@@ -104,7 +104,7 @@ function createImageCard(img) {
   const displayVersion = normalizeVersion(img.version);
   
   return `
-    <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+    <div class="bg-white rounded-xl shadow-sm p-6 card-hover glass-card">
       <div class="flex items-start justify-between mb-4">
         <div class="flex-1">
           <h3 class="text-xl font-semibold text-gray-900 mb-2">${img.name.split('/').pop()}</h3>

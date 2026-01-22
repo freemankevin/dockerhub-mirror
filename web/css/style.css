@@ -4,7 +4,7 @@
 /* 全局样式 */
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #0a0a0a;
+  background: #ffffff;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -21,30 +21,30 @@ button, input, select, textarea {
   font-family: 'JetBrains Mono', 'Monaco', 'Menlo', 'Consolas', monospace !important;
   font-size: 13px;
   line-height: 1.6;
-  color: #d4d4d4;
+  color: #1f2937;
   font-weight: 400;
 }
 
 .terminal-prompt {
   font-family: 'JetBrains Mono', monospace !important;
-  color: #4ec9b0;
+  color: #22d3ee;
   user-select: none;
   font-weight: 500;
 }
 
 .terminal-command {
   font-family: 'JetBrains Mono', monospace !important;
-  color: #dcdcaa;
-  font-weight: 400;
+  color: #fbbf24;
+  font-weight: 500;
 }
 
 .version-select {
   font-family: 'JetBrains Mono', monospace !important;
 }
 
-/* 渐变背景 - 极客深色风格 */
+/* 渐变背景 - 深色风格，与footer统一 */
 .gradient-bg {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
   position: relative;
   overflow: hidden;
 }
@@ -59,17 +59,17 @@ button, input, select, textarea {
   background: 
     repeating-linear-gradient(
       0deg,
-      rgba(255, 255, 255, 0.03) 0px,
+      rgba(255, 255, 255, 0.02) 0px,
       transparent 1px,
       transparent 2px,
-      rgba(255, 255, 255, 0.03) 3px
+      rgba(255, 255, 255, 0.02) 3px
     ),
     repeating-linear-gradient(
       90deg,
-      rgba(255, 255, 255, 0.03) 0px,
+      rgba(255, 255, 255, 0.02) 0px,
       transparent 1px,
       transparent 2px,
-      rgba(255, 255, 255, 0.03) 3px
+      rgba(255, 255, 255, 0.02) 3px
     );
   pointer-events: none;
 }
@@ -89,11 +89,11 @@ button, input, select, textarea {
 @keyframes gradient-pulse {
   0%, 100% {
     transform: translate(0, 0);
-    opacity: 0.5;
+    opacity: 0.6;
   }
   50% {
     transform: translate(-25%, -25%);
-    opacity: 0.8;
+    opacity: 0.9;
   }
 }
 
@@ -102,7 +102,7 @@ button, input, select, textarea {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .card-hover::before {
@@ -112,7 +112,7 @@ button, input, select, textarea {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.12), transparent);
   transition: left 0.6s ease;
 }
 
@@ -122,8 +122,53 @@ button, input, select, textarea {
 
 .card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
-  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.12);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+/* 玻璃化效果 */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  position: relative;
+}
+
+.glass-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.12), transparent);
+  transition: left 0.6s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glass-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.glass-card:hover::after {
+  left: 100%;
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 
+    0 20px 40px -10px rgba(0, 0, 0, 0.12),
+    0 8px 16px -4px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 /* 徽章样式 */
@@ -143,31 +188,31 @@ button, input, select, textarea {
 
 .badge-blue {
   background: rgba(59, 130, 246, 0.15);
-  color: #3b82f6;
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #1d4ed8;
+  border: 1px solid rgba(59, 130, 246, 0.4);
 }
 
 .badge-blue:hover {
-  background: rgba(59, 130, 246, 0.25);
-  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.6);
   transform: translateY(-1px);
 }
 
 .badge-green {
   background: rgba(16, 185, 129, 0.15);
-  color: #10b981;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #047857;
+  border: 1px solid rgba(16, 185, 129, 0.4);
 }
 
 .badge-green:hover {
-  background: rgba(16, 185, 129, 0.25);
-  border-color: rgba(16, 185, 129, 0.5);
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.6);
   transform: translateY(-1px);
 }
 
 /* 骨架屏动画 */
 .skeleton {
-  background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
   background-size: 200% 100%;
   animation: loading 1.5s ease-in-out infinite;
 }
@@ -183,54 +228,111 @@ button, input, select, textarea {
 
 /* 搜索框样式 */
 .search-input {
-  background: rgba(0, 0, 0, 0.5);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  color: #e5e7eb;
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  color: #111827;
   font-size: 0.95rem;
   font-weight: 400;
   transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .search-input::placeholder {
-  color: #6b7280;
+  color: #9ca3af;
 }
 
 .search-input:hover {
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .search-input:focus {
   border-color: #3b82f6;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
   outline: none;
+  color: #111827;
+  background: rgba(255, 255, 255, 0.95);
 }
 
-/* 终端窗口样式 */
+/* 搜索框容器 - 玻璃化效果 */
+.search-container {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  position: relative;
+  overflow: hidden;
+}
+
+.search-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.12), transparent);
+  transition: left 0.6s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.search-container > * {
+  position: relative;
+  z-index: 1;
+}
+
+.search-container:hover::before {
+  left: 100%;
+}
+
+.search-container:hover {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 
+    0 20px 40px -10px rgba(0, 0, 0, 0.12),
+    0 8px 16px -4px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transform: translateY(-4px);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+/* 终端窗口样式 - 深色模式 */
 .terminal-window {
-  background: linear-gradient(180deg, #1e1e1e 0%, #1a1a1a 100%);
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 
-    0 0 0 1px rgba(255, 255, 255, 0.05),
-    0 10px 40px -10px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+    0 0 0 1px rgba(0, 0, 0, 0.3),
+    0 10px 40px -10px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
 }
 
 .terminal-window:hover {
   box-shadow: 
-    0 0 0 1px rgba(59, 130, 246, 0.2),
-    0 20px 50px -10px rgba(0, 0, 0, 0.6);
-  border-color: rgba(59, 130, 246, 0.3);
+    0 0 0 1px rgba(59, 130, 246, 0.3),
+    0 20px 50px -10px rgba(0, 0, 0, 0.5);
+  border-color: rgba(59, 130, 246, 0.4);
 }
 
 .terminal-header {
-  background: linear-gradient(90deg, #252525 0%, #2a2a2a 100%);
+  background: linear-gradient(90deg, #334155 0%, #1e293b 100%);
   padding: 10px 14px;
   display: flex;
   align-items: center;
   gap: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.terminal-header .text-gray-400 {
+  color: #94a3b8 !important;
 }
 
 .terminal-dot {
@@ -266,24 +368,26 @@ button, input, select, textarea {
   font-family: 'JetBrains Mono', 'Monaco', 'Menlo', monospace;
   font-size: 13px;
   line-height: 1.7;
-  color: #d4d4d4;
+  color: #e2e8f0;
   background: rgba(0, 0, 0, 0.3);
 }
 
-/* 复制按钮样式 */
+/* 复制按钮样式 - 深色模式 */
 .copy-button {
   transition: all 0.2s ease;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   padding: 4px 10px;
   font-weight: 500;
   letter-spacing: 0.5px;
+  color: #94a3b8;
 }
 
 .copy-button:hover {
   background: rgba(59, 130, 246, 0.2);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  color: #60a5fa;
 }
 
 .copy-button:active {
@@ -291,15 +395,15 @@ button, input, select, textarea {
 }
 
 .copy-button.copied {
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.2);
 }
 
-/* 版本选择器样式 */
+/* 版本选择器样式 - 深色模式 */
 .version-select {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #e5e7eb;
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #e2e8f0;
   padding: 0.375rem 0.75rem;
   border-radius: 6px;
   font-family: 'JetBrains Mono', monospace !important;
@@ -310,7 +414,7 @@ button, input, select, textarea {
   transition: all 0.2s ease;
   min-width: 100px;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
   background-position: right 10px center;
   background-repeat: no-repeat;
   background-size: 14px;
@@ -320,18 +424,20 @@ button, input, select, textarea {
 }
 
 .version-select:hover {
-  background: rgba(59, 130, 246, 0.15);
+  background: #334155;
   border-color: rgba(59, 130, 246, 0.4);
+  color: #e2e8f0;
 }
 
 .version-select:focus {
   border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  color: #e2e8f0;
 }
 
 .version-select option {
-  background: #1a1a1a;
-  color: #e5e7eb;
+  background: #1e293b;
+  color: #e2e8f0;
   padding: 8px 12px;
   font-family: 'JetBrains Mono', monospace;
   font-weight: 500;
@@ -363,7 +469,7 @@ button, input, select, textarea {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: #10b981;
+  color: #059669;
   font-size: 12px;
   font-weight: 500;
   animation: fadeIn 0.3s ease-out;
@@ -386,12 +492,12 @@ button, input, select, textarea {
   width: 32px;
   height: 32px;
   transition: all 0.3s ease;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .docker-logo:hover {
   transform: rotate(10deg) scale(1.1);
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
 }
 
 /* GitHub 角标样式 */
@@ -402,16 +508,16 @@ button, input, select, textarea {
   justify-content: center;
   width: 56px;
   height: 56px;
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 6px -1px rgba(96, 165, 250, 0.4);
 }
 
 .github-corner-link:hover {
   transform: translateY(-6px) scale(1.05);
-  box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.5);
+  box-shadow: 0 20px 25px -5px rgba(96, 165, 250, 0.6);
 }
 
 .github-corner-link::before {
@@ -488,4 +594,105 @@ footer a::before {
 
 footer a:hover::before {
   width: 100%;
+}
+
+/* 优化Footer中的灰色文字 */
+footer .text-gray-400 {
+  color: #d1d5db !important;
+}
+
+footer .text-gray-500 {
+  color: #9ca3af !important;
+}
+
+footer .text-gray-600 {
+  color: #9ca3af !important;
+}
+
+/* 优化卡片中的文字颜色 - 提高对比度 */
+.card-hover .text-gray-600 {
+  color: #4b5563 !important;
+}
+
+.card-hover .text-gray-500 {
+  color: #6b7280 !important;
+}
+
+.card-hover .text-gray-900 {
+  color: #111827 !important;
+}
+
+.card-hover .text-gray-400 {
+  color: #9ca3af !important;
+}
+
+/* 优化描述文字 */
+.card-hover h3 {
+  color: #111827 !important;
+}
+
+/* 优化时间戳文字 */
+.text-xs.text-gray-500 {
+  color: #6b7280 !important;
+}
+
+/* 优化空状态中的文字颜色 */
+#empty-state .text-gray-900 {
+  color: #111827 !important;
+}
+
+#empty-state .text-gray-500 {
+  color: #6b7280 !important;
+}
+
+/* 优化Header中的文字颜色 - 在深色背景上 */
+.gradient-bg .text-white {
+  color: #f8fafc !important;
+}
+
+.gradient-bg h1 {
+  color: #f8fafc !important;
+}
+
+.gradient-bg .text-gray-600 {
+  color: #cbd5e1 !important;
+}
+
+.gradient-bg .text-gray-500 {
+  color: #94a3b8 !important;
+}
+
+/* 优化统计卡片在深色背景下的样式 */
+.gradient-bg .bg-white {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gradient-bg .text-gray-900 {
+  color: #f8fafc !important;
+}
+
+.gradient-bg .bg-blue-100 {
+  background: rgba(59, 130, 246, 0.2) !important;
+}
+
+.gradient-bg .text-blue-600 {
+  color: #60a5fa !important;
+}
+
+.gradient-bg .bg-green-100 {
+  background: rgba(16, 185, 129, 0.2) !important;
+}
+
+.gradient-bg .text-green-600 {
+  color: #34d399 !important;
+}
+
+.gradient-bg .bg-purple-100 {
+  background: rgba(139, 92, 246, 0.2) !important;
+}
+
+.gradient-bg .text-purple-600 {
+  color: #a78bfa !important;
 }
