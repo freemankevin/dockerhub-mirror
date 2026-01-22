@@ -1,0 +1,82 @@
+{
+  "updated_at": "2026-01-22T03:33:01.982941Z",
+  "registry": "ghcr.io",
+  "owner": "freemankevin",
+  "total_count": 8,
+  "success_count": 8,
+  "fail_count": 5,
+  "images": [
+    {
+      "name": "derklaro/minio",
+      "source": "derklaro/minio:RELEASE.2025-10-15T17-29-55Z",
+      "target": "ghcr.io/freemankevin/derklaro__minio:RELEASE.2025-10-15T17-29-55Z",
+      "version": "RELEASE.2025-10-15T17-29-55Z",
+      "description": "MinIO 高性能对象存储",
+      "repository": "derklaro__minio",
+      "synced_at": "2026-01-22T03:30:37.033710Z"
+    },
+    {
+      "name": "nacos/nacos-server",
+      "source": "nacos/nacos-server:2.1.0-BETA",
+      "target": "ghcr.io/freemankevin/nacos__nacos-server:2.1.0-BETA",
+      "version": "2.1.0-BETA",
+      "description": "Nacos 服务发现和配置中心",
+      "repository": "nacos__nacos-server",
+      "synced_at": "2026-01-22T03:30:52.595296Z"
+    },
+    {
+      "name": "library/rabbitmq",
+      "source": "library/rabbitmq:4.2.2-management-alpine",
+      "target": "ghcr.io/freemankevin/library__rabbitmq:4.2.2-management-alpine",
+      "version": "4.2.2-management-alpine",
+      "description": "RabbitMQ 消息队列管理版本",
+      "repository": "library__rabbitmq",
+      "synced_at": "2026-01-22T03:30:57.468706Z"
+    },
+    {
+      "name": "library/mysql",
+      "source": "library/mysql:9.6.0-oraclelinux9",
+      "target": "ghcr.io/freemankevin/library__mysql:9.6.0-oraclelinux9",
+      "version": "9.6.0-oraclelinux9",
+      "description": "MySQL 关系型数据库",
+      "repository": "library__mysql",
+      "synced_at": "2026-01-22T03:31:21.385576Z"
+    },
+    {
+      "name": "library/postgres",
+      "source": "library/postgres:latest",
+      "target": "ghcr.io/freemankevin/library__postgres:latest",
+      "version": "latest",
+      "description": "PostgreSQL 数据库",
+      "repository": "library__postgres",
+      "synced_at": "2026-01-22T03:32:09.321142Z"
+    },
+    {
+      "name": "library/mongo",
+      "source": "library/mongo:8.2.3-noble",
+      "target": "ghcr.io/freemankevin/library__mongo:8.2.3-noble",
+      "version": "8.2.3-noble",
+      "description": "MongoDB 文档数据库",
+      "repository": "library__mongo",
+      "synced_at": "2026-01-22T03:32:25.558109Z"
+    },
+    {
+      "name": "prom/prometheus",
+      "source": "prom/prometheus:latest",
+      "target": "ghcr.io/freemankevin/prom__prometheus:latest",
+      "version": "latest",
+      "description": "Prometheus 监控系统",
+      "repository": "prom__prometheus",
+      "synced_at": "2026-01-22T03:32:41.060270Z"
+    },
+    {
+      "name": "grafana/grafana",
+      "source": "grafana/grafana:12.4.0-21230963995-ubuntu",
+      "target": "ghcr.io/freemankevin/grafana__grafana:12.4.0-21230963995-ubuntu",
+      "version": "12.4.0-21230963995-ubuntu",
+      "description": "Grafana 可视化平台",
+      "repository": "grafana__grafana",
+      "synced_at": "2026-01-22T03:33:01.982919Z"
+    }
+  ]
+}
