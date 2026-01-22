@@ -32,3 +32,5 @@ nb-configuration.xml
 # patch
 *.orig
 *.rej
+
+web/node_modules/
