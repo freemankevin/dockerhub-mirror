@@ -68,7 +68,161 @@ jobs:
           username: ${{ env.GITHUB_OWNER }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Fetch latest versions and mirror images
+      - name: Update manifest with latest versions
+        id: update_manifest
+        run: |
+          set -euo pipefail
+          
+          python3 << 'PYTHON_SCRIPT'
+          import yaml
+          import re
+          import requests
+          from pathlib import Path
+          from datetime import datetime, timezone
+
+          def version_key(version_str):
+              """转换版本号为可比较的元组"""
+              try:
+                  if not version_str:
+                      return (0, 0, 0)
+                  
+                  # 处理 RELEASE 格式
+                  if version_str.startswith('RELEASE.'):
+                      date_match = re.search(r'(\d{4})-(\d{2})-(\d{2})', version_str)
+                      if date_match:
+                          return tuple(map(int, date_match.groups()))
+                  
+                  # 移除 v 前缀
+                  if version_str.startswith('v'):
+                      version_str = version_str[1:]
+                  
+                  # 分割版本号（移除后缀）
+                  version_parts = version_str.split('-')[0]
+                  parts = []
+                  for part in version_parts.split('.'):
+                      try:
+                          parts.append(int(part))
+                      except ValueError:
+                          parts.append(0)
+                  
+                  while len(parts) < 3:
+                      parts.append(0)
+                  
+                  return tuple(parts[:3])
+              except:
+                  return (0, 0, 0)
+
+          def get_latest_tag(repository, tag_pattern, exclude_pattern=None):
+              """从 Docker Hub 获取符合模式的最新标签"""
+              try:
+                  url = f"https://registry.hub.docker.com/v2/repositories/{repository}/tags"
+                  params = {'page_size': 100, 'ordering': 'last_updated'}
+                  
+                  response = requests.get(url, params=params, timeout=30)
+                  if response.status_code != 200:
+                      print(f"⚠️  Failed to fetch tags for {repository}")
+                      return None
+                  
+                  data = response.json()
+                  results = data.get('results', [])
+                  
+                  if not results:
+                      return None
+                  
+                  matching_tags = []
+                  for tag in results:
+                      tag_name = tag['name']
+                      
+                      # 匹配 tag_pattern
+                      if not re.match(tag_pattern, tag_name):
+                          continue
+                      
+                      # 排除 exclude_pattern
+                      if exclude_pattern and re.match(exclude_pattern, tag_name):
+                          continue
+                      
+                      matching_tags.append(tag_name)
+                  
+                  if not matching_tags:
+                      return None
+                  
+                  # 排序并返回最新版本
+                  matching_tags.sort(key=version_key)
+                  return matching_tags[-1]
+                  
+              except Exception as e:
+                  print(f"❌ Error fetching tags for {repository}: {str(e)}")
+                  return None
+
+          # 读取清单
+          manifest_file = Path('images-manifest.yml')
+          with open(manifest_file, 'r') as f:
+              manifest = yaml.safe_load(f)
+
+          print("🔄 开始更新镜像版本...")
+          updated_count = 0
+
+          for img in manifest.get('images', []):
+              if not img.get('enabled', True):
+                  continue
+              
+              source = img['source']
+              parts = source.split(':')
+              
+              if len(parts) != 2:
+                  continue
+              
+              repository = parts[0]
+              current_version = parts[1]
+              tag_pattern = img.get('tag_pattern')
+              exclude_pattern = img.get('exclude_pattern')
+              
+              if not tag_pattern:
+                  print(f"⚠️  Skipping {repository}: no tag_pattern defined")
+                  continue
+              
+              print(f"🔍 Checking {repository}...")
+              
+              latest_tag = get_latest_tag(repository, tag_pattern, exclude_pattern)
+              
+              if latest_tag:
+                  new_source = f"{repository}:{latest_tag}"
+                  if source != new_source:
+                      print(f"  ✅ Updated: {current_version} -> {latest_tag}")
+                      img['source'] = new_source
+                      updated_count += 1
+                  else:
+                      print(f"  ℹ️  Already latest: {latest_tag}")
+              else:
+                  print(f"  ⚠️  Could not find matching version")
+
+          # 保存更新后的清单
+          with open(manifest_file, 'w') as f:
+              yaml.dump(manifest, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
+
+          print(f"\n✅ Updated {updated_count} images")
+          
+          # 使用新的 GitHub Actions 输出方式
+          with open('$GITHUB_OUTPUT', 'a') as f:
+              f.write(f"updated_count={updated_count}\n")
+          PYTHON_SCRIPT
+
+      - name: Commit manifest changes
+        if: success()
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          git add images-manifest.yml
+          
+          if git diff --staged --quiet; then
+            echo "📝 No manifest changes to commit"
+          else
+            git commit -m "chore: update image versions in manifest [skip ci]"
+            echo "✅ Manifest changes committed"
+          fi
+
+      - name: Mirror images
         id: mirror
         run: |
           set -euo pipefail
@@ -78,68 +232,8 @@ jobs:
           import json
           import subprocess
           import sys
-          import re
-          from datetime import datetime
-          import requests
+          from datetime import datetime, timezone
           from pathlib import Path
-
-          def get_latest_tag(image_name):
-              """从 Docker Hub 获取最新的标签版本"""
-              try:
-                  # 解析镜像名
-                  parts = image_name.split('/')
-                  if len(parts) == 2:
-                      namespace, repo = parts
-                  elif len(parts) == 1:
-                      namespace = 'library'
-                      repo = parts[0]
-                  else:
-                      return None
-                  
-                  # 移除标签
-                  repo = repo.split(':')[0]
-                  
-                  # 调用 Docker Hub API
-                  url = f"https://hub.docker.com/v2/repositories/{namespace}/{repo}/tags"
-                  params = {'page_size': 100, 'ordering': 'last_updated'}
-                  
-                  response = requests.get(url, params=params, timeout=10)
-                  if response.status_code != 200:
-                      print(f"⚠️  Failed to fetch tags for {namespace}/{repo}", file=sys.stderr)
-                      return None
-                  
-                  data = response.json()
-                  results = data.get('results', [])
-                  
-                  if not results:
-                      return None
-                  
-                  # 查找 latest 和语义化版本
-                  latest_tag = None
-                  semver_tags = []
-                  
-                  for tag in results:
-                      tag_name = tag['name']
-                      
-                      # 检查是否是语义化版本
-                      if re.match(r'^\d+\.\d+\.\d+', tag_name):
-                          semver_tags.append(tag_name)
-                      
-                      # 查找 latest
-                      if tag_name == 'latest':
-                          latest_tag = tag_name
-                  
-                  # 返回语义化版本或 latest
-                  if semver_tags:
-                      return semver_tags[0]
-                  elif latest_tag:
-                      return latest_tag
-                  else:
-                      return results[0]['name']
-                  
-              except Exception as e:
-                  print(f"❌ Error fetching tags for {image_name}: {str(e)}", file=sys.stderr)
-                  return None
 
           def mirror_image(source, target):
               """镜像同步"""
@@ -152,7 +246,7 @@ jobs:
                       '--referrers',
                       source, target
                   ]
-                  result = subprocess.run(cmd, capture_output=True, text=True)
+                  result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
                   return result.returncode == 0
               except Exception as e:
                   print(f"❌ Mirror failed: {str(e)}", file=sys.stderr)
@@ -176,47 +270,39 @@ jobs:
               source = img['source']
               description = img.get('description', '')
               
-              # 提取镜像名和当前标签
+              # 提取镜像名和版本
               image_name = source.split(':')[0]
-              current_tag = source.split(':')[1] if ':' in source else 'latest'
+              version = source.split(':')[1] if ':' in source else 'latest'
               
-              print(f"🔍 Processing {image_name}...")
-              
-              # 获取最新版本
-              latest_tag = get_latest_tag(image_name)
-              if not latest_tag:
-                  print(f"⚠️  Could not determine latest version for {image_name}, using {current_tag}")
-                  latest_tag = current_tag
-              
-              source_image = f"{image_name}:{latest_tag}"
+              print(f"🔍 Processing {source}...")
               
               # 构建目标镜像
               repo_name = image_name.replace('/', '__')
-              target_image = f"{registry}/{owner}/{repo_name}:{latest_tag}"
+              target_image = f"{registry}/{owner}/{repo_name}:{version}"
               
-              print(f"📦 Source: {source_image}")
+              print(f"📦 Source: {source}")
               print(f"🎯 Target: {target_image}")
               
               # 执行镜像同步
-              if mirror_image(source_image, target_image):
-                  print(f"✅ Successfully mirrored {source_image}")
+              if mirror_image(source, target_image):
+                  print(f"✅ Successfully mirrored {source}")
                   mirrored_images.append({
                       'name': image_name,
-                      'source': source_image,
+                      'source': source,
                       'target': target_image,
-                      'version': latest_tag,
+                      'version': version,
                       'description': description,
                       'repository': repo_name,
-                      'synced_at': datetime.utcnow().isoformat() + 'Z'
+                      'synced_at': datetime.now(timezone.utc).isoformat()
                   })
                   success_count += 1
               else:
-                  print(f"❌ Failed to mirror {source_image}")
+                  print(f"❌ Failed to mirror {source}")
                   fail_count += 1
 
           # 生成镜像清单 JSON
           output_data = {
-              'updated_at': datetime.utcnow().isoformat() + 'Z',
+              'updated_at': datetime.now(timezone.utc).isoformat(),
               'registry': registry,
               'owner': owner,
               'total_count': len(mirrored_images),
@@ -238,23 +324,23 @@ jobs:
           print(f"   Failed: {fail_count}")
           print(f"✅ Generated images.json")
           
-          # 设置输出
-          print(f"::set-output name=success_count::{success_count}")
-          print(f"::set-output name=fail_count::{fail_count}")
+          # 使用新的 GitHub Actions 输出方式
+          with open('$GITHUB_OUTPUT', 'a') as f:
+              f.write(f"success_count={success_count}\n")
+              f.write(f"fail_count={fail_count}\n")
           PYTHON_SCRIPT
 
-      - name: Commit and push changes
+      - name: Commit and push all changes
         if: success()
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          
           git add web/public/images.json
           
-          if git diff --staged --quiet; then
+          if git diff --staged --quiet && git diff --quiet; then
             echo "📝 No changes to commit"
           else
-            git commit -m "chore: update images manifest [skip ci]"
+            if ! git diff --staged --quiet; then
+              git commit -m "chore: update images manifest [skip ci]"
+            fi
             git push
             echo "✅ Changes committed and pushed"
           fi
@@ -265,6 +351,7 @@ jobs:
           echo "## 🎉 Mirror Sync Completed" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- 🕐 Time: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ Success: ${{ steps.mirror.outputs.success_count }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔄 Manifest Updated: ${{ steps.update_manifest.outputs.updated_count }} images" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Successfully Synced: ${{ steps.mirror.outputs.success_count }}" >> $GITHUB_STEP_SUMMARY
           echo "- ❌ Failed: ${{ steps.mirror.outputs.fail_count }}" >> $GITHUB_STEP_SUMMARY
           echo "- 🔗 Registry: ${{ env.GHCR_REGISTRY }}/${{ env.GITHUB_OWNER }}" >> $GITHUB_STEP_SUMMARY

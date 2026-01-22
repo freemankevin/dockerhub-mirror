@@ -10,7 +10,7 @@ import logging
 import argparse
 import re
 import requests
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional, Tuple
 from requests.adapters import HTTPAdapter
@@ -281,7 +281,7 @@ class ManifestManager:
         if 'config' not in manifest:
             manifest['config'] = {}
         
-        manifest['config']['last_checked'] = datetime.now().isoformat()
+        manifest['config']['last_checked'] = datetime.now(timezone.utc).isoformat()
         
         # 保存清单
         if not dry_run and updated_count > 0:

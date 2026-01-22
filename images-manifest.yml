@@ -18,12 +18,13 @@ images:
     enabled: true
     description: Nacos 服务发现和配置中心
     tag_pattern: '^v[0-9]+\.[0-9]+\.[0-9]+$'
+    exclude_pattern: '.*BETA.*|.*RC.*|.*SNAPSHOT.*'
 
   # Web 服务
   - source: library/nginx:1.29.4-alpine
     enabled: true
-    description: Nginx 高性能 Web 服务器
-    tag_pattern: '^[0-9]+\.[0-9]+\.[0-9]+(?:-alpine)?$'
+    description: Nginx 高性能 Web 服务器 (Alpine 版本)
+    tag_pattern: '^[0-9]+\.[0-9]+\.[0-9]+-alpine$'
 
   # 消息队列
   - source: library/rabbitmq:4.2.2-management-alpine
@@ -36,57 +37,21 @@ images:
     enabled: true
     description: Redis 内存数据库
     tag_pattern: '^[0-9]+\.[0-9]+\.[0-9]+$'
+    exclude_pattern: '.*bookworm.*|.*bullseye.*|.*alpine.*'
 
   # GIS 地理信息
   - source: kartoza/geoserver:2.28.0
     enabled: true
     description: GeoServer 地理信息服务
     tag_pattern: '^[0-9]+\.[0-9]+\.[0-9]+$'
+    exclude_pattern: '.*--.*'
 
   # 地理空间数据库
   - source: freelabspace/postgresql-postgis:18.1
     enabled: true
     description: PostgreSQL 数据库 with PostGIS 扩展
     tag_pattern: '^[0-9]+\.[0-9]+$'
-    exclude_pattern: '^buildcache-.*'
-
-  # 数据库
-  - source: library/mysql:9.2.0
-    enabled: true
-    description: MySQL 关系型数据库
-    tag_pattern: '^[0-9]+\.[0-9]+\.[0-9]+$'
-
-  - source: library/postgres:17.2
-    enabled: true
-    description: PostgreSQL 数据库
-    tag_pattern: '^[0-9]+\.[0-9]+$'
-
-  - source: library/mongo:8.0.4
-    enabled: true
-    description: MongoDB 文档数据库
-    tag_pattern: '^[0-9]+\.[0-9]+\.[0-9]+$'
-
-  # 监控工具
-  - source: prom/prometheus:v3.2.1
-    enabled: true
-    description: Prometheus 监控系统
-    tag_pattern: '^v[0-9]+\.[0-9]+\.[0-9]+$'
-
-  - source: grafana/grafana:11.5.0
-    enabled: true
-    description: Grafana 可视化平台
-    tag_pattern: '^[0-9]+\.[0-9]+\.[0-9]+$'
-
-  # 基础镜像
-  - source: library/alpine:3.21.3
-    enabled: false
-    description: Alpine Linux 轻量级镜像
-    tag_pattern: '^[0-9]+\.[0-9]+\.[0-9]+$'
-
-  - source: library/ubuntu:24.04
-    enabled: false
-    description: Ubuntu Linux 操作系统
-    tag_pattern: '^[0-9]+\.[0-9]+$'
+    exclude_pattern: '^buildcache-.*|^13\..*|^14\..*|^15\..*|^16\..*|^17\..*'
 
 # 配置选项
 config:
