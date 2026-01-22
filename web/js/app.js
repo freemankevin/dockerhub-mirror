@@ -171,12 +171,83 @@ function renderImages(images) {
   container.innerHTML = images.map(createImageCard).join('');
 }
 
-// 搜索过滤
+// 搜索过滤 - 支持模糊匹配
 function filterImages(query) {
-  const filtered = allImages.filter(img => 
-    img.name.toLowerCase().includes(query.toLowerCase()) ||
-    (img.description && img.description.toLowerCase().includes(query.toLowerCase()))
-  );
+  if (!query.trim()) {
+    renderImages(allImages);
+    return;
+  }
+  
+  const queryLower = query.toLowerCase().trim();
+  
+  const filtered = allImages.filter(img => {
+    const name = img.name.toLowerCase();
+    const description = (img.description || '').toLowerCase();
+    const source = img.source.toLowerCase();
+    const target = img.target.toLowerCase();
+    
+    // 1. 精确匹配镜像名称（如搜索 nginx 能匹配 library/nginx）
+    if (name.includes(queryLower)) {
+      return true;
+    }
+    
+    // 2. 匹配镜像名称的最后一部分（如搜索 nginx 能匹配 library/nginx）
+    const nameParts = img.name.split('/');
+    const lastPart = nameParts[nameParts.length - 1].toLowerCase();
+    if (lastPart.includes(queryLower)) {
+      return true;
+    }
+    
+    // 3. 匹配描述
+    if (description.includes(queryLower)) {
+      return true;
+    }
+    
+    // 4. 匹配源镜像（包括版本号）
+    if (source.includes(queryLower)) {
+      return true;
+    }
+    
+    // 5. 匹配目标镜像
+    if (target.includes(queryLower)) {
+      return true;
+    }
+    
+    // 6. 智能模糊匹配：如果查询包含冒号（如 nginx:latest）
+    if (queryLower.includes(':')) {
+      const parts = queryLower.split(':');
+      if (parts.length >= 2) {
+        const nameQuery = parts[0];
+        const versionQuery = parts.slice(1).join(':'); // 处理版本号中的冒号
+        
+        // 检查名称部分是否匹配
+        const nameMatches = name.includes(nameQuery) || lastPart.includes(nameQuery);
+        
+        // 检查版本部分是否匹配（更灵活的匹配）
+        const versionMatches =
+          source.includes(versionQuery) ||
+          target.includes(versionQuery) ||
+          img.version.toLowerCase().includes(versionQuery);
+        
+        if (nameMatches && versionMatches) {
+          return true;
+        }
+        
+        // 如果名称匹配，也返回 true（支持搜索 nginx:latest 匹配到 nginx 镜像）
+        if (nameMatches) {
+          return true;
+        }
+      }
+    }
+    
+    // 7. 支持搜索带版本号的完整镜像名（如 nginx:1.29.4-alpine）
+    if (source.includes(queryLower) || target.includes(queryLower)) {
+      return true;
+    }
+    
+    return false;
+  });
+  
   renderImages(filtered);
 }
 

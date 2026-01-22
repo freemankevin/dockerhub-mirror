@@ -1,9 +1,43 @@
 /* 字体引入 */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
 
-/* 全局样式 */
+/* 全局样式 - 优先使用 Source Code Pro 和 DM Mono */
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Source Code Pro', 'DM Mono', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* 标题和重点文本 */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Source Code Pro', 'DM Mono', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 600;
+}
+
+/* 按钮和交互元素 */
+button, input, select, textarea {
+  font-family: 'Source Code Pro', 'DM Mono', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* 终端字体样式 - 确保使用 Source Code Pro 和 DM Mono */
+.terminal-body {
+  font-family: 'Source Code Pro', 'DM Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace !important;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #d4d4d4;
+}
+
+.terminal-prompt {
+  font-family: 'Source Code Pro', 'DM Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace !important;
+  color: #4ec9b0;
+  user-select: none;
+}
+
+.terminal-command {
+  font-family: 'Source Code Pro', 'DM Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace !important;
+  color: #dcdcaa;
+}
+
+.version-select {
+  font-family: 'Source Code Pro', 'DM Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace !important;
 }
 
 /* 渐变背景 */
@@ -127,21 +161,43 @@ body {
   color: #10b981;
 }
 
-/* 版本选择器样式 */
+/* 版本选择器样式 - 与页面风格一致 */
 .version-select {
-  background: #2d2d2d;
-  border: 1px solid #3d3d3d;
-  color: #d4d4d4;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-family: 'Source Code Pro', monospace;
-  font-size: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: 'Source Code Pro', 'DM Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace !important;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
   outline: none;
+  transition: all 0.2s ease;
+  min-width: 100px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 8px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 32px;
 }
 
 .version-select:hover {
   border-color: #5B6EEA;
+  background-color: #f1f5f9;
+}
+
+.version-select:focus {
+  border-color: #5B6EEA;
+  box-shadow: 0 0 0 3px rgba(91, 110, 234, 0.1);
+}
+
+.version-select option {
+  background: #ffffff;
+  color: #334155;
+  padding: 8px 12px;
+  font-family: 'Source Code Pro', 'DM Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
 }
 
 /* 烟花效果 */
