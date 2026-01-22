@@ -5,17 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Docker Sync Engine - 镜像同步服务</title>
   <meta name="description" content="Docker Hub 镜像同步到 GitHub Container Registry">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐳</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235B6EEA'><path d='M13.983 11h-3.966v1.983h3.966V11zm0-3.965h-3.966v1.982h3.966V7.035zm0 7.93h-3.966v1.983h3.966V14.965zM2.021 2.021v19.958h19.958V2.021H2.021zm17.976 17.976h-1.983v-1.983h-1.982v1.983h-1.983v-1.983h-1.982v1.983H10.07v-1.983H8.088v1.983H6.105v-1.983H4.122v1.983H2.021V4.004h1.982v1.982h1.983V4.004h1.982v1.982h1.983V4.004h1.982v1.982h1.983V4.004h1.982v1.982h1.983V4.004h1.982v15.993z'/></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
     
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
     
     .gradient-bg {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #5B6EEA 0%, #764ba2 100%);
     }
     
     .card-hover {
@@ -58,11 +58,114 @@
     }
     
     .search-input:focus {
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      box-shadow: 0 0 0 3px rgba(91, 110, 234, 0.1);
+    }
+
+    /* Mac 风格命令行样式 */
+    .terminal-window {
+      background: #1e1e1e;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .terminal-header {
+      background: #2d2d2d;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid #3d3d3d;
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+
+    .terminal-body {
+      padding: 16px;
+      font-family: 'DM Mono', 'Source Code Pro', 'Monaco', 'Menlo', 'Consolas', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #d4d4d4;
+    }
+
+    .terminal-prompt {
+      color: #4ec9b0;
+      user-select: none;
+    }
+
+    .terminal-command {
+      color: #dcdcaa;
+    }
+
+    /* 复制成功提示动画 */
+    .copy-toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #10b981;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: slideIn 0.3s ease-out, slideOut 0.3s ease-in 2.7s;
+      z-index: 1000;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideOut {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+    }
+
+    .copy-button {
+      transition: all 0.2s ease;
+    }
+
+    .copy-button:hover {
+      background-color: rgba(91, 110, 234, 0.1);
+    }
+
+    .copy-button.copied {
+      color: #10b981;
     }
   </style>
 </head>
 <body class="bg-gray-50">
+  <!-- 复制成功提示 -->
+  <div id="copy-toast" class="copy-toast" style="display: none;">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+    </svg>
+    <span>复制成功!</span>
+  </div>
+
   <!-- Header -->
   <header class="gradient-bg text-white shadow-lg">
     <div class="container mx-auto px-4 py-6">
@@ -70,7 +173,7 @@
         <div class="flex items-center space-x-3">
           <div class="bg-white rounded-lg p-2">
             <svg class="w-8 h-8 text-indigo-600" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M13.5 2c-5.629 0-10.212 4.436-10.475 10h-3.025l4.537 5.917 4.463-5.917h-2.975c.26-3.902 3.508-7 7.475-7 4.136 0 7.5 3.364 7.5 7.5s-3.364 7.5-7.5 7.5c-2.381 0-4.502-1.119-5.876-2.854l-1.847 2.449c1.919 2.088 4.664 3.405 7.723 3.405 5.798 0 10.5-4.702 10.5-10.5s-4.702-10.5-10.5-10.5z"/>
+              <path d="M13.983 11h-3.966v1.983h3.966V11zm0-3.965h-3.966v1.982h3.966V7.035zm0 7.93h-3.966v1.983h3.966V14.965zM2.021 2.021v19.958h19.958V2.021H2.021zm17.976 17.976h-1.983v-1.983h-1.982v1.983h-1.983v-1.983h-1.982v1.983H10.07v-1.983H8.088v1.983H6.105v-1.983H4.122v1.983H2.021V4.004h1.982v1.982h1.983V4.004h1.982v1.982h1.983V4.004h1.982v1.982h1.983V4.004h1.982v1.982h1.983V4.004h1.982v15.993z"/>
             </svg>
           </div>
           <div>
@@ -212,14 +315,38 @@
       return date.toLocaleDateString('zh-CN');
     }
 
+    // 显示复制成功提示
+    function showCopyToast() {
+      const toast = document.getElementById('copy-toast');
+      toast.style.display = 'flex';
+      
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
+    }
+
     // 复制命令到剪贴板
     function copyCommand(text, btn) {
       navigator.clipboard.writeText(text).then(() => {
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+        // 改变按钮状态
+        const originalHTML = btn.innerHTML;
+        btn.classList.add('copied');
+        btn.innerHTML = `
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+        `;
+        
+        // 显示全局提示
+        showCopyToast();
+        
+        // 2秒后恢复按钮
         setTimeout(() => {
-          btn.innerHTML = originalText;
+          btn.classList.remove('copied');
+          btn.innerHTML = originalHTML;
         }, 2000);
+      }).catch(err => {
+        console.error('复制失败:', err);
       });
     }
 
@@ -262,17 +389,26 @@
           </div>
 
           <div class="space-y-3">
-            <div class="bg-gray-50 rounded-lg p-3">
-              <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-medium text-gray-600">Docker Pull 命令</span>
-                <button onclick="copyCommand('docker pull ${img.target}', this)" class="text-indigo-600 hover:text-indigo-800 text-xs font-medium flex items-center">
+            <!-- Mac 风格终端 -->
+            <div class="terminal-window">
+              <div class="terminal-header">
+                <div class="terminal-dot dot-red"></div>
+                <div class="terminal-dot dot-yellow"></div>
+                <div class="terminal-dot dot-green"></div>
+                <span class="text-xs text-gray-400 ml-2">Docker Pull 命令</span>
+                <button 
+                  onclick="copyCommand('docker pull ${img.target}', this)" 
+                  class="ml-auto copy-button text-gray-400 hover:text-white px-2 py-1 rounded flex items-center text-xs"
+                >
                   <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                   </svg>
                   复制
                 </button>
               </div>
-              <code class="text-sm text-gray-800 break-all">docker pull ${img.target}</code>
+              <div class="terminal-body">
+                <span class="terminal-prompt">$</span> <span class="terminal-command">docker pull ${img.target}</span>
+              </div>
             </div>
 
             <div class="flex items-center text-xs text-gray-500">
@@ -321,7 +457,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
             <h3 class="mt-4 text-lg font-medium text-red-900">加载失败</h3>
-            <p class="mt-2 text-red-700">无法加载镜像数据，请稍后重试</p>
+            <p class="mt-2 text-red-700">无法加载镜像数据,请稍后重试</p>
           </div>
         `;
       }
