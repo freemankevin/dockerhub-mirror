@@ -1,0 +1,22 @@
+{
+  "name": "dockerhub-mirror-web",
+  "version": "1.0.0",
+  "description": "Docker Hub 镜像同步服务 - Web 界面",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve . -p 3000",
+    "build": "echo 'No build step needed - static HTML/CSS/JS'",
+    "preview": "npx serve . -p 3000"
+  },
+  "keywords": [
+    "docker",
+    "mirror",
+    "ghcr",
+    "container-registry"
+  ],
+  "author": "freemankevin",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}

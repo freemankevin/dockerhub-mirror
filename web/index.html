@@ -5,55 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Docker Sync Engine - 镜像同步服务</title>
   <meta name="description" content="Docker Hub 镜像同步到 GitHub Container Registry">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1220 1024'><path d='M903.830212 959.568539c27.357803-23.522597 54.971286-47.045194 82.329089-70.82347 9.460175-8.181773 19.687391-16.363546 28.891885-25.056679-7.414732-9.460175-19.943071-16.107865-30.425968-20.198752-21.221473-8.181773-42.442946-5.369288-61.874656 5.880649-25.56804 14.829463-36.562297 38.35206-35.539576 67.755306 0.25568 11.505618 3.579526 22.755556 9.715855 32.471411 1.789763 3.579526 4.346567 6.903371 6.903371 9.971535m31.70437 22.244195c13.551061 4.602247 28.891885 4.090886 42.698626 1.534082 7.159051-3.068165 25.056679-10.994257 31.70437-9.715855l1.022722 0.255681 1.022721 0.51136c4.090886 2.045443 7.926092 4.857928 9.971536 8.948814 4.857928 9.715855 2.556804 19.43171-6.903371 24.800999l-3.068165 1.789763c-35.028215 20.198752-72.357553 17.386267-107.385768-1.534082-16.619226-8.948814-29.403246-22.499875-38.86342-38.863421l-2.301124-3.835206c-22.499875-39.119101-19.43171-80.027965 5.880649-117.101623 8.693134-12.78402 20.198752-22.755556 33.749813-30.425968l5.113608-2.812484c32.982772-19.17603 68.522347-17.897628 102.52784-1.022722 18.153308 8.948814 32.982772 22.499875 43.209988 40.141823l1.789763 3.068165c7.414732 12.78402-2.301124 24.033958-12.016979 31.704369-11.505618 8.948814-23.011236 19.43171-34.005493 29.147566-25.056679 20.965793-49.601998 42.442946-74.147316 63.408739z' fill='%23394D54'/></svg>">
+  <!-- Docker 官方图标 -->
+  <link rel="icon" href="https://www.docker.com/wp-content/uploads/2022/03/vertical-logo-monochromatic.png" type="image/png">
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
-    
-    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-    .gradient-bg { background: linear-gradient(135deg, #5B6EEA 0%, #764ba2 100%); }
-    .card-hover { transition: all 0.3s ease; }
-    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
-    .badge { display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 500; }
-    .badge-blue { background-color: #dbeafe; color: #1e40af; }
-    .badge-green { background-color: #d1fae5; color: #065f46; }
-    .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: loading 1.5s ease-in-out infinite; }
-    @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-    .search-input:focus { box-shadow: 0 0 0 3px rgba(91, 110, 234, 0.1); }
-    .terminal-window { background: #1e1e1e; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-    .terminal-header { background: #2d2d2d; padding: 8px 12px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid #3d3d3d; }
-    .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
-    .dot-red { background: #ff5f56; }
-    .dot-yellow { background: #ffbd2e; }
-    .dot-green { background: #27c93f; }
-    .terminal-body { padding: 16px; font-family: 'Source Code Pro', 'DM Mono', 'Monaco', 'Menlo', 'Consolas', monospace; font-size: 13px; line-height: 1.6; color: #d4d4d4; }
-    .terminal-prompt { color: #4ec9b0; user-select: none; }
-    .terminal-command { color: #dcdcaa; }
-    .copy-toast { position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 12px 20px; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); display: flex; align-items: center; gap: 8px; animation: slideIn 0.3s ease-out, slideOut 0.3s ease-in 2.7s; z-index: 1000; }
-    @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-    @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(400px); opacity: 0; } }
-    .copy-button { transition: all 0.2s ease; }
-    .copy-button:hover { background-color: rgba(91, 110, 234, 0.1); }
-    .copy-button.copied { color: #10b981; }
-    .version-select { background: #2d2d2d; border: 1px solid #3d3d3d; color: #d4d4d4; padding: 4px 8px; border-radius: 4px; font-family: 'Source Code Pro', monospace; font-size: 12px; cursor: pointer; outline: none; }
-    .version-select:hover { border-color: #5B6EEA; }
-  </style>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="bg-gray-50">
-  <div id="copy-toast" class="copy-toast" style="display: none;">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-    <span>复制成功!</span>
-  </div>
-
   <header class="gradient-bg text-white shadow-lg">
     <div class="container mx-auto px-4 py-6">
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-3">
           <div class="bg-white rounded-lg p-2">
-            <svg class="w-8 h-8" viewBox="0 0 1220 1024" fill="#394D54">
-              <path d="M903.830212 959.568539c27.357803-23.522597 54.971286-47.045194 82.329089-70.82347 9.460175-8.181773 19.687391-16.363546 28.891885-25.056679-7.414732-9.460175-19.943071-16.107865-30.425968-20.198752-21.221473-8.181773-42.442946-5.369288-61.874656 5.880649-25.56804 14.829463-36.562297 38.35206-35.539576 67.755306 0.25568 11.505618 3.579526 22.755556 9.715855 32.471411 1.789763 3.579526 4.346567 6.903371 6.903371 9.971535m31.70437 22.244195c13.551061 4.602247 28.891885 4.090886 42.698626 1.534082 7.159051-3.068165 25.056679-10.994257 31.70437-9.715855l1.022722 0.255681 1.022721 0.51136c4.090886 2.045443 7.926092 4.857928 9.971536 8.948814 4.857928 9.715855 2.556804 19.43171-6.903371 24.800999l-3.068165 1.789763c-35.028215 20.198752-72.357553 17.386267-107.385768-1.534082-16.619226-8.948814-29.403246-22.499875-38.86342-38.863421l-2.301124-3.835206c-22.499875-39.119101-19.43171-80.027965 5.880649-117.101623 8.693134-12.78402 20.198752-22.755556 33.749813-30.425968l5.113608-2.812484c32.982772-19.17603 68.522347-17.897628 102.52784-1.022722 18.153308 8.948814 32.982772 22.499875 43.209988 40.141823l1.789763 3.068165c7.414732 12.78402-2.301124 24.033958-12.016979 31.704369-11.505618 8.948814-23.011236 19.43171-34.005493 29.147566-25.056679 20.965793-49.601998 42.442946-74.147316 63.408739z m262.83945-177.442197h3.579526c10.994257 0 18.408989 7.414732 18.408989 18.408989 0 15.340824-14.573783 19.17603-27.357803 19.17603-16.619226 0-32.471411 9.971536-43.977029 21.221473-14.318102 14.062422-20.454432 32.21573-20.454432 51.903121v89.48814c0 10.227216-6.39201 18.408989-17.130586 18.408988h-2.812485c-10.738577 0-17.130587-8.181773-17.130587-18.408988v-94.601748c0-36.306617 17.641948-65.965543 47.300874-86.931336 17.897628-12.016979 38.09638-18.664669 59.573533-18.664669z"/>
-              <path d="M1057.749813 259.515605c7.414732-56.761049-35.283895-101.505119-61.618977-122.726591-30.425968 35.283895-35.028215 127.328839 12.52834 166.192259-26.590762 23.778277-82.840449 44.99975-140.112859 44.999751H168.749064c-5.624969 60.084894 4.857928 115.31186 28.891885 162.612734l7.926092 14.573783c5.113608 8.437453 10.482896 16.874906 16.619226 24.800998 28.636205 1.789763 55.226966 2.556804 79.516604 2.045444 47.556554-1.022722 86.675655-6.64769 116.078902-16.874907 4.346567-1.534082 9.204494 0.767041 10.738577 5.113608 1.534082 4.346567-0.767041 9.204494-5.113608 10.738577-3.835206 1.278402-7.926092 2.556804-12.27266 3.835206-23.266916 6.64769-48.067915 10.994257-80.283645 13.0397 1.789763 0-2.045443 0.25568-2.045443 0.255681-1.022722 0-2.556804 0.25568-3.579526 0.25568-12.52834 0.767041-26.335081 0.767041-40.141823 0.767041-15.340824 0-30.170287-0.25568-47.045193-1.022721l-0.511361 0.25568c58.295131 65.454182 149.317353 104.828964 263.606492 104.828964 241.873658 0 446.929338-107.130087 537.69588-347.725343 64.431461 6.64769 126.306117-9.715855 154.430961-64.687142-44.48839-26.079401-102.27216-17.897628-135.510611-1.278402z" fill="#00AADA"/>
-              <path d="M343.123096 244.430462h7.414732v78.749563h-7.414732V244.430462z m-14.318102 0h7.670412v78.749563h-7.670412V244.430462z m-14.318103 0h7.670412v78.749563h-7.670412V244.430462z m-14.318102 0h7.670412v78.749563h-7.670412V244.430462z m-14.318102 0h7.670412v78.749563h-7.670412V244.430462z m-14.062422 0h7.414731v78.749563h-7.414731V244.430462z m-7.926093-7.926092h94.601748v94.601747h-94.601748v-94.601747z" fill="#00ACD3"/>
+            <!-- Docker 官方 SVG 图标 -->
+            <svg class="docker-logo" viewBox="0 0 24 24" fill="#2496ED">
+              <path d="M13.983 11.078h2.119a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.119a.185.185 0 0 0-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 0 0 .186-.186V3.574a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.186m0 2.716h2.118a.187.187 0 0 0 .186-.186V6.29a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 0 0 .184-.186V6.29a.185.185 0 0 0-.185-.185H8.1a.185.185 0 0 0-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 0 0 .185-.186V6.29a.185.185 0 0 0-.185-.185H5.136a.186.186 0 0 0-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 0 0 .185-.185V9.006a.185.185 0 0 0-.185-.186h-2.12a.186.186 0 0 0-.185.186v1.887c0 .102.084.185.186.185m-2.929 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.887c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 0 0-.75.748 11.376 11.376 0 0 0 .692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 0 0 3.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288z"/>
             </svg>
           </div>
           <div>
@@ -125,212 +90,21 @@
     <div class="container mx-auto px-4 py-6">
       <div class="text-center text-gray-600 text-sm">
         <p>自动同步 Docker Hub 镜像到 GitHub Container Registry</p>
-        <p class="mt-2">使用 <span class="text-red-500">❤️</span> 构建 | <a href="https://github.com/freemankevin/dockerhub-mirror" class="text-indigo-600 hover:text-indigo-800">GitHub</a></p>
+        <p class="mt-2">
+          Powered by 
+          <a href="https://vercel.com" target="_blank" class="vercel-logo">
+            <svg height="16" viewBox="0 0 75 65" fill="#000000">
+              <path d="M37.59.25l36.95 64H.64l36.95-64z"></path>
+            </svg>
+            Vercel
+          </a>
+          | 
+          <a href="https://github.com/freemankevin/dockerhub-mirror" class="text-indigo-600 hover:text-indigo-800">GitHub</a>
+        </p>
       </div>
     </div>
   </footer>
 
-  <script>
-    let allImages = [];
-    let imageVersions = {}; // 存储每个镜像的所有版本
-
-    // 格式化时间
-    function formatDate(dateString) {
-      const date = new Date(dateString);
-      const now = new Date();
-      const diff = Math.floor((now - date) / 1000);
-      if (diff < 60) return '刚刚';
-      if (diff < 3600) return `${Math.floor(diff / 60)} 分钟前`;
-      if (diff < 86400) return `${Math.floor(diff / 3600)} 小时前`;
-      if (diff < 2592000) return `${Math.floor(diff / 86400)} 天前`;
-      return date.toLocaleDateString('zh-CN');
-    }
-
-    // 规范化版本号显示
-    function normalizeVersion(version) {
-      if (!version || version === 'latest') return 'latest';
-      // 移除开头的 v
-      return version.replace(/^v+/i, '');
-    }
-
-    // 显示复制成功提示
-    function showCopyToast() {
-      const toast = document.getElementById('copy-toast');
-      toast.style.display = 'flex';
-      setTimeout(() => toast.style.display = 'none', 3000);
-    }
-
-    // 复制命令
-    function copyCommand(text, btn) {
-      navigator.clipboard.writeText(text).then(() => {
-        const originalHTML = btn.innerHTML;
-        btn.classList.add('copied');
-        btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
-        showCopyToast();
-        setTimeout(() => {
-          btn.classList.remove('copied');
-          btn.innerHTML = originalHTML;
-        }, 2000);
-      });
-    }
-
-    // 版本切换
-    function changeVersion(imageName, selectEl) {
-      const selectedVersion = selectEl.value;
-      const versions = imageVersions[imageName];
-      const versionData = versions.find(v => v.version === selectedVersion);
-      
-      if (versionData) {
-        const commandEl = selectEl.closest('.terminal-window').querySelector('.terminal-command');
-        commandEl.textContent = `docker pull ${versionData.target}`;
-      }
-    }
-
-    // 创建版本选择器
-    function createVersionSelector(imageName, currentVersion) {
-      const versions = imageVersions[imageName] || [];
-      if (versions.length <= 1) {
-        return `<span class="badge badge-blue">${normalizeVersion(currentVersion)}</span>`;
-      }
-      
-      const options = versions.map(v => 
-        `<option value="${v.version}" ${v.version === currentVersion ? 'selected' : ''}>
-          ${normalizeVersion(v.version)}
-        </option>`
-      ).join('');
-      
-      return `<select class="version-select" onchange="changeVersion('${imageName}', this)">${options}</select>`;
-    }
-
-    // 创建镜像卡片
-    function createImageCard(img) {
-      const displayVersion = normalizeVersion(img.version);
-      
-      return `
-        <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
-          <div class="flex items-start justify-between mb-4">
-            <div class="flex-1">
-              <h3 class="text-xl font-semibold text-gray-900 mb-2">${img.name.split('/').pop()}</h3>
-              <p class="text-gray-600 text-sm mb-3">${img.description || '无描述'}</p>
-              <div class="flex flex-wrap gap-2 items-center">
-                ${createVersionSelector(img.name, img.version)}
-                <span class="badge badge-green">
-                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                  </svg>
-                  已同步
-                </span>
-                <span class="text-xs text-gray-500 flex items-center">
-                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
-                  ${formatDate(img.synced_at)}
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="space-y-3">
-            <div class="terminal-window">
-              <div class="terminal-header">
-                <div class="terminal-dot dot-red"></div>
-                <div class="terminal-dot dot-yellow"></div>
-                <div class="terminal-dot dot-green"></div>
-                <span class="text-xs text-gray-400 ml-2">Docker Pull 命令</span>
-                <button onclick="copyCommand('docker pull ${img.target}', this)" class="ml-auto copy-button text-gray-400 hover:text-white px-2 py-1 rounded flex items-center text-xs">
-                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-                  </svg>
-                  复制
-                </button>
-              </div>
-              <div class="terminal-body">
-                <span class="terminal-prompt">$</span> <span class="terminal-command">docker pull ${img.target}</span>
-              </div>
-            </div>
-            <div class="flex items-center text-xs text-gray-500">
-              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              源镜像: ${img.source}
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    // 渲染镜像列表
-    function renderImages(images) {
-      const container = document.getElementById('images-container');
-      const emptyState = document.getElementById('empty-state');
-
-      if (images.length === 0) {
-        container.classList.add('hidden');
-        emptyState.classList.remove('hidden');
-        return;
-      }
-
-      container.classList.remove('hidden');
-      emptyState.classList.add('hidden');
-      container.innerHTML = images.map(createImageCard).join('');
-    }
-
-    // 搜索过滤
-    function filterImages(query) {
-      const filtered = allImages.filter(img => 
-        img.name.toLowerCase().includes(query.toLowerCase()) ||
-        (img.description && img.description.toLowerCase().includes(query.toLowerCase()))
-      );
-      renderImages(filtered);
-    }
-
-    // 加载镜像数据
-    async function loadImages() {
-      try {
-        const response = await fetch('/public/images.json');
-        const data = await response.json();
-        
-        // 按镜像名称分组,支持多版本
-        const imageMap = {};
-        data.images.forEach(img => {
-          if (!imageMap[img.name]) {
-            imageMap[img.name] = [];
-          }
-          imageMap[img.name].push(img);
-        });
-        
-        // 存储版本信息
-        imageVersions = imageMap;
-        
-        // 每个镜像只显示最新版本
-        allImages = Object.values(imageMap).map(versions => {
-          // 按同步时间排序,取最新的
-          versions.sort((a, b) => new Date(b.synced_at) - new Date(a.synced_at));
-          return versions[0];
-        });
-        
-        // 更新统计
-        document.getElementById('total-count').textContent = Object.keys(imageMap).length;
-        document.getElementById('last-update').textContent = formatDate(data.updated_at);
-        document.getElementById('registry-info').textContent = `${data.registry}/${data.owner}`;
-        
-        renderImages(allImages);
-        document.querySelectorAll('.skeleton-card').forEach(el => el.remove());
-      } catch (error) {
-        console.error('Failed to load images:', error);
-        document.getElementById('images-container').innerHTML = `
-          <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-            <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <h3 class="mt-4 text-lg font-medium text-red-900">加载失败</h3>
-            <p class="mt-2 text-red-700">无法加载镜像数据,请稍后重试</p>
-          </div>
-        `;
-      }
-    }
-
-    document.getElementById('search-input').addEventListener('input', (e) => filterImages(e.target.value));
-    loadImages();
-  </script>
+  <script src="/js/app.js"></script>
 </body>
 </html>
