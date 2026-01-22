@@ -2,16 +2,13 @@
 name: Mirror Docker Images
 
 env:
-  # GitHub 用户名/组织名
   GITHUB_OWNER: freemankevin
-  # GHCR 仓库前缀
   GHCR_REGISTRY: ghcr.io
-  # 镜像清单文件路径
   IMAGES_MANIFEST: images-manifest.yml
 
 on:
   schedule:
-    - cron: '30 1 * * *'  # 每天 UTC 01:30 运行
+    - cron: '30 1 * * *'
   push:
     branches-ignore:
       - 'dependabot/**'
@@ -33,11 +30,11 @@ defaults:
 jobs:
   mirror-docker-images:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
 
     permissions:
       packages: write
-      contents: read
+      contents: write
 
     concurrency:
       group: ${{ github.workflow }}
@@ -46,24 +43,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Show GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
+      - name: Install dependencies
         run: |
-          echo "=== GitHub Context ==="
-          printf '%s' "$GITHUB_CONTEXT" | python -m json.tool
-
-      - name: Show environment variables
-        run: |
-          echo "=== Environment Variables ==="
-          env | sort | grep -E "(GITHUB_|GHCR_|OWNER)" || true
+          sudo apt-get update
+          sudo apt-get install -y python3 python3-pip jq
+          pip3 install pyyaml requests
 
       - name: Install regclient
         uses: iarekylew00t/regctl-installer@v4
-
-      - name: Show regclient version
-        run: regctl version
 
       - name: Login to docker.io
         uses: docker/login-action@v3
@@ -78,132 +68,203 @@ jobs:
           username: ${{ env.GITHUB_OWNER }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check Docker Hub rate-limit
+      - name: Fetch latest versions and mirror images
+        id: mirror
         run: |
           set -euo pipefail
-          echo "🔍 Querying Docker Hub rate-limit..."
-
-          token=$(curl -s -u "${{ secrets.DOCKER_HUB_USERNAME }}:${{ secrets.DOCKER_HUB_TOKEN }}" \
-            "https://auth.docker.io/token?service=registry.docker.io&scope=repository:library/alpine:pull" |
-            jq -r '.token')
-
-          headers=$(curl -sI -H "Authorization: Bearer $token" \
-            -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
-            https://registry-1.docker.io/v2/library/alpine/manifests/latest)
-
-          remain=$(echo "$headers" | awk -F'[ ;]' '/ratelimit-remaining/ {print $2}')
-          limit=$(echo  "$headers" | awk -F'[ ;]' '/ratelimit-limit/      {print $2}')
-
-          echo "📊 Docker Hub pulls remaining: $remain / $limit"
-
-      - name: Parse images manifest
-        id: parse_images
-        run: |
-          set -euo pipefail
-
-          if [[ ! -f "${{ env.IMAGES_MANIFEST }}" ]]; then
-            echo "❌ Manifest file not found: ${{ env.IMAGES_MANIFEST }}"
-            exit 1
-          fi
-
-          # 使用 yq 或 python 解析 YAML，提取镜像列表
-          images=$(python3 << 'EOF'
+          
+          python3 << 'PYTHON_SCRIPT'
           import yaml
+          import json
+          import subprocess
           import sys
+          import re
+          from datetime import datetime
+          import requests
+          from pathlib import Path
 
-          with open('${{ env.IMAGES_MANIFEST }}', 'r') as f:
-              data = yaml.safe_load(f)
+          def get_latest_tag(image_name):
+              """从 Docker Hub 获取最新的标签版本"""
+              try:
+                  # 解析镜像名
+                  parts = image_name.split('/')
+                  if len(parts) == 2:
+                      namespace, repo = parts
+                  elif len(parts) == 1:
+                      namespace = 'library'
+                      repo = parts[0]
+                  else:
+                      return None
+                  
+                  # 移除标签
+                  repo = repo.split(':')[0]
+                  
+                  # 调用 Docker Hub API
+                  url = f"https://hub.docker.com/v2/repositories/{namespace}/{repo}/tags"
+                  params = {'page_size': 100, 'ordering': 'last_updated'}
+                  
+                  response = requests.get(url, params=params, timeout=10)
+                  if response.status_code != 200:
+                      print(f"⚠️  Failed to fetch tags for {namespace}/{repo}", file=sys.stderr)
+                      return None
+                  
+                  data = response.json()
+                  results = data.get('results', [])
+                  
+                  if not results:
+                      return None
+                  
+                  # 查找 latest 和语义化版本
+                  latest_tag = None
+                  semver_tags = []
+                  
+                  for tag in results:
+                      tag_name = tag['name']
+                      
+                      # 检查是否是语义化版本
+                      if re.match(r'^\d+\.\d+\.\d+', tag_name):
+                          semver_tags.append(tag_name)
+                      
+                      # 查找 latest
+                      if tag_name == 'latest':
+                          latest_tag = tag_name
+                  
+                  # 返回语义化版本或 latest
+                  if semver_tags:
+                      return semver_tags[0]
+                  elif latest_tag:
+                      return latest_tag
+                  else:
+                      return results[0]['name']
+                  
+              except Exception as e:
+                  print(f"❌ Error fetching tags for {image_name}: {str(e)}", file=sys.stderr)
+                  return None
 
-          if data and 'images' in data:
-              for img in data['images']:
-                  if img.get('enabled', True):  # 默认启用
-                      print(img['source'])
-          else:
-              print("Warning: No images found in manifest", file=sys.stderr)
-          EOF
-          )
+          def mirror_image(source, target):
+              """镜像同步"""
+              try:
+                  cmd = [
+                      'regctl', 'image', 'copy',
+                      '--verbosity', 'info',
+                      '--digest-tags',
+                      '--include-external',
+                      '--referrers',
+                      source, target
+                  ]
+                  result = subprocess.run(cmd, capture_output=True, text=True)
+                  return result.returncode == 0
+              except Exception as e:
+                  print(f"❌ Mirror failed: {str(e)}", file=sys.stderr)
+                  return False
 
-          echo "images<<EOF" >> "$GITHUB_OUTPUT"
-          echo "$images" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
+          # 读取清单
+          with open('images-manifest.yml', 'r') as f:
+              manifest = yaml.safe_load(f)
 
-          echo "📋 Parsed images from manifest"
+          registry = "${{ env.GHCR_REGISTRY }}"
+          owner = "${{ env.GITHUB_OWNER }}"
+          
+          mirrored_images = []
+          success_count = 0
+          fail_count = 0
 
-      - name: Mirror images
-        id: mirror_images
-        run: |
-          set -eu
+          for img in manifest.get('images', []):
+              if not img.get('enabled', True):
+                  continue
+              
+              source = img['source']
+              description = img.get('description', '')
+              
+              # 提取镜像名和当前标签
+              image_name = source.split(':')[0]
+              current_tag = source.split(':')[1] if ':' in source else 'latest'
+              
+              print(f"🔍 Processing {image_name}...")
+              
+              # 获取最新版本
+              latest_tag = get_latest_tag(image_name)
+              if not latest_tag:
+                  print(f"⚠️  Could not determine latest version for {image_name}, using {current_tag}")
+                  latest_tag = current_tag
+              
+              source_image = f"{image_name}:{latest_tag}"
+              
+              # 构建目标镜像
+              repo_name = image_name.replace('/', '__')
+              target_image = f"{registry}/{owner}/{repo_name}:{latest_tag}"
+              
+              print(f"📦 Source: {source_image}")
+              print(f"🎯 Target: {target_image}")
+              
+              # 执行镜像同步
+              if mirror_image(source_image, target_image):
+                  print(f"✅ Successfully mirrored {source_image}")
+                  mirrored_images.append({
+                      'name': image_name,
+                      'source': source_image,
+                      'target': target_image,
+                      'version': latest_tag,
+                      'description': description,
+                      'repository': repo_name,
+                      'synced_at': datetime.utcnow().isoformat() + 'Z'
+                  })
+                  success_count += 1
+              else:
+                  print(f"❌ Failed to mirror {source_image}")
+                  fail_count += 1
 
-          repos=()
-          images="${{ steps.parse_images.outputs.images }}"
+          # 生成镜像清单 JSON
+          output_data = {
+              'updated_at': datetime.utcnow().isoformat() + 'Z',
+              'registry': registry,
+              'owner': owner,
+              'total_count': len(mirrored_images),
+              'success_count': success_count,
+              'fail_count': fail_count,
+              'images': mirrored_images
+          }
 
-          if [[ -z "$images" ]]; then
-            echo "⚠️ No images to mirror"
-            exit 0
-          fi
+          # 确保目录存在
+          Path('web/public').mkdir(parents=True, exist_ok=True)
+          
+          # 写入 JSON 文件
+          with open('web/public/images.json', 'w') as f:
+              json.dump(output_data, f, indent=2, ensure_ascii=False)
 
-          while IFS= read -r image; do
-            image=$(echo "$image" | xargs)
-            [[ -n "$image" ]] || continue
+          print(f"\n📊 Summary:")
+          print(f"   Total: {len(mirrored_images)}")
+          print(f"   Success: {success_count}")
+          print(f"   Failed: {fail_count}")
+          print(f"✅ Generated images.json")
+          
+          # 设置输出
+          print(f"::set-output name=success_count::{success_count}")
+          print(f"::set-output name=fail_count::{fail_count}")
+          PYTHON_SCRIPT
 
-            echo "::group::🔄 Mirroring [$image]..."
-
-            name="${image%%:*}"
-            tag="${image#*:}"
-            repo="${name//\//__}"
-
-            target_image="${{ env.GHCR_REGISTRY }}/${{ env.GITHUB_OWNER }}/$repo:$tag"
-
-            echo "Source: $image"
-            echo "Target: $target_image"
-
-            if regctl image copy \
-              --verbosity debug \
-              --digest-tags \
-              --include-external \
-              --referrers \
-              "$image" \
-              "$target_image"; then
-              echo "✅ Successfully mirrored: $repo:$tag"
-              repos+=("$repo")
-            else
-              echo "❌ Failed to mirror: $image"
-            fi
-
-            echo "::endgroup::"
-          done <<< "$images"
-
-          if [[ ${#repos[@]} -gt 0 ]]; then
-            packages=$(printf '%s\n' "${repos[@]}" | sort -u | paste -sd ',')
-            echo "packages=${packages}" >> "$GITHUB_OUTPUT"
-            echo "✅ Mirrored ${#repos[@]} package(s)"
-          else
-            echo "⚠️ No packages were successfully mirrored"
-          fi
-
-      - name: Make images public (optional)
-        if: success() && steps.mirror_images.outputs.packages
-        run: |
-          set -euo pipefail
-
-          packages="${{ steps.mirror_images.outputs.packages }}"
-          IFS=',' read -ra pkg_array <<< "$packages"
-
-          for pkg in "${pkg_array[@]}"; do
-            echo "📦 Processing package: $pkg"
-            # 可选：通过 GitHub API 设置包可见性
-            # curl -X PATCH \
-            #   -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            #   -H "Accept: application/vnd.github.v3+json" \
-            #   https://api.github.com/user/packages/container/$pkg \
-            #   -d '{"visibility":"public"}'
-          done
-
-      - name: Update mirror index (optional)
+      - name: Commit and push changes
         if: success()
         run: |
-          set -euo pipefail
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          git add web/public/images.json
+          
+          if git diff --staged --quiet; then
+            echo "📝 No changes to commit"
+          else
+            git commit -m "chore: update images manifest [skip ci]"
+            git push
+            echo "✅ Changes committed and pushed"
+          fi
 
-          echo "📝 Mirror sync completed at $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-          echo "🎯 Owner: ${{ env.GITHUB_OWNER }}"
-          echo "🔗 GHCR: ${{ env.GHCR_REGISTRY }}/${{ env.GITHUB_OWNER }}"
+      - name: Summary
+        if: always()
+        run: |
+          echo "## 🎉 Mirror Sync Completed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- 🕐 Time: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Success: ${{ steps.mirror.outputs.success_count }}" >> $GITHUB_STEP_SUMMARY
+          echo "- ❌ Failed: ${{ steps.mirror.outputs.fail_count }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔗 Registry: ${{ env.GHCR_REGISTRY }}/${{ env.GITHUB_OWNER }}" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Docker Sync Engine - 镜像同步服务</title>
+  <meta name="description" content="Docker Hub 镜像同步到 GitHub Container Registry">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐳</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    
+    .badge-blue {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .badge-green {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+    
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    
+    .search-input:focus {
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Header -->
+  <header class="gradient-bg text-white shadow-lg">
+    <div class="container mx-auto px-4 py-6">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="bg-white rounded-lg p-2">
+            <svg class="w-8 h-8 text-indigo-600" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M13.5 2c-5.629 0-10.212 4.436-10.475 10h-3.025l4.537 5.917 4.463-5.917h-2.975c.26-3.902 3.508-7 7.475-7 4.136 0 7.5 3.364 7.5 7.5s-3.364 7.5-7.5 7.5c-2.381 0-4.502-1.119-5.876-2.854l-1.847 2.449c1.919 2.088 4.664 3.405 7.723 3.405 5.798 0 10.5-4.702 10.5-10.5s-4.702-10.5-10.5-10.5z"/>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold">Docker Sync Engine</h1>
+            <p class="text-indigo-100 text-sm">镜像自动同步服务</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <a href="https://github.com/freemankevin/dockerhub-mirror" target="_blank" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            <span class="hidden sm:inline">GitHub</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 py-8">
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-600 text-sm font-medium">总镜像数</p>
+            <p id="total-count" class="text-3xl font-bold text-gray-900 mt-1">-</p>
+          </div>
+          <div class="bg-blue-100 rounded-full p-3">
+            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-600 text-sm font-medium">最后更新</p>
+            <p id="last-update" class="text-lg font-semibold text-gray-900 mt-1">-</p>
+          </div>
+          <div class="bg-green-100 rounded-full p-3">
+            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-600 text-sm font-medium">注册表</p>
+            <p class="text-sm font-semibold text-gray-900 mt-1" id="registry-info">ghcr.io/freemankevin</p>
+          </div>
+          <div class="bg-purple-100 rounded-full p-3">
+            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+      <div class="relative">
+        <input 
+          type="text" 
+          id="search-input"
+          placeholder="搜索镜像名称或描述..."
+          class="w-full px-5 py-3 pl-12 border border-gray-300 rounded-lg search-input focus:outline-none focus:border-indigo-500 transition"
+        >
+        <svg class="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Images List -->
+    <div id="images-container" class="grid grid-cols-1 gap-6">
+      <!-- Loading skeletons -->
+      <div class="skeleton-card bg-white rounded-xl shadow-sm p-6">
+        <div class="skeleton h-6 w-1/3 rounded mb-3"></div>
+        <div class="skeleton h-4 w-2/3 rounded mb-4"></div>
+        <div class="flex space-x-4">
+          <div class="skeleton h-8 w-24 rounded-full"></div>
+          <div class="skeleton h-8 w-32 rounded-full"></div>
+        </div>
+      </div>
+      <div class="skeleton-card bg-white rounded-xl shadow-sm p-6">
+        <div class="skeleton h-6 w-1/3 rounded mb-3"></div>
+        <div class="skeleton h-4 w-2/3 rounded mb-4"></div>
+        <div class="flex space-x-4">
+          <div class="skeleton h-8 w-24 rounded-full"></div>
+          <div class="skeleton h-8 w-32 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="hidden text-center py-12">
+      <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      <h3 class="mt-4 text-lg font-medium text-gray-900">未找到匹配的镜像</h3>
+      <p class="mt-2 text-gray-500">尝试使用不同的关键词搜索</p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t mt-12">
+    <div class="container mx-auto px-4 py-6">
+      <div class="text-center text-gray-600 text-sm">
+        <p>自动同步 Docker Hub 镜像到 GitHub Container Registry</p>
+        <p class="mt-2">使用 <span class="text-red-500">❤️</span> 构建 | 
+          <a href="https://github.com/freemankevin/dockerhub-mirror" class="text-indigo-600 hover:text-indigo-800">GitHub</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let allImages = [];
+
+    // 格式化时间
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      const now = new Date();
+      const diff = Math.floor((now - date) / 1000);
+
+      if (diff < 60) return '刚刚';
+      if (diff < 3600) return `${Math.floor(diff / 60)} 分钟前`;
+      if (diff < 86400) return `${Math.floor(diff / 3600)} 小时前`;
+      if (diff < 2592000) return `${Math.floor(diff / 86400)} 天前`;
+      
+      return date.toLocaleDateString('zh-CN');
+    }
+
+    // 复制命令到剪贴板
+    function copyCommand(text, btn) {
+      navigator.clipboard.writeText(text).then(() => {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+        }, 2000);
+      });
+    }
+
+    // 渲染镜像卡片
+    function renderImages(images) {
+      const container = document.getElementById('images-container');
+      const emptyState = document.getElementById('empty-state');
+
+      if (images.length === 0) {
+        container.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      container.classList.remove('hidden');
+      emptyState.classList.add('hidden');
+
+      container.innerHTML = images.map(img => `
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex-1">
+              <h3 class="text-xl font-semibold text-gray-900 mb-2">${img.name.split('/').pop()}</h3>
+              <p class="text-gray-600 text-sm mb-3">${img.description || '无描述'}</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="badge badge-blue">v${img.version}</span>
+                <span class="badge badge-green">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  已同步
+                </span>
+                <span class="text-xs text-gray-500 flex items-center">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  ${formatDate(img.synced_at)}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <div class="bg-gray-50 rounded-lg p-3">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-medium text-gray-600">Docker Pull 命令</span>
+                <button onclick="copyCommand('docker pull ${img.target}', this)" class="text-indigo-600 hover:text-indigo-800 text-xs font-medium flex items-center">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                  </svg>
+                  复制
+                </button>
+              </div>
+              <code class="text-sm text-gray-800 break-all">docker pull ${img.target}</code>
+            </div>
+
+            <div class="flex items-center text-xs text-gray-500">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              源镜像: ${img.source}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // 搜索过滤
+    function filterImages(query) {
+      const filtered = allImages.filter(img => 
+        img.name.toLowerCase().includes(query.toLowerCase()) ||
+        (img.description && img.description.toLowerCase().includes(query.toLowerCase()))
+      );
+      renderImages(filtered);
+    }
+
+    // 加载镜像数据
+    async function loadImages() {
+      try {
+        const response = await fetch('public/images.json');
+        const data = await response.json();
+        
+        allImages = data.images;
+        
+        // 更新统计信息
+        document.getElementById('total-count').textContent = data.total_count;
+        document.getElementById('last-update').textContent = formatDate(data.updated_at);
+        document.getElementById('registry-info').textContent = `${data.registry}/${data.owner}`;
+        
+        // 渲染镜像列表
+        renderImages(allImages);
+        
+        // 移除骨架屏
+        document.querySelectorAll('.skeleton-card').forEach(el => el.remove());
+      } catch (error) {
+        console.error('Failed to load images:', error);
+        document.getElementById('images-container').innerHTML = `
+          <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
+            <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <h3 class="mt-4 text-lg font-medium text-red-900">加载失败</h3>
+            <p class="mt-2 text-red-700">无法加载镜像数据，请稍后重试</p>
+          </div>
+        `;
+      }
+    }
+
+    // 搜索输入监听
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      filterImages(e.target.value);
+    });
+
+    // 页面加载时获取数据
+    loadImages();
+  </script>
+</body>
+</html>
