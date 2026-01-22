@@ -14,7 +14,7 @@ images:
   exclude_pattern: .*BETA.*|.*RC.*|.*SNAPSHOT.*
 - source: library/nginx:1.29.4-alpine
   enabled: true
-  description: Nginx 高性能 Web 服务器 
+  description: Nginx 高性能 Web 服务器
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+-alpine$
 - source: library/rabbitmq:4.2.2-management-alpine
   enabled: true
@@ -33,8 +33,10 @@ images:
 - source: freelabspace/postgresql-postgis:18.1
   enabled: true
   description: PostgreSQL 数据库 + PostGIS 扩展
-  tag_pattern: ^[0-9]+\.[0-9]+$
-  exclude_pattern: ^buildcache-.*|^13\..*|^14\..*|^15\..*|^16\..*|^17\..*
+  tag_pattern: ^(1[3-8])\.[0-9]+$
+  exclude_pattern: ^buildcache-.*
+  sync_all_matching: true
+  version_range: "13.x-18.x"
 - source: freelabspace/postgresql-backup:latest
   enabled: true
   description: PostgreSQL 备份工具
