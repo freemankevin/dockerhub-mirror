@@ -3,6 +3,10 @@
   "public": true,
   "rewrites": [
     {
+      "source": "/public/(.*)",
+      "destination": "/web/public/$1"
+    },
+    {
       "source": "/(.*)",
       "destination": "/web/index.html"
     }
@@ -14,6 +18,10 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=300, s-maxage=300"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json"
         }
       ]
     }
