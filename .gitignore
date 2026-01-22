@@ -34,3 +34,4 @@ nb-configuration.xml
 *.rej
 
 web/node_modules/
+logs/

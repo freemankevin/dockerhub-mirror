@@ -288,23 +288,28 @@ class ManifestManager:
                 all_versions = api.get_all_matching_versions(repository, tag_pattern, exclude_pattern)
 
                 if all_versions:
-                    # 检查 versions 是否有变化
-                    current_versions = img.get('versions', [])
-                    versions_changed = current_versions != all_versions
+                    # 显示所有匹配版本
+                    print(f"  {COLOR_GREEN}📋 找到 {len(all_versions)} 个匹配版本{COLOR_RESET}")
+                    print(f"  {COLOR_CYAN}  版本列表: {', '.join(all_versions)}{COLOR_RESET}")
 
-                    if versions_changed:
-                        print(f"  {COLOR_GREEN}📋 找到 {len(all_versions)} 个匹配版本{COLOR_RESET}")
-                        print(f"  {COLOR_CYAN}  版本列表: {', '.join(all_versions)}{COLOR_RESET}")
+                    # 更新 source 为最新版本
+                    latest_version = all_versions[-1]
+                    if current_version != latest_version:
+                        print(f"  {COLOR_GREEN}🔄 发现更新: {latest_version}{COLOR_RESET}")
                         if not dry_run:
-                            img['versions'] = all_versions
-                            # 同时更新 source 为最新版本
-                            latest_version = all_versions[-1]
                             img['source'] = f"{repository}:{latest_version}"
-                            print(f"  {COLOR_GREEN}🔄 已更新 versions 字段{COLOR_RESET}")
+                            # 移除旧的 versions 字段（如果存在）
+                            if 'versions' in img:
+                                del img['versions']
                         updated_count += 1
                     else:
-                        print(f"  {COLOR_GREEN}✓ versions 字段已是最新{COLOR_RESET}")
-                        unchanged_count += 1
+                        print(f"  {COLOR_GREEN}✓ 已是最新版本{COLOR_RESET}")
+                        if not dry_run and 'versions' in img:
+                            # 移除旧的 versions 字段
+                            del img['versions']
+                            updated_count += 1
+                        else:
+                            unchanged_count += 1
                 else:
                     print(f"  {COLOR_RED}✗ 无法获取匹配版本{COLOR_RESET}")
                     failed_count += 1
