@@ -14,7 +14,7 @@ images:
   exclude_pattern: .*BETA.*|.*RC.*|.*SNAPSHOT.*
 - source: library/nginx:1.29.4-alpine
   enabled: true
-  description: Nginx 高性能 Web 服务器 
+  description: Nginx 高性能 Web 服务器
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+-alpine$
 - source: library/rabbitmq:4.2.2-management-alpine
   enabled: true
