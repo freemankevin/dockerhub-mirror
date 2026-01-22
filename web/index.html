@@ -298,7 +298,7 @@
     // 加载镜像数据
     async function loadImages() {
       try {
-        const response = await fetch('public/images.json');
+        const response = await fetch('/public/images.json');
         const data = await response.json();
         
         allImages = data.images;
