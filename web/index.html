@@ -10,163 +10,41 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
     
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    }
-    
-    .gradient-bg {
-      background: linear-gradient(135deg, #5B6EEA 0%, #764ba2 100%);
-    }
-    
-    .card-hover {
-      transition: all 0.3s ease;
-    }
-    
-    .card-hover:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    }
-    
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.875rem;
-      font-weight: 500;
-    }
-    
-    .badge-blue {
-      background-color: #dbeafe;
-      color: #1e40af;
-    }
-    
-    .badge-green {
-      background-color: #d1fae5;
-      color: #065f46;
-    }
-    
-    .skeleton {
-      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-      background-size: 200% 100%;
-      animation: loading 1.5s ease-in-out infinite;
-    }
-    
-    @keyframes loading {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-    
-    .search-input:focus {
-      box-shadow: 0 0 0 3px rgba(91, 110, 234, 0.1);
-    }
-
-    /* Mac 风格命令行样式 */
-    .terminal-window {
-      background: #1e1e1e;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    }
-
-    .terminal-header {
-      background: #2d2d2d;
-      padding: 8px 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      border-bottom: 1px solid #3d3d3d;
-    }
-
-    .terminal-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .gradient-bg { background: linear-gradient(135deg, #5B6EEA 0%, #764ba2 100%); }
+    .card-hover { transition: all 0.3s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+    .badge { display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 500; }
+    .badge-blue { background-color: #dbeafe; color: #1e40af; }
+    .badge-green { background-color: #d1fae5; color: #065f46; }
+    .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: loading 1.5s ease-in-out infinite; }
+    @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    .search-input:focus { box-shadow: 0 0 0 3px rgba(91, 110, 234, 0.1); }
+    .terminal-window { background: #1e1e1e; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+    .terminal-header { background: #2d2d2d; padding: 8px 12px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid #3d3d3d; }
+    .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
     .dot-red { background: #ff5f56; }
     .dot-yellow { background: #ffbd2e; }
     .dot-green { background: #27c93f; }
-
-    .terminal-body {
-      padding: 16px;
-      font-family: 'Source Code Pro', 'DM Mono', 'Monaco', 'Menlo', 'Consolas', monospace;
-      font-size: 13px;
-      line-height: 1.6;
-      color: #d4d4d4;
-    }
-
-    .terminal-prompt {
-      color: #4ec9b0;
-      user-select: none;
-    }
-
-    .terminal-command {
-      color: #dcdcaa;
-    }
-
-    /* 复制成功提示动画 */
-    .copy-toast {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #10b981;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      animation: slideIn 0.3s ease-out, slideOut 0.3s ease-in 2.7s;
-      z-index: 1000;
-    }
-
-    @keyframes slideIn {
-      from {
-        transform: translateX(400px);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes slideOut {
-      from {
-        transform: translateX(0);
-        opacity: 1;
-      }
-      to {
-        transform: translateX(400px);
-        opacity: 0;
-      }
-    }
-
-    .copy-button {
-      transition: all 0.2s ease;
-    }
-
-    .copy-button:hover {
-      background-color: rgba(91, 110, 234, 0.1);
-    }
-
-    .copy-button.copied {
-      color: #10b981;
-    }
+    .terminal-body { padding: 16px; font-family: 'Source Code Pro', 'DM Mono', 'Monaco', 'Menlo', 'Consolas', monospace; font-size: 13px; line-height: 1.6; color: #d4d4d4; }
+    .terminal-prompt { color: #4ec9b0; user-select: none; }
+    .terminal-command { color: #dcdcaa; }
+    .copy-toast { position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 12px 20px; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); display: flex; align-items: center; gap: 8px; animation: slideIn 0.3s ease-out, slideOut 0.3s ease-in 2.7s; z-index: 1000; }
+    @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(400px); opacity: 0; } }
+    .copy-button { transition: all 0.2s ease; }
+    .copy-button:hover { background-color: rgba(91, 110, 234, 0.1); }
+    .copy-button.copied { color: #10b981; }
+    .version-select { background: #2d2d2d; border: 1px solid #3d3d3d; color: #d4d4d4; padding: 4px 8px; border-radius: 4px; font-family: 'Source Code Pro', monospace; font-size: 12px; cursor: pointer; outline: none; }
+    .version-select:hover { border-color: #5B6EEA; }
   </style>
 </head>
 <body class="bg-gray-50">
-  <!-- 复制成功提示 -->
   <div id="copy-toast" class="copy-toast" style="display: none;">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-    </svg>
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
     <span>复制成功!</span>
   </div>
 
-  <!-- Header -->
   <header class="gradient-bg text-white shadow-lg">
     <div class="container mx-auto px-4 py-6">
       <div class="flex items-center justify-between">
@@ -183,21 +61,15 @@
             <p class="text-indigo-100 text-sm">镜像自动同步服务</p>
           </div>
         </div>
-        <div class="flex items-center space-x-4">
-          <a href="https://github.com/freemankevin/dockerhub-mirror" target="_blank" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-            <span class="hidden sm:inline">GitHub</span>
-          </a>
-        </div>
+        <a href="https://github.com/freemankevin/dockerhub-mirror" target="_blank" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          <span class="hidden sm:inline">GitHub</span>
+        </a>
       </div>
     </div>
   </header>
 
-  <!-- Main Content -->
   <main class="container mx-auto px-4 py-8">
-    <!-- Stats -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
         <div class="flex items-center justify-between">
@@ -206,13 +78,10 @@
             <p id="total-count" class="text-3xl font-bold text-gray-900 mt-1">-</p>
           </div>
           <div class="bg-blue-100 rounded-full p-3">
-            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/>
-            </svg>
+            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
           </div>
         </div>
       </div>
-
       <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
         <div class="flex items-center justify-between">
           <div>
@@ -220,13 +89,10 @@
             <p id="last-update" class="text-lg font-semibold text-gray-900 mt-1">-</p>
           </div>
           <div class="bg-green-100 rounded-full p-3">
-            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
+            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
         </div>
       </div>
-
       <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
         <div class="flex items-center justify-between">
           <div>
@@ -234,146 +100,120 @@
             <p class="text-sm font-semibold text-gray-900 mt-1" id="registry-info">ghcr.io/freemankevin</p>
           </div>
           <div class="bg-purple-100 rounded-full p-3">
-            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
-            </svg>
+            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Search -->
     <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
       <div class="relative">
-        <input 
-          type="text" 
-          id="search-input"
-          placeholder="搜索镜像名称或描述..."
-          class="w-full px-5 py-3 pl-12 border border-gray-300 rounded-lg search-input focus:outline-none focus:border-indigo-500 transition"
-        >
-        <svg class="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-        </svg>
+        <input type="text" id="search-input" placeholder="搜索镜像名称或描述..." class="w-full px-5 py-3 pl-12 border border-gray-300 rounded-lg search-input focus:outline-none focus:border-indigo-500 transition">
+        <svg class="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
       </div>
     </div>
 
-    <!-- Images List -->
-    <div id="images-container" class="grid grid-cols-1 gap-6">
-      <!-- Loading skeletons -->
-      <div class="skeleton-card bg-white rounded-xl shadow-sm p-6">
-        <div class="skeleton h-6 w-1/3 rounded mb-3"></div>
-        <div class="skeleton h-4 w-2/3 rounded mb-4"></div>
-        <div class="flex space-x-4">
-          <div class="skeleton h-8 w-24 rounded-full"></div>
-          <div class="skeleton h-8 w-32 rounded-full"></div>
-        </div>
-      </div>
-      <div class="skeleton-card bg-white rounded-xl shadow-sm p-6">
-        <div class="skeleton h-6 w-1/3 rounded mb-3"></div>
-        <div class="skeleton h-4 w-2/3 rounded mb-4"></div>
-        <div class="flex space-x-4">
-          <div class="skeleton h-8 w-24 rounded-full"></div>
-          <div class="skeleton h-8 w-32 rounded-full"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Empty State -->
+    <div id="images-container" class="grid grid-cols-1 gap-6"></div>
     <div id="empty-state" class="hidden text-center py-12">
-      <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-      </svg>
+      <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
       <h3 class="mt-4 text-lg font-medium text-gray-900">未找到匹配的镜像</h3>
       <p class="mt-2 text-gray-500">尝试使用不同的关键词搜索</p>
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="bg-white border-t mt-12">
     <div class="container mx-auto px-4 py-6">
       <div class="text-center text-gray-600 text-sm">
         <p>自动同步 Docker Hub 镜像到 GitHub Container Registry</p>
-        <p class="mt-2">使用 <span class="text-red-500">❤️</span> 构建 | 
-          <a href="https://github.com/freemankevin/dockerhub-mirror" class="text-indigo-600 hover:text-indigo-800">GitHub</a>
-        </p>
+        <p class="mt-2">使用 <span class="text-red-500">❤️</span> 构建 | <a href="https://github.com/freemankevin/dockerhub-mirror" class="text-indigo-600 hover:text-indigo-800">GitHub</a></p>
       </div>
     </div>
   </footer>
 
   <script>
     let allImages = [];
+    let imageVersions = {}; // 存储每个镜像的所有版本
 
     // 格式化时间
     function formatDate(dateString) {
       const date = new Date(dateString);
       const now = new Date();
       const diff = Math.floor((now - date) / 1000);
-
       if (diff < 60) return '刚刚';
       if (diff < 3600) return `${Math.floor(diff / 60)} 分钟前`;
       if (diff < 86400) return `${Math.floor(diff / 3600)} 小时前`;
       if (diff < 2592000) return `${Math.floor(diff / 86400)} 天前`;
-      
       return date.toLocaleDateString('zh-CN');
+    }
+
+    // 规范化版本号显示
+    function normalizeVersion(version) {
+      if (!version || version === 'latest') return 'latest';
+      // 移除开头的 v
+      return version.replace(/^v+/i, '');
     }
 
     // 显示复制成功提示
     function showCopyToast() {
       const toast = document.getElementById('copy-toast');
       toast.style.display = 'flex';
-      
-      setTimeout(() => {
-        toast.style.display = 'none';
-      }, 3000);
+      setTimeout(() => toast.style.display = 'none', 3000);
     }
 
-    // 复制命令到剪贴板
+    // 复制命令
     function copyCommand(text, btn) {
       navigator.clipboard.writeText(text).then(() => {
-        // 改变按钮状态
         const originalHTML = btn.innerHTML;
         btn.classList.add('copied');
-        btn.innerHTML = `
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-          </svg>
-        `;
-        
-        // 显示全局提示
+        btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
         showCopyToast();
-        
-        // 2秒后恢复按钮
         setTimeout(() => {
           btn.classList.remove('copied');
           btn.innerHTML = originalHTML;
         }, 2000);
-      }).catch(err => {
-        console.error('复制失败:', err);
       });
     }
 
-    // 渲染镜像卡片
-    function renderImages(images) {
-      const container = document.getElementById('images-container');
-      const emptyState = document.getElementById('empty-state');
-
-      if (images.length === 0) {
-        container.classList.add('hidden');
-        emptyState.classList.remove('hidden');
-        return;
+    // 版本切换
+    function changeVersion(imageName, selectEl) {
+      const selectedVersion = selectEl.value;
+      const versions = imageVersions[imageName];
+      const versionData = versions.find(v => v.version === selectedVersion);
+      
+      if (versionData) {
+        const commandEl = selectEl.closest('.terminal-window').querySelector('.terminal-command');
+        commandEl.textContent = `docker pull ${versionData.target}`;
       }
+    }
 
-      container.classList.remove('hidden');
-      emptyState.classList.add('hidden');
+    // 创建版本选择器
+    function createVersionSelector(imageName, currentVersion) {
+      const versions = imageVersions[imageName] || [];
+      if (versions.length <= 1) {
+        return `<span class="badge badge-blue">${normalizeVersion(currentVersion)}</span>`;
+      }
+      
+      const options = versions.map(v => 
+        `<option value="${v.version}" ${v.version === currentVersion ? 'selected' : ''}>
+          ${normalizeVersion(v.version)}
+        </option>`
+      ).join('');
+      
+      return `<select class="version-select" onchange="changeVersion('${imageName}', this)">${options}</select>`;
+    }
 
-      container.innerHTML = images.map(img => `
+    // 创建镜像卡片
+    function createImageCard(img) {
+      const displayVersion = normalizeVersion(img.version);
+      
+      return `
         <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
           <div class="flex items-start justify-between mb-4">
             <div class="flex-1">
               <h3 class="text-xl font-semibold text-gray-900 mb-2">${img.name.split('/').pop()}</h3>
               <p class="text-gray-600 text-sm mb-3">${img.description || '无描述'}</p>
-              <div class="flex flex-wrap gap-2">
-                <span class="badge badge-blue">v${img.version}</span>
+              <div class="flex flex-wrap gap-2 items-center">
+                ${createVersionSelector(img.name, img.version)}
                 <span class="badge badge-green">
                   <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -389,19 +229,14 @@
               </div>
             </div>
           </div>
-
           <div class="space-y-3">
-            <!-- Mac 风格终端 -->
             <div class="terminal-window">
               <div class="terminal-header">
                 <div class="terminal-dot dot-red"></div>
                 <div class="terminal-dot dot-yellow"></div>
                 <div class="terminal-dot dot-green"></div>
                 <span class="text-xs text-gray-400 ml-2">Docker Pull 命令</span>
-                <button 
-                  onclick="copyCommand('docker pull ${img.target}', this)" 
-                  class="ml-auto copy-button text-gray-400 hover:text-white px-2 py-1 rounded flex items-center text-xs"
-                >
+                <button onclick="copyCommand('docker pull ${img.target}', this)" class="ml-auto copy-button text-gray-400 hover:text-white px-2 py-1 rounded flex items-center text-xs">
                   <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                   </svg>
@@ -412,7 +247,6 @@
                 <span class="terminal-prompt">$</span> <span class="terminal-command">docker pull ${img.target}</span>
               </div>
             </div>
-
             <div class="flex items-center text-xs text-gray-500">
               <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -421,7 +255,23 @@
             </div>
           </div>
         </div>
-      `).join('');
+      `;
+    }
+
+    // 渲染镜像列表
+    function renderImages(images) {
+      const container = document.getElementById('images-container');
+      const emptyState = document.getElementById('empty-state');
+
+      if (images.length === 0) {
+        container.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      container.classList.remove('hidden');
+      emptyState.classList.add('hidden');
+      container.innerHTML = images.map(createImageCard).join('');
     }
 
     // 搜索过滤
@@ -439,17 +289,31 @@
         const response = await fetch('/public/images.json');
         const data = await response.json();
         
-        allImages = data.images;
+        // 按镜像名称分组,支持多版本
+        const imageMap = {};
+        data.images.forEach(img => {
+          if (!imageMap[img.name]) {
+            imageMap[img.name] = [];
+          }
+          imageMap[img.name].push(img);
+        });
         
-        // 更新统计信息
-        document.getElementById('total-count').textContent = data.total_count;
+        // 存储版本信息
+        imageVersions = imageMap;
+        
+        // 每个镜像只显示最新版本
+        allImages = Object.values(imageMap).map(versions => {
+          // 按同步时间排序,取最新的
+          versions.sort((a, b) => new Date(b.synced_at) - new Date(a.synced_at));
+          return versions[0];
+        });
+        
+        // 更新统计
+        document.getElementById('total-count').textContent = Object.keys(imageMap).length;
         document.getElementById('last-update').textContent = formatDate(data.updated_at);
         document.getElementById('registry-info').textContent = `${data.registry}/${data.owner}`;
         
-        // 渲染镜像列表
         renderImages(allImages);
-        
-        // 移除骨架屏
         document.querySelectorAll('.skeleton-card').forEach(el => el.remove());
       } catch (error) {
         console.error('Failed to load images:', error);
@@ -465,12 +329,7 @@
       }
     }
 
-    // 搜索输入监听
-    document.getElementById('search-input').addEventListener('input', (e) => {
-      filterImages(e.target.value);
-    });
-
-    // 页面加载时获取数据
+    document.getElementById('search-input').addEventListener('input', (e) => filterImages(e.target.value));
     loadImages();
   </script>
 </body>
