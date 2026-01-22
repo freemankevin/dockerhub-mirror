@@ -1,0 +1,51 @@
+# Docker 镜像清单配置
+# 支持动态添加/移除镜像，版本号可随时更新
+# enabled 字段可控制该镜像是否同步
+
+images:
+  # 搜索引擎和数据库
+  - source: library/elasticsearch:9.2.3
+    enabled: true
+    description: Elasticsearch 搜索引擎
+
+  - source: derklaro/minio:RELEASE.2025-10-15T17-29-55Z
+    enabled: true
+    description: MinIO 对象存储
+
+  - source: nacos/nacos-server:v3.1.1
+    enabled: true
+    description: Nacos 服务发现配置中心
+
+  # Web 服务
+  - source: library/nginx:1.29.4-alpine
+    enabled: true
+    description: Nginx Web 服务器
+
+  # 消息队列
+  - source: library/rabbitmq:4.2.2-management-alpine
+    enabled: true
+    description: RabbitMQ 消息队列
+
+  # 缓存数据库
+  - source: library/redis:8.4.0
+    enabled: true
+    description: Redis 缓存数据库
+
+  # GIS 地理信息
+  - source: kartoza/geoserver:2.28.0
+    enabled: true
+    description: GeoServer GIS 服务
+
+  # 地理空间数据库
+  - source: freelabspace/postgresql-postgis:18.1
+    enabled: true
+    description: PostgreSQL with PostGIS 扩展
+
+# 可选配置
+config:
+  registry: ghcr.io
+  owner: freemankevin
+  # 是否在同步前检查镜像是否存在
+  check_exist: true
+  # 同步后是否自动更新索引
+  update_index: true

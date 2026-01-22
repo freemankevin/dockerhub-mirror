@@ -2,147 +2,208 @@
 name: Mirror Docker Images
 
 env:
-  # List of Docker Hub images to mirror, one per line
-  SOURCE_IMAGES: |
-    library/elasticsearch:9.2.3
-    derklaro/minio:RELEASE.2025-10-15T17-29-55Z
-    nacos/nacos-server:v3.1.1
-    library/nginx:1.29.4-alpine
-    library/rabbitmq:4.2.2-management-alpine
-    library/redis:8.4.0
-    kartoza/geoserver:2.28.0
-    freelabspace/postgresql-postgis:18.1
+  # GitHub 用户名/组织名
+  GITHUB_OWNER: freemankevin
+  # GHCR 仓库前缀
+  GHCR_REGISTRY: ghcr.io
+  # 镜像清单文件路径
+  IMAGES_MANIFEST: images-manifest.yml
 
-on:  # https://docs.github.com/en/actions/reference/events-that-trigger-workflows
+on:
   schedule:
-    # https://docs.github.com/en/actions/reference/events-that-trigger-workflows#schedule
-    - cron: '30 1 * * *'  # Runs daily at 01:30 UTC
+    - cron: '30 1 * * *'  # 每天 UTC 01:30 运行
   push:
-    branches-ignore:  # build all branches except:
-    - 'dependabot/**'  # prevent GHA triggered twice (once for commit to the branch and once for opening/syncing the PR)
-    tags-ignore:  # don't build tags
-    - '**'
-    paths-ignore:
-    - '**/*.md'
-    - '.git*'
-    - '.github/*.yml'
-    - '.github/workflows/keepalive.yml'
+    branches-ignore:
+      - 'dependabot/**'
+    tags-ignore:
+      - '**'
+    paths:
+      - 'images-manifest.yml'
+      - '.github/workflows/mirror-images.yml'
   pull_request:
-    paths-ignore:
-    - '**/*.md'
-    - '.git*'
-    - '.github/*.yml'
-    - '.github/workflows/keepalive.yml'
+    paths:
+      - 'images-manifest.yml'
+      - '.github/workflows/mirror-images.yml'
   workflow_dispatch:
-    # https://docs.github.com/en/actions/reference/events-that-trigger-workflows#workflow_dispatch
 
 defaults:
   run:
     shell: bash
 
 jobs:
-
-  ###########################################################
   mirror-docker-images:
-  ###########################################################
-    runs-on: ubuntu-latest  # https://github.com/actions/runner-images#available-images
+    runs-on: ubuntu-latest
     timeout-minutes: 30
 
     permissions:
       packages: write
+      contents: read
 
-    # https://docs.github.com/en/actions/using-jobs/using-concurrency
     concurrency:
       group: ${{ github.workflow }}
       cancel-in-progress: false
 
-
     steps:
-    - name: "Show: GitHub context"
-      env:
-        GITHUB_CONTEXT: ${{ toJSON(github) }}
-      run: printf '%s' "$GITHUB_CONTEXT" | python -m json.tool
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      - name: Show GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: |
+          echo "=== GitHub Context ==="
+          printf '%s' "$GITHUB_CONTEXT" | python -m json.tool
 
-    - name: "Show: environment variables"
-      run: env | sort
+      - name: Show environment variables
+        run: |
+          echo "=== Environment Variables ==="
+          env | sort | grep -E "(GITHUB_|GHCR_|OWNER)" || true
 
+      - name: Install regclient
+        uses: iarekylew00t/regctl-installer@v4
 
-    - name: Install regclient
-      uses: iarekylew00t/regctl-installer@v4
+      - name: Show regclient version
+        run: regctl version
 
+      - name: Login to docker.io
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-    - name: "Show: regclient version"
-      run: regctl version
+      - name: Login to ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.GHCR_REGISTRY }}
+          username: ${{ env.GITHUB_OWNER }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Check Docker Hub rate-limit
+        run: |
+          set -euo pipefail
+          echo "🔍 Querying Docker Hub rate-limit..."
 
-    - name: Login to docker.io
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_TOKEN }}
+          token=$(curl -s -u "${{ secrets.DOCKER_HUB_USERNAME }}:${{ secrets.DOCKER_HUB_TOKEN }}" \
+            "https://auth.docker.io/token?service=registry.docker.io&scope=repository:library/alpine:pull" |
+            jq -r '.token')
 
+          headers=$(curl -sI -H "Authorization: Bearer $token" \
+            -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
+            https://registry-1.docker.io/v2/library/alpine/manifests/latest)
 
-    - name: Login to ghcr.io
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+          remain=$(echo "$headers" | awk -F'[ ;]' '/ratelimit-remaining/ {print $2}')
+          limit=$(echo  "$headers" | awk -F'[ ;]' '/ratelimit-limit/      {print $2}')
 
+          echo "📊 Docker Hub pulls remaining: $remain / $limit"
 
-    - name: Check Docker Hub rate-limit
-      run: |
-        set -euo pipefail
+      - name: Parse images manifest
+        id: parse_images
+        run: |
+          set -euo pipefail
 
-        echo "🔍  Querying Docker Hub rate-limit…"
+          if [[ ! -f "${{ env.IMAGES_MANIFEST }}" ]]; then
+            echo "❌ Manifest file not found: ${{ env.IMAGES_MANIFEST }}"
+            exit 1
+          fi
 
-        token=$(curl -s -u "${{ secrets.DOCKER_HUB_USERNAME }}:${{ secrets.DOCKER_HUB_TOKEN }}" \
-          "https://auth.docker.io/token?service=registry.docker.io&scope=repository:library/alpine:pull" |
-          jq -r '.token')
+          # 使用 yq 或 python 解析 YAML，提取镜像列表
+          images=$(python3 << 'EOF'
+          import yaml
+          import sys
 
-        headers=$(curl -sI -H "Authorization: Bearer $token" \
-          -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
-          https://registry-1.docker.io/v2/library/alpine/manifests/latest)
+          with open('${{ env.IMAGES_MANIFEST }}', 'r') as f:
+              data = yaml.safe_load(f)
 
-        remain=$(echo "$headers" | awk -F'[ ;]' '/ratelimit-remaining/ {print $2}')
-        limit=$(echo  "$headers" | awk -F'[ ;]' '/ratelimit-limit/      {print $2}')
+          if data and 'images' in data:
+              for img in data['images']:
+                  if img.get('enabled', True):  # 默认启用
+                      print(img['source'])
+          else:
+              print("Warning: No images found in manifest", file=sys.stderr)
+          EOF
+          )
 
-        echo "🛈  Docker Hub pulls remaining in the current 6-hour window: $remain / $limit"
+          echo "images<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$images" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
 
-    - name: Mirror images
-      id: mirror_images
-      run: |
-        set -eu
-        repos=()
-        while IFS= read -r image; do
-          image=$(echo "$image" | xargs)  # trim spaces
-          [[ -n "$image" ]] || continue  # skip if the line is empty
-          echo "::group::🔄 Mirroring [$image]..."
-          name="${image%%:*}"
-          tag="${image#*:}"
-          repo="${name//\//__}"  # replace org/repo separator / with __
-          (set -x; regctl image copy \
-            --verbosity debug \
-            --digest-tags \
-            --include-external \
-            --referrers \
-            "$image" \
-            "ghcr.io/${{ github.repository_owner }}/$repo:$tag")
-          repos+=("$repo")
-          echo "::endgroup::"
-        done <<< "$SOURCE_IMAGES"
+          echo "📋 Parsed images from manifest"
 
-        packages=$(printf '%s\n' "${repos[@]}" | sort -u | paste -sd ',')
-        echo "packages=${packages}" >> "$GITHUB_OUTPUT"
+      - name: Mirror images
+        id: mirror_images
+        run: |
+          set -eu
 
+          repos=()
+          images="${{ steps.parse_images.outputs.images }}"
 
-    - name: Delete untagged images
-      uses: dataaxiom/ghcr-cleanup-action@v1
-      with:
-        packages: ${{ steps.mirror_images.outputs.packages }}
-        delete-untagged: true
-        delete-partial-images: true
-        delete-ghost-images: true
-        delete-orphaned-images: true
-        validate: true
+          if [[ -z "$images" ]]; then
+            echo "⚠️ No images to mirror"
+            exit 0
+          fi
+
+          while IFS= read -r image; do
+            image=$(echo "$image" | xargs)
+            [[ -n "$image" ]] || continue
+
+            echo "::group::🔄 Mirroring [$image]..."
+
+            name="${image%%:*}"
+            tag="${image#*:}"
+            repo="${name//\//__}"
+
+            target_image="${{ env.GHCR_REGISTRY }}/${{ env.GITHUB_OWNER }}/$repo:$tag"
+
+            echo "Source: $image"
+            echo "Target: $target_image"
+
+            if regctl image copy \
+              --verbosity debug \
+              --digest-tags \
+              --include-external \
+              --referrers \
+              "$image" \
+              "$target_image"; then
+              echo "✅ Successfully mirrored: $repo:$tag"
+              repos+=("$repo")
+            else
+              echo "❌ Failed to mirror: $image"
+            fi
+
+            echo "::endgroup::"
+          done <<< "$images"
+
+          if [[ ${#repos[@]} -gt 0 ]]; then
+            packages=$(printf '%s\n' "${repos[@]}" | sort -u | paste -sd ',')
+            echo "packages=${packages}" >> "$GITHUB_OUTPUT"
+            echo "✅ Mirrored ${#repos[@]} package(s)"
+          else
+            echo "⚠️ No packages were successfully mirrored"
+          fi
+
+      - name: Make images public (optional)
+        if: success() && steps.mirror_images.outputs.packages
+        run: |
+          set -euo pipefail
+
+          packages="${{ steps.mirror_images.outputs.packages }}"
+          IFS=',' read -ra pkg_array <<< "$packages"
+
+          for pkg in "${pkg_array[@]}"; do
+            echo "📦 Processing package: $pkg"
+            # 可选：通过 GitHub API 设置包可见性
+            # curl -X PATCH \
+            #   -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            #   -H "Accept: application/vnd.github.v3+json" \
+            #   https://api.github.com/user/packages/container/$pkg \
+            #   -d '{"visibility":"public"}'
+          done
+
+      - name: Update mirror index (optional)
+        if: success()
+        run: |
+          set -euo pipefail
+
+          echo "📝 Mirror sync completed at $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+          echo "🎯 Owner: ${{ env.GITHUB_OWNER }}"
+          echo "🔗 GHCR: ${{ env.GHCR_REGISTRY }}/${{ env.GITHUB_OWNER }}"
