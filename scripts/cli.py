@@ -113,8 +113,17 @@ def cmd_run(args):
     if ret != 0 and not args.continue_on_error:
         return ret
     
+    # 为同步步骤设置不同的 max_workers
+    original_max_workers = getattr(args, 'max_workers', None)
+    if hasattr(args, 'max_workers_sync'):
+        args.max_workers = args.max_workers_sync
+    
     print(f"\n{COLOR_CYAN}步骤 2/2: 同步镜像{COLOR_RESET}\n")
     ret = cmd_sync(args)
+    
+    # 恢复原始 max_workers
+    if original_max_workers is not None:
+        args.max_workers = original_max_workers
     
     print(f"\n{COLOR_BLUE}{'='*80}{COLOR_RESET}")
     print(f"{COLOR_GREEN}✅ 完整流程执行完成{COLOR_RESET}")
@@ -136,34 +145,34 @@ def main():
   python main.py update
   python main.py update --dry-run
   python main.py update -D
+  python main.py update --max-workers 10
   
   # 同步镜像
   python main.py sync --owner username
   python main.py sync --owner username --registry ghcr.io
+  python main.py sync --owner username --max-workers 5
   
   # 完整流程（更新+同步）
   python main.py run --owner username
   python main.py run --owner username --continue-on-error
+  python main.py run --owner username --max-workers 10 --max-workers-sync 5
   
   # 使用自定义清单
   python main.py update --manifest custom.yml
+  
+  # 禁用并发处理
+  python main.py update --no-concurrency
+  python main.py sync --owner username --no-concurrency
         """
     )
     
     # 全局参数
-    parser.add_argument('-D', '--debug', 
+    parser.add_argument('-D', '--debug',
                        action='store_true',
                        help='启用调试模式')
     parser.add_argument('--manifest',
                        type=Path,
                        help=f'清单文件路径 (默认: {MANIFEST_FILE})')
-    parser.add_argument('--max-workers',
-                       type=int,
-                       default=5,
-                       help='最大并发数 (默认: 5)')
-    parser.add_argument('--no-concurrency',
-                       action='store_true',
-                       help='禁用并发处理')
     
     # 子命令
     subparsers = parser.add_subparsers(dest='command', help='可用命令')
@@ -173,6 +182,13 @@ def main():
     parser_update.add_argument('--dry-run',
                               action='store_true',
                               help='预演模式，不修改文件')
+    parser_update.add_argument('--max-workers',
+                              type=int,
+                              default=5,
+                              help='最大并发数 (默认: 5)')
+    parser_update.add_argument('--no-concurrency',
+                              action='store_true',
+                              help='禁用并发处理')
     parser_update.set_defaults(func=cmd_update)
     
     # sync 命令
@@ -188,6 +204,13 @@ def main():
     parser_sync.add_argument('--output',
                             type=Path,
                             help=f'输出 JSON 文件路径 (默认: {OUTPUT_FILE})')
+    parser_sync.add_argument('--max-workers',
+                            type=int,
+                            default=3,
+                            help='最大并发数 (默认: 3)')
+    parser_sync.add_argument('--no-concurrency',
+                            action='store_true',
+                            help='禁用并发处理')
     parser_sync.set_defaults(func=cmd_sync)
     
     # run 命令（完整流程）
@@ -209,6 +232,17 @@ def main():
     parser_run.add_argument('--continue-on-error',
                            action='store_true',
                            help='即使更新失败也继续同步')
+    parser_run.add_argument('--max-workers',
+                           type=int,
+                           default=5,
+                           help='更新清单的最大并发数 (默认: 5)')
+    parser_run.add_argument('--max-workers-sync',
+                           type=int,
+                           default=3,
+                           help='同步镜像的最大并发数 (默认: 3)')
+    parser_run.add_argument('--no-concurrency',
+                           action='store_true',
+                           help='禁用并发处理')
     parser_run.set_defaults(func=cmd_run)
     
     # 解析参数
@@ -219,8 +253,9 @@ def main():
         parser.print_help()
         return 0
     
-    # 设置并发标志
-    args.concurrency = not args.no_concurrency
+    # 设置并发标志（如果子命令支持）
+    if hasattr(args, 'no_concurrency'):
+        args.concurrency = not args.no_concurrency
     
     # 执行对应的命令
     try:
