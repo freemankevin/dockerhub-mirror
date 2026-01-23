@@ -3,6 +3,10 @@
   "public": true,
   "rewrites": [
     {
+      "source": "/images.json",
+      "destination": "/images.json"
+    },
+    {
       "source": "/css/(.*)",
       "destination": "/web/css/$1"
     },
@@ -11,17 +15,13 @@
       "destination": "/web/js/$1"
     },
     {
-      "source": "/public/(.*)",
-      "destination": "/web/public/$1"
-    },
-    {
       "source": "/(.*)",
       "destination": "/web/index.html"
     }
   ],
   "headers": [
     {
-      "source": "/public/(.*)",
+      "source": "/images.json",
       "headers": [
         {
           "key": "Cache-Control",

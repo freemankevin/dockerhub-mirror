@@ -254,7 +254,7 @@ function filterImages(query) {
 // 加载镜像数据
 async function loadImages() {
   try {
-    const response = await fetch('/public/images.json');
+    const response = await fetch('/images.json');
     const data = await response.json();
     
     // 按镜像名称分组,支持多版本
