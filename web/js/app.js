@@ -92,7 +92,7 @@ function changeVersion(imageName, selectEl) {
     // 更新源镜像信息中的版本
     const sourceInfoEl = card.querySelector('.source-info-text');
     if (sourceInfoEl) {
-      sourceInfoEl.textContent = `源镜像: ${versionData.source}`;
+      sourceInfoEl.textContent = `源镜像: ${imageName}:${versionData.version}`;
     }
     
     // 更新复制按钮的命令
@@ -277,27 +277,28 @@ async function loadImages() {
     const response = await fetch('/images.json');
     const data = await response.json();
     
-    // 按镜像名称分组，支持多版本
-    const imageMap = {};
-    data.images.forEach(img => {
-      if (!imageMap[img.name]) {
-        imageMap[img.name] = [];
-      }
-      imageMap[img.name].push(img);
+    // 直接使用images.json中的镜像数据结构
+    // 每个镜像对象包含: name, description, repository, total_versions, latest_version, versions[]
+    allImages = data.images.map(img => {
+      // 为每个镜像添加当前显示的版本（默认使用latest_version）
+      const currentVersionData = img.versions.find(v => v.version === img.latest_version) || img.versions[0];
+      
+      // 存储该镜像的所有版本信息
+      imageVersions[img.name] = img.versions;
+      
+      // 返回一个扁平化的镜像对象用于显示
+      return {
+        name: img.name,
+        description: img.description,
+        version: currentVersionData.version,
+        target: currentVersionData.target,
+        synced_at: currentVersionData.synced_at,
+        source: img.name + ':' + currentVersionData.version
+      };
     });
     
-    // 存储版本信息（包含所有版本）
-    imageVersions = imageMap;
-    
-    // 每个镜像显示最新版本作为默认
-    allImages = Object.values(imageMap).map(versions => {
-      // 按同步时间排序，取最新的
-      versions.sort((a, b) => new Date(b.synced_at) - new Date(a.synced_at));
-      return versions[0];
-    });
-    
-    // 更新统计（统计唯一镜像数，而不是总版本数）
-    document.getElementById('total-count').textContent = Object.keys(imageMap).length;
+    // 更新统计
+    document.getElementById('total-count').textContent = data.total_images;
     document.getElementById('last-update').textContent = formatDate(data.updated_at);
     document.getElementById('registry-info').textContent = `${data.registry}/${data.owner}`;
     

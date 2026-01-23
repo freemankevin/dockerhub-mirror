@@ -11,6 +11,7 @@ import re
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import Dict, List, Optional
+from packaging import version
 
 # 设置标准输出编码为 UTF-8（解决 Windows 终端编码问题）
 if sys.platform == 'win32':
@@ -76,6 +77,49 @@ def filter_tags_by_pattern(
         filtered_tags.append(tag)
     
     return filtered_tags
+
+
+def sort_tags_by_version(tags: List[Dict], logger=None) -> List[Dict]:
+    """按版本号语义排序标签（最新的在前）
+    
+    Args:
+        tags: 标签列表
+        logger: 日志记录器
+        
+    Returns:
+        排序后的标签列表
+    """
+    def version_key(tag):
+        """生成用于排序的键值"""
+        tag_name = tag['name']
+        
+        # 特殊处理 'latest' 标签，让它排在最后
+        if tag_name.lower() == 'latest':
+            return (0, 0, 0, 0, tag.get('created_at') or '')
+        
+        # 尝试解析版本号
+        try:
+            # 移除开头的 'v' 或 'V'
+            clean_name = re.sub(r'^[vV]+', '', tag_name)
+            
+            # 提取数字版本部分（如 18.1, 17.7, 16.11）
+            version_match = re.match(r'^(\d+)(?:\.(\d+))?(?:\.(\d+))?', clean_name)
+            if version_match:
+                major = int(version_match.group(1)) if version_match.group(1) else 0
+                minor = int(version_match.group(2)) if version_match.group(2) else 0
+                patch = int(version_match.group(3)) if version_match.group(3) else 0
+                # 按版本号降序排序（大版本在前）
+                return (1, major, minor, patch, tag.get('created_at') or '')
+            
+            # 如果无法解析版本号，使用原始字符串排序
+            return (2, tag_name, tag.get('created_at') or '')
+        except Exception as e:
+            if logger:
+                logger.debug(f"解析版本号失败: {tag_name}, 错误: {e}")
+            return (3, tag_name, tag.get('created_at') or '')
+    
+    # 按键值排序（降序：最新的在前）
+    return sorted(tags, key=version_key, reverse=True)
 
 
 def generate_images_json(
@@ -153,12 +197,8 @@ def generate_images_json(
             
             logger.debug(f"过滤后剩余 {len(filtered_tags)} 个标签")
             
-            # 按创建时间降序排序（最新的在前）
-            tags_sorted = sorted(
-                filtered_tags,
-                key=lambda x: x.get('created_at') or '',
-                reverse=True
-            )
+            # 按版本号语义排序（最新的版本在前）
+            tags_sorted = sort_tags_by_version(filtered_tags, logger)
             
             # 收集所有版本信息
             versions = []
