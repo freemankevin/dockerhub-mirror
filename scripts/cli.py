@@ -65,11 +65,9 @@ def cmd_sync(args):
     print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}")
     print(f"📍 目标仓库: {args.registry}/{args.owner}")
     print(f"📄 清单文件: {args.manifest or MANIFEST_FILE}")
-    print(f"📊 输出文件: {args.output or OUTPUT_FILE}")
     print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}\n")
 
     manifest_file = args.manifest or MANIFEST_FILE
-    output_file = args.output or OUTPUT_FILE
 
     if not manifest_file.exists():
         logger.error(f"清单文件不存在: {manifest_file}")
@@ -96,7 +94,7 @@ def cmd_sync(args):
 
     # 执行同步
     use_concurrency = getattr(args, 'concurrency', True)
-    result = sync.sync_from_manifest(manifest, api, output_file, use_concurrency=use_concurrency)
+    result = sync.sync_from_manifest(manifest, api, use_concurrency=use_concurrency)
 
     # 输出结果
     if result['success_count'] > 0:
@@ -104,6 +102,26 @@ def cmd_sync(args):
 
     if result['fail_count'] > 0:
         print(f"{COLOR_RED}✗ {result['fail_count']} 个镜像同步失败{COLOR_RESET}")
+
+    # 同步成功后，生成 images.json
+    if result['fail_count'] == 0 or args.continue_on_error:
+        print(f"\n{COLOR_CYAN}📝 生成镜像列表 JSON...{COLOR_RESET}")
+        try:
+            from scripts.generate_images_json import generate_images_json
+            
+            output_file = args.output or OUTPUT_FILE
+            generate_images_json(
+                manifest_file,
+                output_file,
+                args.registry,
+                args.owner,
+                token=None,  # 可以从环境变量获取
+                logger=logger
+            )
+        except Exception as e:
+            logger.error(f"生成镜像列表失败: {str(e)}")
+            if not args.continue_on_error:
+                return 1
 
     print()
     return 0 if result['fail_count'] == 0 else 1

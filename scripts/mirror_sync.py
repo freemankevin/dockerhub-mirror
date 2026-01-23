@@ -33,8 +33,80 @@ class MirrorSync:
         self.fail_count = 0
         self._lock = threading.Lock()
     
+    def _get_image_digest(self, image: str) -> Optional[str]:
+        """获取镜像的 digest
+        
+        Args:
+            image: 镜像名称
+            
+        Returns:
+            镜像的 digest，如果获取失败返回 None
+        """
+        try:
+            cmd = ['regctl', 'image', 'digest', image]
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=30
+            )
+            
+            if result.returncode == 0:
+                digest = result.stdout.strip()
+                if self.logger:
+                    self.logger.debug(f"镜像 {image} 的 digest: {digest}")
+                return digest
+            else:
+                # 镜像不存在
+                if self.logger:
+                    self.logger.debug(f"镜像 {image} 不存在或无法获取 digest")
+                return None
+        except Exception as e:
+            if self.logger:
+                self.logger.debug(f"获取镜像 digest 失败 {image}: {str(e)}")
+            return None
+
+    def needs_sync(self, source: str, target: str) -> bool:
+        """检查镜像是否需要同步
+        
+        Args:
+            source: 源镜像
+            target: 目标镜像
+            
+        Returns:
+            True 表示需要同步，False 表示可以跳过
+        """
+        # 获取源镜像的 digest
+        source_digest = self._get_image_digest(source)
+        if not source_digest:
+            if self.logger:
+                self.logger.warning(f"无法获取源镜像 {source} 的 digest，将强制同步")
+            return True
+        
+        # 获取目标镜像的 digest
+        target_digest = self._get_image_digest(target)
+        if not target_digest:
+            # 目标镜像不存在，需要同步
+            if self.logger:
+                self.logger.debug(f"目标镜像 {target} 不存在，需要同步")
+            return True
+        
+        # 比较 digest
+        if source_digest == target_digest:
+            if self.logger:
+                self.logger.info(f"镜像 {source} 与目标 {target} 的 digest 相同，跳过同步")
+            return False
+        else:
+            if self.logger:
+                self.logger.debug(f"镜像 {source} 与目标 {target} 的 digest 不同，需要同步")
+            return True
+
     def mirror_image(self, source: str, target: str) -> bool:
         """镜像同步（带重试机制）"""
+        # 先检查是否需要同步
+        if not self.needs_sync(source, target):
+            return True  # 跳过同步，视为成功
+        
         for attempt in range(self.max_retries):
             try:
                 # 添加随机延迟，避免同时发送请求
@@ -243,28 +315,14 @@ class MirrorSync:
                     task['description']
                 )
 
-        # 生成镜像清单 JSON
-        output_data = {
-            'updated_at': datetime.now(timezone.utc).isoformat(),
-            'registry': self.registry,
-            'owner': self.owner,
-            'total_count': len(self.mirrored_images),
-            'success_count': self.success_count,
-            'fail_count': self.fail_count,
-            'images': self.mirrored_images
-        }
-
-        # 保存到文件
-        if output_file:
-            output_file.parent.mkdir(parents=True, exist_ok=True)
-            with open(output_file, 'w', encoding='utf-8') as f:
-                json.dump(output_data, f, indent=2, ensure_ascii=False)
-            print(f"\n✅ Generated {output_file}")
-
         # 打印统计
         print(f"\n📊 Summary:")
         print(f"   Total: {len(self.mirrored_images)}")
         print(f"   Success: {self.success_count}")
         print(f"   Failed: {self.fail_count}")
 
-        return output_data
+        # 返回简单的统计结果
+        return {
+            'success_count': self.success_count,
+            'fail_count': self.fail_count
+        }
