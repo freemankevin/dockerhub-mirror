@@ -92,7 +92,7 @@ function changeVersion(imageName, selectEl) {
     // 更新源镜像信息中的版本
     const sourceInfoEl = card.querySelector('.source-info-text');
     if (sourceInfoEl) {
-      sourceInfoEl.textContent = `源镜像: ${imageName}:${versionData.version}`;
+      sourceInfoEl.textContent = `源镜像: ${versionData.source}`;
     }
     
     // 更新复制按钮的命令
@@ -293,7 +293,7 @@ async function loadImages() {
         version: currentVersionData.version,
         target: currentVersionData.target,
         synced_at: currentVersionData.synced_at,
-        source: img.name + ':' + currentVersionData.version
+        source: currentVersionData.source || (img.name + ':' + currentVersionData.version)
       };
     });
     

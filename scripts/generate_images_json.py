@@ -26,6 +26,38 @@ from scripts.ghcr_api import GHCRRegistryAPI
 from scripts.utils import setup_logger
 
 
+def normalize_source_image(image_name: str) -> str:
+    """规范化镜像名称，添加完整的仓库地址前缀
+    
+    Args:
+        image_name: 镜像名称，如 'nginx', 'kartoza/geoserver', 'library/nginx'
+        
+    Returns:
+        规范化后的镜像名称，如 'docker.io/library/nginx', 'docker.io/kartoza/geoserver'
+    """
+    if not image_name:
+        return ''
+    
+    # 如果已经包含协议前缀（如 docker://, https://），直接返回
+    if '://' in image_name:
+        return image_name
+    
+    # 如果已经包含 docker.io/，直接返回
+    if image_name.startswith('docker.io/'):
+        return image_name
+    
+    # 如果包含其他仓库前缀（如 gcr.io/, ghcr.io/, quay.io/），直接返回
+    if '/' in image_name and '.' in image_name.split('/')[0]:
+        return image_name
+    
+    # 检查是否是官方镜像（不包含斜杠或以 library/ 开头）
+    if '/' not in image_name:
+        return f'docker.io/library/{image_name}'
+    
+    # 对于其他镜像，添加 docker.io/ 前缀
+    return f'docker.io/{image_name}'
+
+
 def filter_tags_by_pattern(
     tags: List[Dict],
     tag_pattern: Optional[str] = None,
@@ -202,12 +234,15 @@ def generate_images_json(
             # 收集所有版本信息
             versions = []
             for tag in tags_sorted:
+                # 生成完整的源镜像地址
+                full_source = f"{normalize_source_image(image_name)}:{tag['name']}"
                 versions.append({
                     'version': tag['name'],
                     'digest': tag.get('digest', ''),
                     'created_at': tag.get('created_at'),
                     'synced_at': tag.get('created_at'),  # 使用创建时间作为同步时间
-                    'target': f"{registry}/{owner}/{repo_name}:{tag['name']}"
+                    'target': f"{registry}/{owner}/{repo_name}:{tag['name']}",
+                    'source': full_source
                 })
             
             total_versions += len(versions)
