@@ -36,6 +36,9 @@ nb-configuration.xml
 web/node_modules/
 logs/
 
+# Frontend development
+web/images.json
+
 # Python
 __pycache__/
 *.py[cod]
