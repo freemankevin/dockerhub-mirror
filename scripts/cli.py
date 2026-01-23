@@ -1,0 +1,222 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+命令行接口
+"""
+
+import argparse
+import yaml
+from pathlib import Path
+
+from .docker_hub_api import DockerHubAPI
+from .manifest_manager import ManifestManager
+from .mirror_sync import MirrorSync
+from .utils import setup_logger, COLOR_GREEN, COLOR_YELLOW, COLOR_BLUE, COLOR_RED, COLOR_RESET
+
+# ==================== 配置 ====================
+
+PROJECT_ROOT = Path(__file__).parent.parent
+MANIFEST_FILE = PROJECT_ROOT / "images-manifest.yml"
+OUTPUT_FILE = PROJECT_ROOT / "images.json"  # ✅ 修改：移到根目录
+LOGS_DIR = PROJECT_ROOT / "logs"
+
+
+# ==================== 子命令处理函数 ====================
+
+def cmd_update(args):
+    """更新清单版本"""
+    logger = setup_logger('update', args.debug, LOGS_DIR)
+    
+    print(f"\n{COLOR_BLUE}{'='*80}{COLOR_RESET}")
+    print(f"{COLOR_GREEN}📄 更新镜像清单{COLOR_RESET}")
+    print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}\n")
+    
+    manifest_file = args.manifest or MANIFEST_FILE
+    
+    if not manifest_file.exists():
+        logger.error(f"清单文件不存在: {manifest_file}")
+        return 1
+    
+    # 初始化 API 和管理器
+    api = DockerHubAPI(logger)
+    manager = ManifestManager(manifest_file, logger)
+    
+    # 更新版本
+    updated_count = manager.update_versions(api, dry_run=args.dry_run)
+    
+    if updated_count > 0 and not args.dry_run:
+        print(f"\n{COLOR_GREEN}✓ 成功更新 {updated_count} 个镜像版本{COLOR_RESET}\n")
+    elif updated_count > 0 and args.dry_run:
+        print(f"\n{COLOR_YELLOW}ℹ️  预演模式：发现 {updated_count} 个可更新镜像{COLOR_RESET}\n")
+    else:
+        print(f"\n{COLOR_GREEN}✓ 所有镜像都是最新版本{COLOR_RESET}\n")
+    
+    return 0
+
+
+def cmd_sync(args):
+    """同步镜像"""
+    logger = setup_logger('sync', args.debug, LOGS_DIR)
+    
+    print(f"\n{COLOR_BLUE}{'='*80}{COLOR_RESET}")
+    print(f"{COLOR_GREEN}🚀 同步镜像到远程仓库{COLOR_RESET}")
+    print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}")
+    print(f"📍 目标仓库: {args.registry}/{args.owner}")
+    print(f"📄 清单文件: {args.manifest or MANIFEST_FILE}")
+    print(f"📊 输出文件: {args.output or OUTPUT_FILE}")
+    print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}\n")
+    
+    manifest_file = args.manifest or MANIFEST_FILE
+    output_file = args.output or OUTPUT_FILE
+    
+    if not manifest_file.exists():
+        logger.error(f"清单文件不存在: {manifest_file}")
+        return 1
+    
+    # 加载清单
+    with open(manifest_file, 'r', encoding='utf-8') as f:
+        manifest = yaml.safe_load(f)
+    
+    # 初始化 API 和同步器
+    api = DockerHubAPI(logger)
+    sync = MirrorSync(args.registry, args.owner, logger)
+    
+    # 执行同步
+    result = sync.sync_from_manifest(manifest, api, output_file)
+    
+    # 输出结果
+    if result['success_count'] > 0:
+        print(f"\n{COLOR_GREEN}✓ 成功同步 {result['success_count']} 个镜像{COLOR_RESET}")
+    
+    if result['fail_count'] > 0:
+        print(f"{COLOR_RED}✗ {result['fail_count']} 个镜像同步失败{COLOR_RESET}")
+    
+    print()
+    return 0 if result['fail_count'] == 0 else 1
+
+
+def cmd_run(args):
+    """运行完整流程：更新 + 同步"""
+    logger = setup_logger('run', args.debug, LOGS_DIR)
+    
+    print(f"\n{COLOR_BLUE}{'='*80}{COLOR_RESET}")
+    print(f"{COLOR_GREEN}🔄 运行完整同步流程{COLOR_RESET}")
+    print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}\n")
+    
+    # 步骤 1: 更新清单
+    print(f"{COLOR_CYAN}步骤 1/2: 更新镜像清单{COLOR_RESET}\n")
+    ret = cmd_update(args)
+    if ret != 0 and not args.continue_on_error:
+        return ret
+    
+    print(f"\n{COLOR_CYAN}步骤 2/2: 同步镜像{COLOR_RESET}\n")
+    ret = cmd_sync(args)
+    
+    print(f"\n{COLOR_BLUE}{'='*80}{COLOR_RESET}")
+    print(f"{COLOR_GREEN}✅ 完整流程执行完成{COLOR_RESET}")
+    print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}\n")
+    
+    return ret
+
+
+# ==================== 主函数 ====================
+
+def main():
+    """主入口函数"""
+    parser = argparse.ArgumentParser(
+        description='Docker 镜像同步工具',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+示例:
+  # 更新清单
+  python main.py update
+  python main.py update --dry-run
+  python main.py update -D
+  
+  # 同步镜像
+  python main.py sync --owner username
+  python main.py sync --owner username --registry ghcr.io
+  
+  # 完整流程（更新+同步）
+  python main.py run --owner username
+  python main.py run --owner username --continue-on-error
+  
+  # 使用自定义清单
+  python main.py update --manifest custom.yml
+        """
+    )
+    
+    # 全局参数
+    parser.add_argument('-D', '--debug', 
+                       action='store_true',
+                       help='启用调试模式')
+    parser.add_argument('--manifest',
+                       type=Path,
+                       help=f'清单文件路径 (默认: {MANIFEST_FILE})')
+    
+    # 子命令
+    subparsers = parser.add_subparsers(dest='command', help='可用命令')
+    
+    # update 命令
+    parser_update = subparsers.add_parser('update', help='更新镜像清单')
+    parser_update.add_argument('--dry-run',
+                              action='store_true',
+                              help='预演模式，不修改文件')
+    parser_update.set_defaults(func=cmd_update)
+    
+    # sync 命令
+    parser_sync = subparsers.add_parser('sync', help='同步镜像')
+    parser_sync.add_argument('--owner',
+                            type=str,
+                            required=True,
+                            help='目标仓库所有者')
+    parser_sync.add_argument('--registry',
+                            type=str,
+                            default='ghcr.io',
+                            help='目标镜像仓库 (默认: ghcr.io)')
+    parser_sync.add_argument('--output',
+                            type=Path,
+                            help=f'输出 JSON 文件路径 (默认: {OUTPUT_FILE})')
+    parser_sync.set_defaults(func=cmd_sync)
+    
+    # run 命令（完整流程）
+    parser_run = subparsers.add_parser('run', help='运行完整流程（更新+同步）')
+    parser_run.add_argument('--owner',
+                           type=str,
+                           required=True,
+                           help='目标仓库所有者')
+    parser_run.add_argument('--registry',
+                           type=str,
+                           default='ghcr.io',
+                           help='目标镜像仓库 (默认: ghcr.io)')
+    parser_run.add_argument('--output',
+                           type=Path,
+                           help=f'输出 JSON 文件路径 (默认: {OUTPUT_FILE})')
+    parser_run.add_argument('--dry-run',
+                           action='store_true',
+                           help='预演模式（仅对更新清单有效）')
+    parser_run.add_argument('--continue-on-error',
+                           action='store_true',
+                           help='即使更新失败也继续同步')
+    parser_run.set_defaults(func=cmd_run)
+    
+    # 解析参数
+    args = parser.parse_args()
+    
+    # 如果没有指定子命令，显示帮助
+    if not args.command:
+        parser.print_help()
+        return 0
+    
+    # 执行对应的命令
+    try:
+        return args.func(args)
+    except KeyboardInterrupt:
+        print(f"\n\n{COLOR_YELLOW}⚠️  用户中断{COLOR_RESET}")
+        return 1
+    except Exception as e:
+        print(f"\n{COLOR_RED}✗ 错误: {str(e)}{COLOR_RESET}")
+        import traceback
+        if args.debug:
+            traceback.print_exc()
+        return 1
