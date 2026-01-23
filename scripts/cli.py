@@ -59,7 +59,7 @@ def cmd_update(args):
 def cmd_sync(args):
     """同步镜像"""
     logger = setup_logger('sync', args.debug, LOGS_DIR)
-    
+
     print(f"\n{COLOR_BLUE}{'='*80}{COLOR_RESET}")
     print(f"{COLOR_GREEN}🚀 同步镜像到远程仓库{COLOR_RESET}")
     print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}")
@@ -67,34 +67,44 @@ def cmd_sync(args):
     print(f"📄 清单文件: {args.manifest or MANIFEST_FILE}")
     print(f"📊 输出文件: {args.output or OUTPUT_FILE}")
     print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}\n")
-    
+
     manifest_file = args.manifest or MANIFEST_FILE
     output_file = args.output or OUTPUT_FILE
-    
+
     if not manifest_file.exists():
         logger.error(f"清单文件不存在: {manifest_file}")
         return 1
-    
+
     # 加载清单
     with open(manifest_file, 'r', encoding='utf-8') as f:
         manifest = yaml.safe_load(f)
-    
+
     # 初始化 API 和同步器
     max_workers = getattr(args, 'max_workers', 3)
+    max_retries = getattr(args, 'max_retries', 3)
+    retry_delay = getattr(args, 'retry_delay', 2.0)
+
     api = DockerHubAPI(logger, max_workers=max_workers)
-    sync = MirrorSync(args.registry, args.owner, logger, max_workers=max_workers)
-    
+    sync = MirrorSync(
+        args.registry,
+        args.owner,
+        logger,
+        max_workers=max_workers,
+        max_retries=max_retries,
+        retry_delay=retry_delay
+    )
+
     # 执行同步
     use_concurrency = getattr(args, 'concurrency', True)
     result = sync.sync_from_manifest(manifest, api, output_file, use_concurrency=use_concurrency)
-    
+
     # 输出结果
     if result['success_count'] > 0:
         print(f"\n{COLOR_GREEN}✓ 成功同步 {result['success_count']} 个镜像{COLOR_RESET}")
-    
+
     if result['fail_count'] > 0:
         print(f"{COLOR_RED}✗ {result['fail_count']} 个镜像同步失败{COLOR_RESET}")
-    
+
     print()
     return 0 if result['fail_count'] == 0 else 1
 
@@ -102,33 +112,46 @@ def cmd_sync(args):
 def cmd_run(args):
     """运行完整流程：更新 + 同步"""
     logger = setup_logger('run', args.debug, LOGS_DIR)
-    
+
     print(f"\n{COLOR_BLUE}{'='*80}{COLOR_RESET}")
     print(f"{COLOR_GREEN}🔄 运行完整同步流程{COLOR_RESET}")
     print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}\n")
-    
+
     # 步骤 1: 更新清单
     print(f"{COLOR_CYAN}步骤 1/2: 更新镜像清单{COLOR_RESET}\n")
     ret = cmd_update(args)
     if ret != 0 and not args.continue_on_error:
         return ret
-    
-    # 为同步步骤设置不同的 max_workers
+
+    # 为同步步骤设置不同的参数
     original_max_workers = getattr(args, 'max_workers', None)
+    original_max_retries = getattr(args, 'max_retries', None)
+    original_retry_delay = getattr(args, 'retry_delay', None)
+
     if hasattr(args, 'max_workers_sync'):
         args.max_workers = args.max_workers_sync
-    
+
+    # 如果没有单独设置重试参数，使用默认值
+    if not hasattr(args, 'max_retries') or args.max_retries is None:
+        args.max_retries = 3
+    if not hasattr(args, 'retry_delay') or args.retry_delay is None:
+        args.retry_delay = 2.0
+
     print(f"\n{COLOR_CYAN}步骤 2/2: 同步镜像{COLOR_RESET}\n")
     ret = cmd_sync(args)
-    
-    # 恢复原始 max_workers
+
+    # 恢复原始参数
     if original_max_workers is not None:
         args.max_workers = original_max_workers
-    
+    if original_max_retries is not None:
+        args.max_retries = original_max_retries
+    if original_retry_delay is not None:
+        args.retry_delay = original_retry_delay
+
     print(f"\n{COLOR_BLUE}{'='*80}{COLOR_RESET}")
     print(f"{COLOR_GREEN}✅ 完整流程执行完成{COLOR_RESET}")
     print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}\n")
-    
+
     return ret
 
 
@@ -146,23 +169,29 @@ def main():
   python main.py update --dry-run
   python main.py update -D
   python main.py update --max-workers 10
-  
+
   # 同步镜像
   python main.py sync --owner username
   python main.py sync --owner username --registry ghcr.io
   python main.py sync --owner username --max-workers 5
-  
+  python main.py sync --owner username --max-workers 2 --max-retries 5 --retry-delay 3
+
   # 完整流程（更新+同步）
   python main.py run --owner username
   python main.py run --owner username --continue-on-error
-  python main.py run --owner username --max-workers 10 --max-workers-sync 5
-  
+  python main.py run --owner username --max-workers 10 --max-workers-sync 2 --max-retries 5 --retry-delay 3
+
   # 使用自定义清单
   python main.py update --manifest custom.yml
-  
+
   # 禁用并发处理
   python main.py update --no-concurrency
   python main.py sync --owner username --no-concurrency
+
+注意:
+  - Docker Hub 对匿名用户有严格的速率限制（100次拉取/6小时）
+  - 建议降低并发数（--max-workers 2-3）并增加重试次数（--max-retries 5）
+  - 使用 --retry-delay 参数控制重试之间的延迟时间
         """
     )
     
@@ -208,6 +237,14 @@ def main():
                             type=int,
                             default=3,
                             help='最大并发数 (默认: 3)')
+    parser_sync.add_argument('--max-retries',
+                            type=int,
+                            default=3,
+                            help='最大重试次数 (默认: 3)')
+    parser_sync.add_argument('--retry-delay',
+                            type=float,
+                            default=2.0,
+                            help='重试延迟（秒）(默认: 2.0)')
     parser_sync.add_argument('--no-concurrency',
                             action='store_true',
                             help='禁用并发处理')
@@ -240,6 +277,14 @@ def main():
                            type=int,
                            default=3,
                            help='同步镜像的最大并发数 (默认: 3)')
+    parser_run.add_argument('--max-retries',
+                           type=int,
+                           default=3,
+                           help='最大重试次数 (默认: 3)')
+    parser_run.add_argument('--retry-delay',
+                           type=float,
+                           default=2.0,
+                           help='重试延迟（秒）(默认: 2.0)')
     parser_run.add_argument('--no-concurrency',
                            action='store_true',
                            help='禁用并发处理')

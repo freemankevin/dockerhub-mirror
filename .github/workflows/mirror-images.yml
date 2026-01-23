@@ -80,8 +80,8 @@ jobs:
         id: update
         run: |
           echo "🔄 检查并更新镜像版本..."
-          python3 main.py update --max-workers 5
-          
+          python3 main.py update --max-workers 3
+
           # 检查清单是否有更新
           if git diff --quiet images-manifest.yml; then
             echo "has_updates=false" >> $GITHUB_OUTPUT
@@ -102,8 +102,8 @@ jobs:
         id: sync
         run: |
           echo "🚀 开始同步镜像..."
-          python3 main.py sync --owner ${{ env.GITHUB_OWNER }} --registry ${{ env.GHCR_REGISTRY }} --max-workers 3
-          
+          python3 main.py sync --owner ${{ env.GITHUB_OWNER }} --registry ${{ env.GHCR_REGISTRY }} --max-workers 2 --max-retries 5 --retry-delay 3
+
           # 提取同步统计
           if [ -f images.json ]; then
             success=$(jq -r '.success_count // 0' images.json)

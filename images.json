@@ -1,9 +1,0 @@
-{
-  "updated_at": "2026-01-23T04:39:53.579462+00:00",
-  "registry": "ghcr.io",
-  "owner": "test-user",
-  "total_count": 0,
-  "success_count": 0,
-  "fail_count": 24,
-  "images": []
-}
