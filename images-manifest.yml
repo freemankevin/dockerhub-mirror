@@ -63,6 +63,12 @@ images:
   exclude_pattern: ^buildcache-.*
   sync_all_matching: false
   
+- source: ghcr.io/freemankevin/network-tools:latest
+  enabled: true
+  description: 容器化环境的网络测试工具，包含 curl、wget、ping、nslookup、dig、telnet、nc、tcpdump 等常用网络诊断工具
+  tag_pattern: ^latest$|^[0-9]+\.[0-9]+$
+  sync_all_matching: false
+  
 config:
   registry: ghcr.io
   owner: freemankevin

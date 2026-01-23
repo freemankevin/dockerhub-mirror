@@ -65,6 +65,17 @@ class MirrorSync:
             if self.logger:
                 self.logger.debug(f"获取镜像 digest 失败 {image}: {str(e)}")
             return None
+    
+    def _is_ghcr_source(self, source: str) -> bool:
+        """检查源镜像是否来自 GitHub Container Registry
+        
+        Args:
+            source: 源镜像地址
+            
+        Returns:
+            True 表示源镜像来自 GHCR，False 表示来自其他仓库
+        """
+        return source.startswith('ghcr.io/')
 
     def needs_sync(self, source: str, target: str) -> bool:
         """检查镜像是否需要同步
@@ -182,6 +193,23 @@ class MirrorSync:
         print(f"\n🔄 Processing {source_image}...")
         print(f"📦 Source: {source_image}")
         print(f"🎯 Target: {target_image}")
+        
+        # 检查源镜像是否来自 GHCR
+        if self._is_ghcr_source(source_image):
+            print(f"ℹ️  源镜像来自 GHCR，跳过同步步骤")
+            # 直接添加到镜像列表，不执行同步
+            with self._lock:
+                self.mirrored_images.append({
+                    'name': image_name,
+                    'source': source_image,
+                    'target': source_image,  # GHCR 镜像本身就是目标
+                    'version': version,
+                    'description': description,
+                    'repository': repo_name,
+                    'synced_at': datetime.now(timezone.utc).isoformat()
+                })
+                self.success_count += 1
+            return True
         
         if self.mirror_image(source_image, target_image):
             print(f"✅ Successfully mirrored {source_image}")

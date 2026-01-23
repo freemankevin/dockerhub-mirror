@@ -30,10 +30,10 @@ def normalize_source_image(image_name: str) -> str:
     """规范化镜像名称，添加完整的仓库地址前缀
     
     Args:
-        image_name: 镜像名称，如 'nginx', 'kartoza/geoserver', 'library/nginx'
+        image_name: 镜像名称，如 'nginx', 'kartoza/geoserver', 'library/nginx', 'ghcr.io/freemankevin/network-tools'
         
     Returns:
-        规范化后的镜像名称，如 'docker.io/library/nginx', 'docker.io/kartoza/geoserver'
+        规范化后的镜像名称，如 'docker.io/library/nginx', 'docker.io/kartoza/geoserver', 'ghcr.io/freemankevin/network-tools'
     """
     if not image_name:
         return ''
@@ -46,7 +46,11 @@ def normalize_source_image(image_name: str) -> str:
     if image_name.startswith('docker.io/'):
         return image_name
     
-    # 如果包含其他仓库前缀（如 gcr.io/, ghcr.io/, quay.io/），直接返回
+    # 如果已经包含 ghcr.io/，直接返回（GHCR 镜像已经是完整地址）
+    if image_name.startswith('ghcr.io/'):
+        return image_name
+    
+    # 如果包含其他仓库前缀（如 gcr.io/, quay.io/），直接返回
     if '/' in image_name and '.' in image_name.split('/')[0]:
         return image_name
     
@@ -204,64 +208,136 @@ def generate_images_json(
             image_name = source
             version = 'latest'
         
-        # 转换为 GHCR 仓库名
-        repo_name = image_name.replace('/', '__')
+        # 检查源镜像是否来自 GHCR
+        is_ghcr_source = source.startswith('ghcr.io/')
         
-        # 获取 GHCR 中的所有标签信息
-        print(f"\n🔍 获取 {owner}/{repo_name} 的所有标签...")
-        logger.debug(f"完整镜像路径: {registry}/{owner}/{repo_name}")
-        logger.debug(f"原始源: {source}")
-        logger.debug(f"标签匹配模式: {tag_pattern}")
-        logger.debug(f"排除模式: {exclude_pattern}")
-        tags = ghcr_api.get_repository_tags(owner, repo_name)
-        
-        if tags:
-            logger.debug(f"找到 {len(tags)} 个标签")
-            
-            # 根据 tag_pattern 和 exclude_pattern 过滤标签
-            filtered_tags = filter_tags_by_pattern(
-                tags,
-                tag_pattern=tag_pattern,
-                exclude_pattern=exclude_pattern,
-                logger=logger
-            )
-            
-            logger.debug(f"过滤后剩余 {len(filtered_tags)} 个标签")
-            
-            # 按版本号语义排序（最新的版本在前）
-            tags_sorted = sort_tags_by_version(filtered_tags, logger)
-            
-            # 收集所有版本信息
-            versions = []
-            for tag in tags_sorted:
-                # 生成完整的源镜像地址
-                full_source = f"{normalize_source_image(image_name)}:{tag['name']}"
-                versions.append({
-                    'version': tag['name'],
-                    'digest': tag.get('digest', ''),
-                    'created_at': tag.get('created_at'),
-                    'synced_at': tag.get('created_at'),  # 使用创建时间作为同步时间
-                    'target': f"{registry}/{owner}/{repo_name}:{tag['name']}",
-                    'source': full_source
-                })
-            
-            total_versions += len(versions)
-            
-            # 添加镜像信息（包含所有版本）
-            images.append({
-                'name': image_name,
-                'description': description,
-                'repository': repo_name,
-                'total_versions': len(versions),
-                'latest_version': versions[0]['version'] if versions else None,
-                'versions': versions
-            })
-            
-            print(f"   ✅ 找到 {len(versions)} 个版本")
-            print(f"   📌 最新版本: {versions[0]['version'] if versions else 'N/A'}")
+        if is_ghcr_source:
+            # 对于 GHCR 源镜像，直接从源镜像获取标签信息
+            # 提取 GHCR 仓库的所有者和仓库名
+            # 格式: ghcr.io/{owner}/{repo}:{tag}
+            parts = source.replace('ghcr.io/', '').split('/')
+            if len(parts) >= 2:
+                source_owner = parts[0]
+                # 剩余部分是仓库名（可能包含斜杠），需要将斜杠替换为双下划线
+                source_repo = '/'.join(parts[1:]).split(':')[0]
+                source_repo_name = source_repo.replace('/', '__')
+                
+                print(f"\n🔍 获取 GHCR 源镜像 {source_owner}/{source_repo_name} 的所有标签...")
+                logger.debug(f"原始源: {source}")
+                logger.debug(f"标签匹配模式: {tag_pattern}")
+                logger.debug(f"排除模式: {exclude_pattern}")
+                tags = ghcr_api.get_repository_tags(source_owner, source_repo_name)
+                
+                if tags:
+                    logger.debug(f"找到 {len(tags)} 个标签")
+                    
+                    # 根据 tag_pattern 和 exclude_pattern 过滤标签
+                    filtered_tags = filter_tags_by_pattern(
+                        tags,
+                        tag_pattern=tag_pattern,
+                        exclude_pattern=exclude_pattern,
+                        logger=logger
+                    )
+                    
+                    logger.debug(f"过滤后剩余 {len(filtered_tags)} 个标签")
+                    
+                    # 按版本号语义排序（最新的版本在前）
+                    tags_sorted = sort_tags_by_version(filtered_tags, logger)
+                    
+                    # 收集所有版本信息
+                    versions = []
+                    for tag in tags_sorted:
+                        # 对于 GHCR 源镜像，源和目标都是 GHCR 地址
+                        full_source = f"{normalize_source_image(image_name)}:{tag['name']}"
+                        versions.append({
+                            'version': tag['name'],
+                            'digest': tag.get('digest', ''),
+                            'created_at': tag.get('created_at'),
+                            'synced_at': tag.get('created_at'),
+                            'target': full_source,  # GHCR 源镜像本身就是目标
+                            'source': full_source
+                        })
+                    
+                    total_versions += len(versions)
+                    
+                    # 添加镜像信息（包含所有版本）
+                    images.append({
+                        'name': image_name,
+                        'description': description,
+                        'repository': source_repo_name,
+                        'total_versions': len(versions),
+                        'latest_version': versions[0]['version'] if versions else None,
+                        'versions': versions
+                    })
+                    
+                    print(f"   ✅ 找到 {len(versions)} 个版本")
+                    print(f"   📌 最新版本: {versions[0]['version'] if versions else 'N/A'}")
+                else:
+                    print(f"   ⚠️  未找到任何标签")
+                    logger.warning(f"GHCR 仓库 {source_owner}/{source_repo_name} 可能不存在或需要认证")
+            else:
+                print(f"   ⚠️  无法解析 GHCR 源镜像: {source}")
+                logger.warning(f"GHCR 源镜像格式不正确: {source}")
         else:
-            print(f"   ⚠️  未找到任何标签")
-            logger.warning(f"仓库 {owner}/{repo_name} 可能不存在或需要认证")
+            # 对于非 GHCR 源镜像，从目标仓库获取标签信息
+            # 转换为 GHCR 仓库名
+            repo_name = image_name.replace('/', '__')
+            
+            # 获取 GHCR 中的所有标签信息
+            print(f"\n🔍 获取 {owner}/{repo_name} 的所有标签...")
+            logger.debug(f"完整镜像路径: {registry}/{owner}/{repo_name}")
+            logger.debug(f"原始源: {source}")
+            logger.debug(f"标签匹配模式: {tag_pattern}")
+            logger.debug(f"排除模式: {exclude_pattern}")
+            tags = ghcr_api.get_repository_tags(owner, repo_name)
+            
+            if tags:
+                logger.debug(f"找到 {len(tags)} 个标签")
+                
+                # 根据 tag_pattern 和 exclude_pattern 过滤标签
+                filtered_tags = filter_tags_by_pattern(
+                    tags,
+                    tag_pattern=tag_pattern,
+                    exclude_pattern=exclude_pattern,
+                    logger=logger
+                )
+                
+                logger.debug(f"过滤后剩余 {len(filtered_tags)} 个标签")
+                
+                # 按版本号语义排序（最新的版本在前）
+                tags_sorted = sort_tags_by_version(filtered_tags, logger)
+                
+                # 收集所有版本信息
+                versions = []
+                for tag in tags_sorted:
+                    # 生成完整的源镜像地址
+                    full_source = f"{normalize_source_image(image_name)}:{tag['name']}"
+                    versions.append({
+                        'version': tag['name'],
+                        'digest': tag.get('digest', ''),
+                        'created_at': tag.get('created_at'),
+                        'synced_at': tag.get('created_at'),  # 使用创建时间作为同步时间
+                        'target': f"{registry}/{owner}/{repo_name}:{tag['name']}",
+                        'source': full_source
+                    })
+                
+                total_versions += len(versions)
+                
+                # 添加镜像信息（包含所有版本）
+                images.append({
+                    'name': image_name,
+                    'description': description,
+                    'repository': repo_name,
+                    'total_versions': len(versions),
+                    'latest_version': versions[0]['version'] if versions else None,
+                    'versions': versions
+                })
+                
+                print(f"   ✅ 找到 {len(versions)} 个版本")
+                print(f"   📌 最新版本: {versions[0]['version'] if versions else 'N/A'}")
+            else:
+                print(f"   ⚠️  未找到任何标签")
+                logger.warning(f"仓库 {owner}/{repo_name} 可能不存在或需要认证")
     
     # 生成输出数据
     output_data = {
