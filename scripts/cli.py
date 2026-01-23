@@ -254,6 +254,9 @@ def main():
     parser_sync.add_argument('--output',
                             type=Path,
                             help=f'输出 JSON 文件路径 (默认: {OUTPUT_FILE})')
+    parser_sync.add_argument('--continue-on-error',
+                            action='store_true',
+                            help='即使同步失败也继续生成 JSON')
     parser_sync.add_argument('--max-workers',
                             type=int,
                             default=3,
