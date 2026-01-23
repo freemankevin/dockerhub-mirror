@@ -73,15 +73,35 @@ function copyCommand(text, btn) {
   });
 }
 
-// 版本切换
+// 版本切换 - 修复版本同步更新问题
 function changeVersion(imageName, selectEl) {
   const selectedVersion = selectEl.value;
   const versions = imageVersions[imageName];
   const versionData = versions.find(v => v.version === selectedVersion);
   
   if (versionData) {
-    const commandEl = selectEl.closest('.terminal-window').querySelector('.terminal-command');
-    commandEl.textContent = `docker pull ${versionData.target}`;
+    // 获取卡片容器
+    const card = selectEl.closest('.glass-card');
+    
+    // 更新终端命令中的镜像版本
+    const commandEl = card.querySelector('.terminal-command');
+    if (commandEl) {
+      commandEl.textContent = `docker pull ${versionData.target}`;
+    }
+    
+    // 更新源镜像信息中的版本
+    const sourceInfoEl = card.querySelector('.source-info-text');
+    if (sourceInfoEl) {
+      sourceInfoEl.textContent = `源镜像: ${versionData.source}`;
+    }
+    
+    // 更新复制按钮的命令
+    const copyBtn = card.querySelector('.copy-button');
+    if (copyBtn) {
+      copyBtn.onclick = function() {
+        copyCommand(`docker pull ${versionData.target}`, this);
+      };
+    }
   }
 }
 
@@ -144,11 +164,11 @@ function createImageCard(img) {
             <span class="terminal-prompt">$</span> <span class="terminal-command">docker pull ${img.target}</span>
           </div>
         </div>
-        <div class="flex items-center text-xs text-gray-500">
+        <div class="flex items-center text-xs text-gray-500 source-info">
           <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
-          源镜像: ${img.source}
+          <span class="source-info-text">源镜像: ${img.source}</span>
         </div>
       </div>
     </div>
@@ -251,13 +271,13 @@ function filterImages(query) {
   renderImages(filtered);
 }
 
-// 加载镜像数据
+// 加载镜像数据 - 修复版本数据问题
 async function loadImages() {
   try {
     const response = await fetch('/images.json');
     const data = await response.json();
     
-    // 按镜像名称分组,支持多版本
+    // 按镜像名称分组，支持多版本
     const imageMap = {};
     data.images.forEach(img => {
       if (!imageMap[img.name]) {
@@ -266,17 +286,17 @@ async function loadImages() {
       imageMap[img.name].push(img);
     });
     
-    // 存储版本信息
+    // 存储版本信息（包含所有版本）
     imageVersions = imageMap;
     
-    // 每个镜像只显示最新版本
+    // 每个镜像显示最新版本作为默认
     allImages = Object.values(imageMap).map(versions => {
-      // 按同步时间排序,取最新的
+      // 按同步时间排序，取最新的
       versions.sort((a, b) => new Date(b.synced_at) - new Date(a.synced_at));
       return versions[0];
     });
     
-    // 更新统计
+    // 更新统计（统计唯一镜像数，而不是总版本数）
     document.getElementById('total-count').textContent = Object.keys(imageMap).length;
     document.getElementById('last-update').textContent = formatDate(data.updated_at);
     document.getElementById('registry-info').textContent = `${data.registry}/${data.owner}`;
@@ -291,7 +311,7 @@ async function loadImages() {
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
         <h3 class="mt-4 text-lg font-medium text-red-900">加载失败</h3>
-        <p class="mt-2 text-red-700">无法加载镜像数据,请稍后重试</p>
+        <p class="mt-2 text-red-700">无法加载镜像数据，请稍后重试</p>
       </div>
     `;
   }
