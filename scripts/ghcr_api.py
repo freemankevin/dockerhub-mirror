@@ -3,6 +3,7 @@
 """
 GitHub Container Registry API 客户端
 处理与 GitHub Container Registry 的所有交互
+使用 GitHub REST API 而不是 Docker Registry API
 """
 
 import requests
@@ -20,18 +21,22 @@ class GHCRRegistryAPI:
         
         Args:
             logger: 日志记录器
-            token: GitHub Personal Access Token (可选，用于私有仓库)
+            token: GitHub Personal Access Token (必需)
         """
-        self.base_url = "https://ghcr.io/v2"
+        self.base_url = "https://api.github.com"
         self.session = self._create_session()
         self.logger = logger
         self.token = token
         
-        # 如果提供了 token，添加到 session headers
+        # 添加认证 header
         if token:
             self.session.headers.update({
-                'Authorization': f'Bearer {token}'
+                'Authorization': f'Bearer {token}',
+                'Accept': 'application/vnd.github.v3+json'
             })
+        else:
+            if self.logger:
+                self.logger.warning("未提供 token，可能无法访问私有仓库")
     
     def _create_session(self) -> requests.Session:
         """创建带重试策略的会话"""
@@ -51,90 +56,99 @@ class GHCRRegistryAPI:
         """获取仓库中的所有标签
         
         Args:
-            owner: 仓库所有者
-            repository: 仓库名称
+            owner: 仓库所有者（组织名或用户名）
+            repository: 仓库名称（例如：library__elasticsearch）
             
         Returns:
             标签列表，每个标签包含 name、digest、created 等信息
         """
         try:
-            # 获取标签列表
-            url = f"{self.base_url}/{owner}/{repository}/tags/list"
+            # 使用 GitHub REST API 获取容器包的版本信息
+            # 端点: GET /orgs/{org}/packages/container/{package_name}/versions
+            url = f"{self.base_url}/orgs/{owner}/packages/container/{repository}/versions"
             
             if self.logger:
                 self.logger.debug(f"获取 {owner}/{repository} 的标签列表")
                 self.logger.debug(f"请求 URL: {url}")
                 self.logger.debug(f"使用认证: {'是' if self.token else '否'}")
             
-            response = self.session.get(url, timeout=30)
+            # 分页获取所有版本
+            tags = []
+            page = 1
+            per_page = 100
             
-            if self.logger:
-                self.logger.debug(f"响应状态码: {response.status_code}")
-            
-            response.raise_for_status()
-            data = response.json()
-            
-            tags = data.get('tags', [])
+            while True:
+                params = {
+                    'page': page,
+                    'per_page': per_page
+                }
+                
+                response = self.session.get(url, params=params, timeout=30)
+                
+                if self.logger:
+                    self.logger.debug(f"响应状态码: {response.status_code}")
+                
+                # 如果返回 404，说明仓库不存在
+                if response.status_code == 404:
+                    if self.logger:
+                        self.logger.warning(f"仓库 {owner}/{repository} 不存在")
+                    return []
+                
+                response.raise_for_status()
+                versions = response.json()
+                
+                if not versions:
+                    break
+                
+                # 解析版本信息
+                for version in versions:
+                    try:
+                        # 获取标签信息
+                        metadata = version.get('metadata', {})
+                        container_tags = metadata.get('container', {}).get('tags', [])
+                        
+                        # 获取创建时间
+                        created_at = version.get('created_at')
+                        if created_at:
+                            try:
+                                created_at = datetime.fromisoformat(created_at.replace('Z', '+00:00'))
+                            except:
+                                created_at = None
+                        
+                        # 获取 digest
+                        name = version.get('name', '')
+                        
+                        # 为每个标签创建一个条目
+                        if container_tags:
+                            for tag in container_tags:
+                                tags.append({
+                                    'name': tag,
+                                    'digest': name,
+                                    'created_at': created_at.isoformat() if created_at else None
+                                })
+                        else:
+                            # 如果没有标签，使用版本 ID 作为标签名
+                            tags.append({
+                                'name': name,
+                                'digest': name,
+                                'created_at': created_at.isoformat() if created_at else None
+                            })
+                    
+                    except Exception as e:
+                        if self.logger:
+                            self.logger.debug(f"解析版本信息失败: {str(e)}")
+                        continue
+                
+                # 检查是否还有更多页面
+                if len(versions) < per_page:
+                    break
+                
+                page += 1
             
             if self.logger:
                 self.logger.debug(f"找到 {len(tags)} 个标签")
             
-            # 获取每个标签的详细信息
-            tag_details = []
-            for tag in tags:
-                try:
-                    # 获取标签的 manifest
-                    manifest_url = f"{self.base_url}/{owner}/{repository}/manifests/{tag}"
-                    manifest_response = self.session.get(
-                        manifest_url,
-                        headers={'Accept': 'application/vnd.docker.distribution.manifest.v2+json'},
-                        timeout=30
-                    )
-                    manifest_response.raise_for_status()
-                    manifest = manifest_response.json()
-                    
-                    # 获取 digest
-                    digest = manifest.get('config', {}).get('digest', '')
-                    
-                    # 获取创建时间（从 config 的 history 中）
-                    created_at = None
-                    config_url = f"{self.base_url}/{owner}/{repository}/blobs/{digest}"
-                    try:
-                        config_response = self.session.get(config_url, timeout=30)
-                        config_response.raise_for_status()
-                        config = config_response.json()
-                        history = config.get('history', [])
-                        if history:
-                            created_str = history[0].get('created', '')
-                            if created_str:
-                                try:
-                                    created_at = datetime.fromisoformat(created_str.replace('Z', '+00:00'))
-                                except:
-                                    pass
-                    except Exception as e:
-                        if self.logger:
-                            self.logger.debug(f"获取标签 {tag} 的配置失败: {str(e)}")
-                    
-                    tag_details.append({
-                        'name': tag,
-                        'digest': digest,
-                        'created_at': created_at.isoformat() if created_at else None
-                    })
-                    
-                except Exception as e:
-                    if self.logger:
-                        self.logger.debug(f"获取标签 {tag} 的详细信息失败: {str(e)}")
-                    # 即使获取详细信息失败，也添加基本信息
-                    tag_details.append({
-                        'name': tag,
-                        'digest': '',
-                        'created_at': None
-                    })
-            
-            if self.logger:
-                self.logger.debug(f"找到 {len(tag_details)} 个标签")
-            
-            return tag_details
+            return tags
         
         except requests.RequestException as e:
             if self.logger:
@@ -160,14 +174,34 @@ class GHCRRegistryAPI:
             仓库名称列表
         """
         try:
-            # 注意：GHCR 没有直接列出所有仓库的 API
-            # 这里我们假设仓库命名遵循某种模式
-            # 实际使用时，可能需要从其他地方获取仓库列表
+            # 使用 GitHub REST API 获取所有容器包
+            url = f"{self.base_url}/orgs/{owner}/packages"
+            params = {
+                'package_type': 'container',
+                'per_page': 100
+            }
             
-            if self.logger:
-                self.logger.warning(f"GHCR 没有直接列出所有仓库的 API，需要从其他地方获取仓库列表")
+            repositories = []
+            page = 1
             
-            return []
+            while True:
+                params['page'] = page
+                response = self.session.get(url, params=params, timeout=30)
+                response.raise_for_status()
+                packages = response.json()
+                
+                if not packages:
+                    break
+                
+                for package in packages:
+                    repositories.append(package['name'])
+                
+                if len(packages) < 100:
+                    break
+                
+                page += 1
+            
+            return repositories
         
         except Exception as e:
             if self.logger:
@@ -186,50 +220,21 @@ class GHCRRegistryAPI:
             镜像信息字典
         """
         try:
-            # 获取 manifest
-            url = f"{self.base_url}/{owner}/{repository}/manifests/{tag}"
-            response = self.session.get(
-                url,
-                headers={'Accept': 'application/vnd.docker.distribution.manifest.v2+json'},
-                timeout=30
-            )
-            response.raise_for_status()
-            manifest = response.json()
+            # 获取所有标签
+            tags = self.get_repository_tags(owner, repository)
             
-            # 获取 digest
-            digest = manifest.get('config', {}).get('digest', '')
+            # 查找匹配的标签
+            for t in tags:
+                if t['name'] == tag:
+                    return {
+                        'name': f"{owner}/{repository}:{tag}",
+                        'digest': t.get('digest', ''),
+                        'created_at': t.get('created_at')
+                    }
             
-            # 获取创建时间
-            created_at = None
-            if digest:
-                config_url = f"{self.base_url}/{owner}/{repository}/blobs/{digest}"
-                try:
-                    config_response = self.session.get(config_url, timeout=30)
-                    config_response.raise_for_status()
-                    config = config_response.json()
-                    history = config.get('history', [])
-                    if history:
-                        created_str = history[0].get('created', '')
-                        if created_str:
-                            try:
-                                created_at = datetime.fromisoformat(created_str.replace('Z', '+00:00'))
-                            except:
-                                pass
-                except Exception as e:
-                    if self.logger:
-                        self.logger.debug(f"获取镜像配置失败: {str(e)}")
-            
-            return {
-                'name': f"{owner}/{repository}:{tag}",
-                'digest': digest,
-                'created_at': created_at.isoformat() if created_at else None
-            }
-        
-        except requests.RequestException as e:
-            if self.logger:
-                self.logger.error(f"获取镜像信息失败 {owner}/{repository}:{tag}: {str(e)}")
             return None
+        
         except Exception as e:
             if self.logger:
-                self.logger.error(f"未知错误 {owner}/{repository}:{tag}: {str(e)}")
+                self.logger.error(f"获取镜像信息失败 {owner}/{repository}:{tag}: {str(e)}")
             return None
