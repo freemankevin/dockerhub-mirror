@@ -56,7 +56,6 @@ sudo mv regctl-linux-amd64 /usr/local/bin/regctl
 ```bash
 cd web
 npm install
-cd ..
 ```
 
 ## 🚀 使用方法
