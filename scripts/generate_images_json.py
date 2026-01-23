@@ -33,7 +33,7 @@ def generate_images_json(
     token: str = None,
     logger=None
 ) -> Dict:
-    """从 GHCR 生成镜像列表 JSON
+    """从 GHCR 生成镜像列表 JSON（包含所有版本）
     
     Args:
         manifest_file: 清单文件路径
@@ -58,6 +58,7 @@ def generate_images_json(
     
     # 收集所有镜像信息
     images = []
+    total_versions = 0
     
     for img in manifest.get('images', []):
         if not img.get('enabled', True):
@@ -76,37 +77,47 @@ def generate_images_json(
         # 转换为 GHCR 仓库名
         repo_name = image_name.replace('/', '__')
         
-        # 获取 GHCR 中的标签信息
-        print(f"\n🔍 获取 {owner}/{repo_name} 的标签信息...")
+        # 获取 GHCR 中的所有标签信息
+        print(f"\n🔍 获取 {owner}/{repo_name} 的所有标签...")
         logger.debug(f"完整镜像路径: {registry}/{owner}/{repo_name}")
         logger.debug(f"原始源: {source}")
-        logger.debug(f"目标版本: {version}")
         tags = ghcr_api.get_repository_tags(owner, repo_name)
         
         if tags:
-            logger.debug(f"找到 {len(tags)} 个标签: {[tag['name'] for tag in tags]}")
-            # 找到匹配的标签
-            matching_tag = None
-            for tag in tags:
-                if tag['name'] == version:
-                    matching_tag = tag
-                    break
+            logger.debug(f"找到 {len(tags)} 个标签")
             
-            if matching_tag:
-                images.append({
-                    'name': image_name,
-                    'source': source,
-                    'target': f"{registry}/{owner}/{repo_name}:{version}",
-                    'version': version,
-                    'description': description,
-                    'repository': repo_name,
-                    'digest': matching_tag.get('digest', ''),
-                    'created_at': matching_tag.get('created_at'),
-                    'synced_at': matching_tag.get('created_at')  # 使用创建时间作为同步时间
+            # 按创建时间降序排序（最新的在前）
+            tags_sorted = sorted(
+                tags,
+                key=lambda x: x.get('created_at') or '',
+                reverse=True
+            )
+            
+            # 收集所有版本信息
+            versions = []
+            for tag in tags_sorted:
+                versions.append({
+                    'version': tag['name'],
+                    'digest': tag.get('digest', ''),
+                    'created_at': tag.get('created_at'),
+                    'synced_at': tag.get('created_at'),  # 使用创建时间作为同步时间
+                    'target': f"{registry}/{owner}/{repo_name}:{tag['name']}"
                 })
-                print(f"   ✅ 找到标签 {version}")
-            else:
-                print(f"   ⚠️  未找到标签 {version} (可用标签: {', '.join([tag['name'] for tag in tags[:5]])}{'...' if len(tags) > 5 else ''})")
+            
+            total_versions += len(versions)
+            
+            # 添加镜像信息（包含所有版本）
+            images.append({
+                'name': image_name,
+                'description': description,
+                'repository': repo_name,
+                'total_versions': len(versions),
+                'latest_version': versions[0]['version'] if versions else None,
+                'versions': versions
+            })
+            
+            print(f"   ✅ 找到 {len(versions)} 个版本")
+            print(f"   📌 最新版本: {versions[0]['version'] if versions else 'N/A'}")
         else:
             print(f"   ⚠️  未找到任何标签")
             logger.warning(f"仓库 {owner}/{repo_name} 可能不存在或需要认证")
@@ -116,9 +127,8 @@ def generate_images_json(
         'updated_at': datetime.now(timezone.utc).isoformat(),
         'registry': registry,
         'owner': owner,
-        'total_count': len(images),
-        'success_count': len(images),  # 所有成功获取的镜像
-        'fail_count': 0,  # 这里没有失败的情况，因为只是获取信息
+        'total_images': len(images),
+        'total_versions': total_versions,
         'images': images
     }
     
@@ -128,7 +138,7 @@ def generate_images_json(
         json.dump(output_data, f, indent=2, ensure_ascii=False)
     
     print(f"\n✅ 已生成 {output_file}")
-    print(f"📊 总计: {len(images)} 个镜像")
+    print(f"📊 总计: {len(images)} 个镜像，{total_versions} 个版本")
     
     return output_data
 
