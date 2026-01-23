@@ -1,172 +1,120 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-镜像同步工具
-处理 Docker 镜像的实际同步操作
+镜像清单管理器
+负责加载、更新和保存镜像清单文件
 """
 
-import json
-import subprocess
-import sys
+import yaml
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 
 
-class MirrorSync:
-    """镜像同步管理器"""
+class ManifestManager:
+    """镜像清单管理器"""
     
-    def __init__(self, registry: str, owner: str, logger=None):
-        self.registry = registry
-        self.owner = owner
+    def __init__(self, manifest_file: Path, logger=None):
+        """初始化清单管理器
+        
+        Args:
+            manifest_file: 清单文件路径
+            logger: 日志记录器
+        """
+        self.manifest_file = manifest_file
         self.logger = logger
-        self.mirrored_images = []
-        self.success_count = 0
-        self.fail_count = 0
+        self.manifest = None
+        self._load_manifest()
     
-    def mirror_image(self, source: str, target: str) -> bool:
-        """镜像同步"""
+    def _load_manifest(self) -> None:
+        """加载清单文件"""
         try:
-            cmd = [
-                'regctl', 'image', 'copy',
-                '--verbosity', 'info',
-                '--digest-tags',
-                '--include-external',
-                '--referrers',
-                source, target
-            ]
+            with open(self.manifest_file, 'r', encoding='utf-8') as f:
+                self.manifest = yaml.safe_load(f)
             
             if self.logger:
-                self.logger.debug(f"执行命令: {' '.join(cmd)}")
-            
-            result = subprocess.run(
-                cmd, 
-                capture_output=True, 
-                text=True, 
-                timeout=300
-            )
-            
-            if result.returncode == 0:
-                return True
-            else:
-                if self.logger:
-                    self.logger.error(f"同步失败: {result.stderr}")
-                return False
-                
-        except subprocess.TimeoutExpired:
+                self.logger.debug(f"已加载清单文件: {self.manifest_file}")
+        except FileNotFoundError:
             if self.logger:
-                self.logger.error(f"同步超时: {source}")
-            return False
+                self.logger.error(f"清单文件不存在: {self.manifest_file}")
+            raise
+        except yaml.YAMLError as e:
+            if self.logger:
+                self.logger.error(f"清单文件格式错误: {str(e)}")
+            raise
+    
+    def _save_manifest(self) -> None:
+        """保存清单文件"""
+        try:
+            # 更新最后检查时间
+            if 'config' not in self.manifest:
+                self.manifest['config'] = {}
+            self.manifest['config']['last_checked'] = datetime.now(timezone.utc).isoformat()
+            
+            with open(self.manifest_file, 'w', encoding='utf-8') as f:
+                yaml.dump(self.manifest, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
+            
+            if self.logger:
+                self.logger.debug(f"已保存清单文件: {self.manifest_file}")
         except Exception as e:
             if self.logger:
-                self.logger.error(f"镜像同步异常: {str(e)}")
-            return False
+                self.logger.error(f"保存清单文件失败: {str(e)}")
+            raise
     
-    def sync_single_version(
-        self, 
-        image_name: str, 
-        version: str,
-        description: str = ''
-    ) -> bool:
-        """同步单个版本"""
-        source_image = f"{image_name}:{version}"
-        repo_name = image_name.replace('/', '__')
-        target_image = f"{self.registry}/{self.owner}/{repo_name}:{version}"
+    def update_versions(self, api, dry_run: bool = False) -> int:
+        """更新镜像版本
         
-        print(f"\n🔄 Processing {source_image}...")
-        print(f"📦 Source: {source_image}")
-        print(f"🎯 Target: {target_image}")
+        Args:
+            api: DockerHubAPI 实例
+            dry_run: 预演模式，不修改文件
+            
+        Returns:
+            更新的镜像数量
+        """
+        updated_count = 0
         
-        if self.mirror_image(source_image, target_image):
-            print(f"✅ Successfully mirrored {source_image}")
-            self.mirrored_images.append({
-                'name': image_name,
-                'source': source_image,
-                'target': target_image,
-                'version': version,
-                'description': description,
-                'repository': repo_name,
-                'synced_at': datetime.now(timezone.utc).isoformat()
-            })
-            self.success_count += 1
-            return True
-        else:
-            print(f"❌ Failed to mirror {source_image}")
-            self.fail_count += 1
-            return False
-    
-    def sync_from_manifest(
-        self, 
-        manifest: Dict, 
-        api,
-        output_file: Optional[Path] = None
-    ) -> Dict:
-        """从清单同步所有镜像"""
-        
-        for img in manifest.get('images', []):
+        for img in self.manifest.get('images', []):
             if not img.get('enabled', True):
                 continue
             
             source = img['source']
-            description = img.get('description', '')
             tag_pattern = img.get('tag_pattern')
             exclude_pattern = img.get('exclude_pattern')
-            sync_all = img.get('sync_all_matching', False)
             
-            # 提取镜像名
-            image_name = source.split(':')[0]
-            
-            # 确定要同步的版本列表
-            versions_to_sync = []
-            
-            if sync_all:
-                # 获取所有匹配的版本
-                print(f"\n🔍 Fetching all matching versions for {image_name}...")
-                all_versions = api.get_all_matching_versions(
-                    image_name, tag_pattern, exclude_pattern
-                )
-                
-                if all_versions:
-                    versions_to_sync = all_versions
-                    print(f"📋 Found {len(versions_to_sync)} versions to sync")
-                else:
-                    print(f"⚠️  No matching versions found for {image_name}")
-                    continue
+            # 提取镜像名和当前版本
+            if ':' in source:
+                image_name, current_version = source.rsplit(':', 1)
             else:
-                # 只同步当前版本
-                current_version = source.split(':')[1] if ':' in source else 'latest'
-                versions_to_sync = [current_version]
+                image_name = source
+                current_version = 'latest'
             
-            # 同步每个版本
-            for version in versions_to_sync:
-                self.sync_single_version(image_name, version, description)
-        
-        # 生成镜像清单 JSON
-        output_data = {
-            'updated_at': datetime.now(timezone.utc).isoformat(),
-            'registry': self.registry,
-            'owner': self.owner,
-            'total_count': len(self.mirrored_images),
-            'success_count': self.success_count,
-            'fail_count': self.fail_count,
-            'images': self.mirrored_images
-        }
-        
-        # 保存到文件
-        if output_file:
-            # ✅ 修改：不再需要创建 parent 目录（因为是根目录）
-            # 但为了安全起见，保留这个逻辑，以防用户指定其他路径
-            if output_file.parent != output_file.parent.parent:  # 不是根目录
-                output_file.parent.mkdir(parents=True, exist_ok=True)
+            # 获取最新版本
+            if tag_pattern:
+                latest_version = api.get_latest_version(image_name, tag_pattern, exclude_pattern)
+            else:
+                latest_version = None
             
-            with open(output_file, 'w', encoding='utf-8') as f:
-                json.dump(output_data, f, indent=2, ensure_ascii=False)
-            print(f"\n✅ Generated {output_file}")
+            if latest_version and latest_version != current_version:
+                # 有新版本
+                print(f"\n📦 {image_name}")
+                print(f"   当前版本: {current_version}")
+                print(f"   最新版本: {latest_version}")
+                
+                if not dry_run:
+                    # 更新版本
+                    img['source'] = f"{image_name}:{latest_version}"
+                    updated_count += 1
+                    print(f"   ✅ 已更新")
+                else:
+                    print(f"   ℹ️  预演模式：将更新")
+                    updated_count += 1
         
-        # 打印统计
-        print(f"\n📊 Summary:")
-        print(f"   Total: {len(self.mirrored_images)}")
-        print(f"   Success: {self.success_count}")
-        print(f"   Failed: {self.fail_count}")
+        # 保存清单（如果不是预演模式）
+        if updated_count > 0 and not dry_run:
+            self._save_manifest()
         
-        return output_data
+        return updated_count
+    
+    def get_manifest(self) -> Dict:
+        """获取清单数据"""
+        return self.manifest
