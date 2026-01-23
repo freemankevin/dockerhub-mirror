@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-01-23T07:25:29.996475+00:00",
+  "updated_at": "2026-01-23T09:17:47.393085+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
-  "total_images": 9,
-  "total_versions": 51,
+  "total_images": 10,
+  "total_versions": 52,
   "images": [
     {
       "name": "library/elasticsearch",
@@ -491,6 +491,23 @@
           "synced_at": "2026-01-22T06:12:10+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-backup:latest",
           "source": "docker.io/freelabspace/postgresql-backup:latest"
+        }
+      ]
+    },
+    {
+      "name": "ghcr.io/freemankevin/network-tools",
+      "description": "容器化环境的网络测试工具，包含 curl、wget、ping、nslookup、dig、telnet、nc、tcpdump 等常用网络诊断工具",
+      "repository": "network-tools",
+      "total_versions": 1,
+      "latest_version": "latest",
+      "versions": [
+        {
+          "version": "latest",
+          "digest": "sha256:b50c9f73bd815c5dd2778d115cb57e7fe538f9ea66650b432f491fdc12f6d104",
+          "created_at": "2026-01-23T09:16:35+00:00",
+          "synced_at": "2026-01-23T09:16:35+00:00",
+          "target": "ghcr.io/freemankevin/network-tools:latest",
+          "source": "ghcr.io/freemankevin/network-tools:latest"
         }
       ]
     }
