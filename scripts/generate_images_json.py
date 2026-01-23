@@ -7,9 +7,10 @@
 import json
 import yaml
 import sys
+import re
 from pathlib import Path
 from datetime import datetime, timezone
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 # 设置标准输出编码为 UTF-8（解决 Windows 终端编码问题）
 if sys.platform == 'win32':
@@ -23,6 +24,58 @@ sys.path.insert(0, str(project_root))
 
 from scripts.ghcr_api import GHCRRegistryAPI
 from scripts.utils import setup_logger
+
+
+def filter_tags_by_pattern(
+    tags: List[Dict],
+    tag_pattern: Optional[str] = None,
+    exclude_pattern: Optional[str] = None,
+    logger=None
+) -> List[Dict]:
+    """根据 tag_pattern 和 exclude_pattern 过滤标签
+    
+    Args:
+        tags: 标签列表
+        tag_pattern: 包含标签的正则表达式模式
+        exclude_pattern: 排除标签的正则表达式模式
+        logger: 日志记录器
+        
+    Returns:
+        过滤后的标签列表
+    """
+    filtered_tags = []
+    
+    for tag in tags:
+        tag_name = tag['name']
+        
+        # 如果有 tag_pattern，检查标签是否匹配
+        if tag_pattern:
+            try:
+                if not re.match(tag_pattern, tag_name):
+                    if logger:
+                        logger.debug(f"标签 '{tag_name}' 不匹配模式 '{tag_pattern}'，已过滤")
+                    continue
+            except re.error as e:
+                if logger:
+                    logger.warning(f"tag_pattern 正则表达式错误: {e}")
+                continue
+        
+        # 如果有 exclude_pattern，检查标签是否需要排除
+        if exclude_pattern:
+            try:
+                if re.search(exclude_pattern, tag_name):
+                    if logger:
+                        logger.debug(f"标签 '{tag_name}' 匹配排除模式 '{exclude_pattern}'，已过滤")
+                    continue
+            except re.error as e:
+                if logger:
+                    logger.warning(f"exclude_pattern 正则表达式错误: {e}")
+                continue
+        
+        # 标签通过所有过滤条件
+        filtered_tags.append(tag)
+    
+    return filtered_tags
 
 
 def generate_images_json(
@@ -66,6 +119,8 @@ def generate_images_json(
         
         source = img['source']
         description = img.get('description', '')
+        tag_pattern = img.get('tag_pattern')
+        exclude_pattern = img.get('exclude_pattern')
         
         # 提取镜像名和版本
         if ':' in source:
@@ -81,14 +136,26 @@ def generate_images_json(
         print(f"\n🔍 获取 {owner}/{repo_name} 的所有标签...")
         logger.debug(f"完整镜像路径: {registry}/{owner}/{repo_name}")
         logger.debug(f"原始源: {source}")
+        logger.debug(f"标签匹配模式: {tag_pattern}")
+        logger.debug(f"排除模式: {exclude_pattern}")
         tags = ghcr_api.get_repository_tags(owner, repo_name)
         
         if tags:
             logger.debug(f"找到 {len(tags)} 个标签")
             
+            # 根据 tag_pattern 和 exclude_pattern 过滤标签
+            filtered_tags = filter_tags_by_pattern(
+                tags,
+                tag_pattern=tag_pattern,
+                exclude_pattern=exclude_pattern,
+                logger=logger
+            )
+            
+            logger.debug(f"过滤后剩余 {len(filtered_tags)} 个标签")
+            
             # 按创建时间降序排序（最新的在前）
             tags_sorted = sorted(
-                tags,
+                filtered_tags,
                 key=lambda x: x.get('created_at') or '',
                 reverse=True
             )
