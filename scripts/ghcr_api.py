@@ -63,12 +63,21 @@ class GHCRRegistryAPI:
             
             if self.logger:
                 self.logger.debug(f"获取 {owner}/{repository} 的标签列表")
+                self.logger.debug(f"请求 URL: {url}")
+                self.logger.debug(f"使用认证: {'是' if self.token else '否'}")
             
             response = self.session.get(url, timeout=30)
+            
+            if self.logger:
+                self.logger.debug(f"响应状态码: {response.status_code}")
+            
             response.raise_for_status()
             data = response.json()
             
             tags = data.get('tags', [])
+            
+            if self.logger:
+                self.logger.debug(f"找到 {len(tags)} 个标签")
             
             # 获取每个标签的详细信息
             tag_details = []
@@ -130,10 +139,15 @@ class GHCRRegistryAPI:
         except requests.RequestException as e:
             if self.logger:
                 self.logger.error(f"获取标签列表失败 {owner}/{repository}: {str(e)}")
+                if hasattr(e, 'response') and e.response is not None:
+                    self.logger.error(f"响应状态码: {e.response.status_code}")
+                    self.logger.error(f"响应内容: {e.response.text[:500]}")
             return []
         except Exception as e:
             if self.logger:
                 self.logger.error(f"未知错误 {owner}/{repository}: {str(e)}")
+                import traceback
+                self.logger.debug(traceback.format_exc())
             return []
     
     def get_all_repositories(self, owner: str) -> List[str]:

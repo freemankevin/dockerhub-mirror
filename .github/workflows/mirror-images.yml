@@ -49,6 +49,11 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Configure git
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -92,14 +97,14 @@ jobs:
       - name: Commit manifest changes
         if: steps.update.outputs.has_updates == 'true'
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
           git add images-manifest.yml
           git commit -m "chore: update image versions [skip ci]"
           echo "✅ Manifest changes committed"
 
       - name: Sync mirrors
         id: sync
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "🚀 开始同步镜像..."
           python3 main.py sync --owner ${{ env.GITHUB_OWNER }} --registry ${{ env.GHCR_REGISTRY }} --max-workers 2 --max-retries 5 --retry-delay 3

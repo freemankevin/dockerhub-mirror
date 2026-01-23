@@ -81,6 +81,7 @@ def generate_images_json(
         tags = ghcr_api.get_repository_tags(owner, repo_name)
         
         if tags:
+            logger.debug(f"找到 {len(tags)} 个标签: {[tag['name'] for tag in tags]}")
             # 找到匹配的标签
             matching_tag = None
             for tag in tags:
@@ -102,9 +103,10 @@ def generate_images_json(
                 })
                 print(f"   ✅ 找到标签 {version}")
             else:
-                print(f"   ⚠️  未找到标签 {version}")
+                print(f"   ⚠️  未找到标签 {version} (可用标签: {', '.join([tag['name'] for tag in tags[:5]])}{'...' if len(tags) > 5 else ''})")
         else:
             print(f"   ⚠️  未找到任何标签")
+            logger.warning(f"仓库 {owner}/{repo_name} 可能不存在或需要认证")
     
     # 生成输出数据
     output_data = {

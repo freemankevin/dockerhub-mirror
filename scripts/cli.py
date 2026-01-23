@@ -108,14 +108,17 @@ def cmd_sync(args):
         print(f"\n{COLOR_CYAN}📝 生成镜像列表 JSON...{COLOR_RESET}")
         try:
             from scripts.generate_images_json import generate_images_json
+            import os
             
             output_file = args.output or OUTPUT_FILE
+            # 从环境变量获取 GHCR_TOKEN
+            token = os.environ.get('GHCR_TOKEN')
             generate_images_json(
                 manifest_file,
                 output_file,
                 args.registry,
                 args.owner,
-                token=None,  # 可以从环境变量获取
+                token=token,
                 logger=logger
             )
         except Exception as e:
