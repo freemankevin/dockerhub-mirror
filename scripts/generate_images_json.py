@@ -11,7 +11,6 @@ import re
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import Dict, List, Optional
-from packaging import version
 
 # 设置标准输出编码为 UTF-8（解决 Windows 终端编码问题）
 if sys.platform == 'win32':
