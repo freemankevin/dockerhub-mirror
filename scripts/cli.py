@@ -38,11 +38,13 @@ def cmd_update(args):
         return 1
     
     # 初始化 API 和管理器
-    api = DockerHubAPI(logger)
+    max_workers = getattr(args, 'max_workers', 5)
+    api = DockerHubAPI(logger, max_workers=max_workers)
     manager = ManifestManager(manifest_file, logger)
     
     # 更新版本
-    updated_count = manager.update_versions(api, dry_run=args.dry_run)
+    use_concurrency = getattr(args, 'concurrency', True)
+    updated_count = manager.update_versions(api, dry_run=args.dry_run, use_concurrency=use_concurrency)
     
     if updated_count > 0 and not args.dry_run:
         print(f"\n{COLOR_GREEN}✓ 成功更新 {updated_count} 个镜像版本{COLOR_RESET}\n")
@@ -78,11 +80,13 @@ def cmd_sync(args):
         manifest = yaml.safe_load(f)
     
     # 初始化 API 和同步器
-    api = DockerHubAPI(logger)
-    sync = MirrorSync(args.registry, args.owner, logger)
+    max_workers = getattr(args, 'max_workers', 3)
+    api = DockerHubAPI(logger, max_workers=max_workers)
+    sync = MirrorSync(args.registry, args.owner, logger, max_workers=max_workers)
     
     # 执行同步
-    result = sync.sync_from_manifest(manifest, api, output_file)
+    use_concurrency = getattr(args, 'concurrency', True)
+    result = sync.sync_from_manifest(manifest, api, output_file, use_concurrency=use_concurrency)
     
     # 输出结果
     if result['success_count'] > 0:
@@ -153,6 +157,13 @@ def main():
     parser.add_argument('--manifest',
                        type=Path,
                        help=f'清单文件路径 (默认: {MANIFEST_FILE})')
+    parser.add_argument('--max-workers',
+                       type=int,
+                       default=5,
+                       help='最大并发数 (默认: 5)')
+    parser.add_argument('--no-concurrency',
+                       action='store_true',
+                       help='禁用并发处理')
     
     # 子命令
     subparsers = parser.add_subparsers(dest='command', help='可用命令')
@@ -207,6 +218,9 @@ def main():
     if not args.command:
         parser.print_help()
         return 0
+    
+    # 设置并发标志
+    args.concurrency = not args.no_concurrency
     
     # 执行对应的命令
     try:

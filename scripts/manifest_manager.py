@@ -61,18 +61,21 @@ class ManifestManager:
                 self.logger.error(f"保存清单文件失败: {str(e)}")
             raise
     
-    def update_versions(self, api, dry_run: bool = False) -> int:
+    def update_versions(self, api, dry_run: bool = False, use_concurrency: bool = True) -> int:
         """更新镜像版本
         
         Args:
             api: DockerHubAPI 实例
             dry_run: 预演模式，不修改文件
+            use_concurrency: 是否使用并发获取版本信息
             
         Returns:
             更新的镜像数量
         """
         updated_count = 0
         
+        # 收集需要检查的镜像
+        images_to_check = []
         for img in self.manifest.get('images', []):
             if not img.get('enabled', True):
                 continue
@@ -88,26 +91,76 @@ class ManifestManager:
                 image_name = source
                 current_version = 'latest'
             
-            # 获取最新版本
+            # 只有当有 tag_pattern 时才需要检查
             if tag_pattern:
-                latest_version = api.get_latest_version(image_name, tag_pattern, exclude_pattern)
-            else:
-                latest_version = None
+                images_to_check.append({
+                    'img': img,
+                    'image_name': image_name,
+                    'current_version': current_version,
+                    'tag_pattern': tag_pattern,
+                    'exclude_pattern': exclude_pattern
+                })
+        
+        # 并发获取所有镜像的最新版本
+        if use_concurrency and images_to_check:
+            repositories = [
+                (item['image_name'], item['tag_pattern'], item['exclude_pattern'])
+                for item in images_to_check
+            ]
             
-            if latest_version and latest_version != current_version:
-                # 有新版本
-                print(f"\n📦 {image_name}")
-                print(f"   当前版本: {current_version}")
-                print(f"   最新版本: {latest_version}")
+            if self.logger:
+                self.logger.info(f"并发获取 {len(repositories)} 个镜像的最新版本...")
+            
+            results = api.get_latest_versions_batch(repositories)
+            
+            # 创建镜像名到结果的映射
+            version_map = {repo: version for repo, version in results}
+            
+            # 更新有新版本的镜像
+            for item in images_to_check:
+                image_name = item['image_name']
+                current_version = item['current_version']
+                latest_version = version_map.get(image_name)
                 
-                if not dry_run:
-                    # 更新版本
-                    img['source'] = f"{image_name}:{latest_version}"
-                    updated_count += 1
-                    print(f"   ✅ 已更新")
-                else:
-                    print(f"   ℹ️  预演模式：将更新")
-                    updated_count += 1
+                if latest_version and latest_version != current_version:
+                    # 有新版本
+                    print(f"\n📦 {image_name}")
+                    print(f"   当前版本: {current_version}")
+                    print(f"   最新版本: {latest_version}")
+                    
+                    if not dry_run:
+                        # 更新版本
+                        item['img']['source'] = f"{image_name}:{latest_version}"
+                        updated_count += 1
+                        print(f"   ✅ 已更新")
+                    else:
+                        print(f"   ℹ️  预演模式：将更新")
+                        updated_count += 1
+        else:
+            # 串行处理
+            for item in images_to_check:
+                image_name = item['image_name']
+                current_version = item['current_version']
+                tag_pattern = item['tag_pattern']
+                exclude_pattern = item['exclude_pattern']
+                
+                # 获取最新版本
+                latest_version = api.get_latest_version(image_name, tag_pattern, exclude_pattern)
+                
+                if latest_version and latest_version != current_version:
+                    # 有新版本
+                    print(f"\n📦 {image_name}")
+                    print(f"   当前版本: {current_version}")
+                    print(f"   最新版本: {latest_version}")
+                    
+                    if not dry_run:
+                        # 更新版本
+                        item['img']['source'] = f"{image_name}:{latest_version}"
+                        updated_count += 1
+                        print(f"   ✅ 已更新")
+                    else:
+                        print(f"   ℹ️  预演模式：将更新")
+                        updated_count += 1
         
         # 保存清单（如果不是预演模式）
         if updated_count > 0 and not dry_run:

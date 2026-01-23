@@ -10,15 +10,19 @@ import requests
 from typing import Optional, Tuple, List
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import threading
 
 
 class DockerHubAPI:
     """Docker Hub API 客户端"""
     
-    def __init__(self, logger=None):
+    def __init__(self, logger=None, max_workers: int = 5):
         self.base_url = "https://registry.hub.docker.com/v2"
         self.session = self._create_session()
         self.logger = logger
+        self.max_workers = max_workers
+        self._lock = threading.Lock()
     
     def _create_session(self) -> requests.Session:
         """创建带重试策略的会话"""
@@ -161,3 +165,47 @@ class DockerHubAPI:
         if self.logger:
             self.logger.debug(f"找到 {len(matching_tags)} 个匹配标签，最新: {latest}")
         return latest
+    
+    def get_latest_versions_batch(
+        self,
+        repositories: List[Tuple[str, str, Optional[str]]],
+        max_workers: Optional[int] = None
+    ) -> List[Tuple[str, Optional[str]]]:
+        """并发获取多个镜像的最新版本
+        
+        Args:
+            repositories: 镜像列表，每个元素为 (repository, tag_pattern, exclude_pattern)
+            max_workers: 最大并发数，默认使用实例的 max_workers
+            
+        Returns:
+            返回列表，每个元素为 (repository, latest_version)
+        """
+        if max_workers is None:
+            max_workers = self.max_workers
+        
+        results = []
+        
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            # 提交所有任务
+            future_to_repo = {
+                executor.submit(
+                    self.get_latest_version, 
+                    repo, 
+                    pattern, 
+                    exclude
+                ): repo 
+                for repo, pattern, exclude in repositories
+            }
+            
+            # 收集结果
+            for future in as_completed(future_to_repo):
+                repo = future_to_repo[future]
+                try:
+                    latest_version = future.result()
+                    results.append((repo, latest_version))
+                except Exception as e:
+                    if self.logger:
+                        self.logger.error(f"获取 {repo} 最新版本失败: {str(e)}")
+                    results.append((repo, None))
+        
+        return results

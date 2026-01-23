@@ -35,4 +35,4 @@ nb-configuration.xml
 
 web/node_modules/
 logs/
-scripts/__pycache__
+scripts/__pycache__/

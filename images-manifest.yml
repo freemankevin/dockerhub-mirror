@@ -28,7 +28,7 @@ images:
   enabled: true
   description: RabbitMQ 消息队列管理
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+-management-alpine$
-  sync_all_matching: true
+  sync_all_matching: false
   retention:
     max_versions: 5
     

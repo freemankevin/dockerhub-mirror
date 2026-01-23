@@ -11,18 +11,22 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import threading
 
 
 class MirrorSync:
     """镜像同步管理器"""
     
-    def __init__(self, registry: str, owner: str, logger=None):
+    def __init__(self, registry: str, owner: str, logger=None, max_workers: int = 3):
         self.registry = registry
         self.owner = owner
         self.logger = logger
+        self.max_workers = max_workers
         self.mirrored_images = []
         self.success_count = 0
         self.fail_count = 0
+        self._lock = threading.Lock()
     
     def mirror_image(self, source: str, target: str) -> bool:
         """镜像同步"""
@@ -79,29 +83,48 @@ class MirrorSync:
         
         if self.mirror_image(source_image, target_image):
             print(f"✅ Successfully mirrored {source_image}")
-            self.mirrored_images.append({
-                'name': image_name,
-                'source': source_image,
-                'target': target_image,
-                'version': version,
-                'description': description,
-                'repository': repo_name,
-                'synced_at': datetime.now(timezone.utc).isoformat()
-            })
-            self.success_count += 1
+            
+            # 线程安全地更新结果
+            with self._lock:
+                self.mirrored_images.append({
+                    'name': image_name,
+                    'source': source_image,
+                    'target': target_image,
+                    'version': version,
+                    'description': description,
+                    'repository': repo_name,
+                    'synced_at': datetime.now(timezone.utc).isoformat()
+                })
+                self.success_count += 1
             return True
         else:
             print(f"❌ Failed to mirror {source_image}")
-            self.fail_count += 1
+            
+            # 线程安全地更新失败计数
+            with self._lock:
+                self.fail_count += 1
             return False
     
     def sync_from_manifest(
         self, 
         manifest: Dict, 
         api,
-        output_file: Optional[Path] = None
+        output_file: Optional[Path] = None,
+        use_concurrency: bool = True
     ) -> Dict:
-        """从清单同步所有镜像"""
+        """从清单同步所有镜像
+        
+        Args:
+            manifest: 镜像清单
+            api: DockerHubAPI 实例
+            output_file: 输出文件路径
+            use_concurrency: 是否使用并发同步
+            
+        Returns:
+            同步结果字典
+        """
+        # 收集所有需要同步的任务
+        sync_tasks = []
         
         for img in manifest.get('images', []):
             if not img.get('enabled', True):
@@ -137,9 +160,50 @@ class MirrorSync:
                 current_version = source.split(':')[1] if ':' in source else 'latest'
                 versions_to_sync = [current_version]
             
-            # 同步每个版本
+            # 添加到同步任务列表
             for version in versions_to_sync:
-                self.sync_single_version(image_name, version, description)
+                sync_tasks.append({
+                    'image_name': image_name,
+                    'version': version,
+                    'description': description
+                })
+        
+        # 执行同步
+        if use_concurrency and sync_tasks:
+            print(f"\n🚀 开始并发同步 {len(sync_tasks)} 个镜像...")
+            
+            with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+                # 提交所有同步任务
+                future_to_task = {
+                    executor.submit(
+                        self.sync_single_version,
+                        task['image_name'],
+                        task['version'],
+                        task['description']
+                    ): task 
+                    for task in sync_tasks
+                }
+                
+                # 等待所有任务完成
+                for future in as_completed(future_to_task):
+                    task = future_to_task[future]
+                    try:
+                        future.result()
+                    except Exception as e:
+                        if self.logger:
+                            self.logger.error(
+                                f"同步 {task['image_name']}:{task['version']} 异常: {str(e)}"
+                            )
+                        with self._lock:
+                            self.fail_count += 1
+        else:
+            # 串行同步
+            for task in sync_tasks:
+                self.sync_single_version(
+                    task['image_name'],
+                    task['version'],
+                    task['description']
+                )
         
         # 生成镜像清单 JSON
         output_data = {

@@ -40,8 +40,8 @@ jobs:
       contents: write
 
     concurrency:
-      group: ${{ github.workflow }}
-      cancel-in-progress: false
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
 
     steps:
       - name: Checkout code
@@ -80,7 +80,7 @@ jobs:
         id: update
         run: |
           echo "🔄 检查并更新镜像版本..."
-          python3 main.py update
+          python3 main.py update --max-workers 5
           
           # 检查清单是否有更新
           if git diff --quiet images-manifest.yml; then
@@ -102,7 +102,7 @@ jobs:
         id: sync
         run: |
           echo "🚀 开始同步镜像..."
-          python3 main.py sync --owner ${{ env.GITHUB_OWNER }} --registry ${{ env.GHCR_REGISTRY }}
+          python3 main.py sync --owner ${{ env.GITHUB_OWNER }} --registry ${{ env.GHCR_REGISTRY }} --max-workers 3
           
           # 提取同步统计
           if [ -f images.json ]; then
