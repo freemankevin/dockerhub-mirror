@@ -58,7 +58,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           pip install --upgrade pip
-          pip install pyyaml requests
+          pip install -r requirements.txt
 
       - name: Install regclient
         uses: iarekylew00t/regctl-installer@v4
