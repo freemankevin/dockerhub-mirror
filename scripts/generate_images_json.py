@@ -78,6 +78,9 @@ def generate_images_json(
         
         # 获取 GHCR 中的标签信息
         print(f"\n🔍 获取 {owner}/{repo_name} 的标签信息...")
+        logger.debug(f"完整镜像路径: {registry}/{owner}/{repo_name}")
+        logger.debug(f"原始源: {source}")
+        logger.debug(f"目标版本: {version}")
         tags = ghcr_api.get_repository_tags(owner, repo_name)
         
         if tags:

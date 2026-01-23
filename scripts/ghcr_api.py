@@ -63,8 +63,11 @@ class GHCRRegistryAPI:
             标签列表，每个标签包含 name、digest、created 等信息
         """
         try:
-            # 使用 GitHub REST API 获取容器包的版本信息
+            # 尝试使用组织端点，如果失败则使用用户端点
             # 端点: GET /orgs/{org}/packages/container/{package_name}/versions
+            # 或: GET /users/{username}/packages/container/{package_name}/versions
+            
+            # 首先尝试组织端点
             url = f"{self.base_url}/orgs/{owner}/packages/container/{repository}/versions"
             
             if self.logger:
@@ -76,6 +79,7 @@ class GHCRRegistryAPI:
             tags = []
             page = 1
             per_page = 100
+            use_org_endpoint = True
             
             while True:
                 params = {
@@ -87,6 +91,14 @@ class GHCRRegistryAPI:
                 
                 if self.logger:
                     self.logger.debug(f"响应状态码: {response.status_code}")
+                
+                # 如果返回 404 且第一次尝试组织端点，尝试用户端点
+                if response.status_code == 404 and use_org_endpoint:
+                    if self.logger:
+                        self.logger.debug(f"组织端点返回 404，尝试用户端点")
+                    url = f"{self.base_url}/users/{owner}/packages/container/{repository}/versions"
+                    use_org_endpoint = False
+                    continue
                 
                 # 如果返回 404，说明仓库不存在
                 if response.status_code == 404:
