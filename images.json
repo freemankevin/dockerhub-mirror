@@ -1,9 +1,109 @@
 {
-  "updated_at": "2026-01-23T05:16:49.869245+00:00",
+  "updated_at": "2026-01-23T05:24:41.040729+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
-  "total_count": 0,
-  "success_count": 0,
+  "total_count": 9,
+  "success_count": 9,
   "fail_count": 0,
-  "images": []
+  "images": [
+    {
+      "name": "library/elasticsearch",
+      "source": "library/elasticsearch:9.2.4",
+      "target": "ghcr.io/freemankevin/library__elasticsearch:9.2.4",
+      "version": "9.2.4",
+      "description": "Elasticsearch 搜索引擎和分析引擎",
+      "repository": "library__elasticsearch",
+      "digest": "sha256:e40ae5dc1e03bb8f5d30ee2491e39629b5d5ef51f7a069fe3de177fe2a09a70e",
+      "created_at": "2026-01-22T03:43:06+00:00",
+      "synced_at": "2026-01-22T03:43:06+00:00"
+    },
+    {
+      "name": "derklaro/minio",
+      "source": "derklaro/minio:RELEASE.2025-10-15T17-29-55Z",
+      "target": "ghcr.io/freemankevin/derklaro__minio:RELEASE.2025-10-15T17-29-55Z",
+      "version": "RELEASE.2025-10-15T17-29-55Z",
+      "description": "MinIO 高性能对象存储",
+      "repository": "derklaro__minio",
+      "digest": "sha256:376ab1b6b91c0a6271999c5c610b34a2433f83643196f14dd68ef07bd5d77098",
+      "created_at": "2026-01-22T03:43:10+00:00",
+      "synced_at": "2026-01-22T03:43:10+00:00"
+    },
+    {
+      "name": "nacos/nacos-server",
+      "source": "nacos/nacos-server:v3.1.1",
+      "target": "ghcr.io/freemankevin/nacos__nacos-server:v3.1.1",
+      "version": "v3.1.1",
+      "description": "Nacos 服务发现和配置中心",
+      "repository": "nacos__nacos-server",
+      "digest": "sha256:13e74786507abbacebe080fae2fc9c05aa2591eb99c97a0a78ff0e72beb21b13",
+      "created_at": "2026-01-22T03:43:13+00:00",
+      "synced_at": "2026-01-22T03:43:13+00:00"
+    },
+    {
+      "name": "library/nginx",
+      "source": "library/nginx:1.29.4-alpine",
+      "target": "ghcr.io/freemankevin/library__nginx:1.29.4-alpine",
+      "version": "1.29.4-alpine",
+      "description": "Nginx 高性能 Web 服务器",
+      "repository": "library__nginx",
+      "digest": "sha256:b0f7830b6bfaa1258f45d94c240ab668ced1b3651c8a222aefe6683447c7bf55",
+      "created_at": "2026-01-22T03:43:19+00:00",
+      "synced_at": "2026-01-22T03:43:19+00:00"
+    },
+    {
+      "name": "library/rabbitmq",
+      "source": "library/rabbitmq:4.2.3-management-alpine",
+      "target": "ghcr.io/freemankevin/library__rabbitmq:4.2.3-management-alpine",
+      "version": "4.2.3-management-alpine",
+      "description": "RabbitMQ 消息队列管理",
+      "repository": "library__rabbitmq",
+      "digest": "sha256:6c8d766b26943aa29f527ca99f56da4a9f4c0fecbc821d69f9e9ec4e59e43005",
+      "created_at": "2026-01-23T03:15:19+00:00",
+      "synced_at": "2026-01-23T03:15:19+00:00"
+    },
+    {
+      "name": "library/redis",
+      "source": "library/redis:8.4.0",
+      "target": "ghcr.io/freemankevin/library__redis:8.4.0",
+      "version": "8.4.0",
+      "description": "Redis 内存数据库",
+      "repository": "library__redis",
+      "digest": "sha256:73dad4271642c5966db88db7a7585fae7cf10b685d1e48006f31e0294c29fdd7",
+      "created_at": "2026-01-22T03:43:33+00:00",
+      "synced_at": "2026-01-22T03:43:33+00:00"
+    },
+    {
+      "name": "kartoza/geoserver",
+      "source": "kartoza/geoserver:2.28.0",
+      "target": "ghcr.io/freemankevin/kartoza__geoserver:2.28.0",
+      "version": "2.28.0",
+      "description": "GeoServer 地理信息服务",
+      "repository": "kartoza__geoserver",
+      "digest": "sha256:505b3904cb47075aef16d13009b21fd06ac8002b322bb27a0d5efe22cec9ce37",
+      "created_at": "2026-01-22T03:43:38+00:00",
+      "synced_at": "2026-01-22T03:43:38+00:00"
+    },
+    {
+      "name": "freelabspace/postgresql-postgis",
+      "source": "freelabspace/postgresql-postgis:18.1",
+      "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:18.1",
+      "version": "18.1",
+      "description": "PostgreSQL 数据库 + PostGIS 扩展",
+      "repository": "freelabspace__postgresql-postgis",
+      "digest": "sha256:a6ad698279b7888ab53a190272a9e37376851f5f1c6758f9e5e8ce8ac08c40d7",
+      "created_at": "2026-01-22T03:43:43+00:00",
+      "synced_at": "2026-01-22T03:43:43+00:00"
+    },
+    {
+      "name": "freelabspace/postgresql-backup",
+      "source": "freelabspace/postgresql-backup:latest",
+      "target": "ghcr.io/freemankevin/freelabspace__postgresql-backup:latest",
+      "version": "latest",
+      "description": "PostgreSQL 备份工具",
+      "repository": "freelabspace__postgresql-backup",
+      "digest": "sha256:3f951523d2096480245f0910ac1f5a09504e76da4682347cf7722caabdfcc035",
+      "created_at": "2026-01-22T06:12:10+00:00",
+      "synced_at": "2026-01-22T06:12:10+00:00"
+    }
+  ]
 }
