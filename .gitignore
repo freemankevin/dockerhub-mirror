@@ -35,3 +35,10 @@ nb-configuration.xml
 
 web/node_modules/
 logs/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
