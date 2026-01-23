@@ -3,33 +3,49 @@ images:
   enabled: true
   description: Elasticsearch 搜索引擎和分析引擎
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
+  sync_all_matching: false
+  
 - source: derklaro/minio:RELEASE.2025-10-15T17-29-55Z
   enabled: true
   description: MinIO 高性能对象存储
   tag_pattern: ^RELEASE\.[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}-[0-9]{2}-[0-9]{2}Z$
+  sync_all_matching: false
+  
 - source: nacos/nacos-server:v3.1.1
   enabled: true
   description: Nacos 服务发现和配置中心
   tag_pattern: ^v[0-9]+\.[0-9]+\.[0-9]+$
   exclude_pattern: .*BETA.*|.*RC.*|.*SNAPSHOT.*
+  sync_all_matching: false
+  
 - source: library/nginx:1.29.4-alpine
   enabled: true
   description: Nginx 高性能 Web 服务器
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+-alpine$
+  sync_all_matching: false
+  
 - source: library/rabbitmq:4.2.3-management-alpine
   enabled: true
   description: RabbitMQ 消息队列管理
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+-management-alpine$
+  sync_all_matching: true
+  retention:
+    max_versions: 5
+    
 - source: library/redis:8.4.0
   enabled: true
   description: Redis 内存数据库
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
   exclude_pattern: .*bookworm.*|.*bullseye.*|.*alpine.*
+  sync_all_matching: false
+  
 - source: kartoza/geoserver:2.28.0
   enabled: true
   description: GeoServer 地理信息服务
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
   exclude_pattern: .*--.*
+  sync_all_matching: false
+  
 - source: freelabspace/postgresql-postgis:18.1
   enabled: true
   description: PostgreSQL 数据库 + PostGIS 扩展
@@ -37,11 +53,16 @@ images:
   exclude_pattern: ^buildcache-.*
   sync_all_matching: true
   version_range: 13.x-18.x
+  retention:
+    max_versions: 3
+    
 - source: freelabspace/postgresql-backup:latest
   enabled: true
   description: PostgreSQL 备份工具
   tag_pattern: ^latest$|^[0-9]+\.[0-9]+$
   exclude_pattern: ^buildcache-.*
+  sync_all_matching: false
+  
 config:
   registry: ghcr.io
   owner: freemankevin
