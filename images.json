@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-01-25T03:25:32.088265+00:00",
+  "updated_at": "2026-01-26T03:28:27.715763+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 10,
@@ -332,9 +332,9 @@
       "versions": [
         {
           "version": "2.28.0",
-          "digest": "sha256:505b3904cb47075aef16d13009b21fd06ac8002b322bb27a0d5efe22cec9ce37",
-          "created_at": "2026-01-22T03:43:38+00:00",
-          "synced_at": "2026-01-22T03:43:38+00:00",
+          "digest": "sha256:e3c1142169be58543e2cce1219671fc004a617868fa68fec00c0016bf0fe3480",
+          "created_at": "2026-01-26T03:28:24+00:00",
+          "synced_at": "2026-01-26T03:28:24+00:00",
           "target": "ghcr.io/freemankevin/kartoza__geoserver:2.28.0",
           "source": "docker.io/kartoza/geoserver:2.28.0"
         }
