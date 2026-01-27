@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-01-26T03:28:27.715763+00:00",
+  "updated_at": "2026-01-27T03:20:06.602365+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 10,
-  "total_versions": 52,
+  "total_versions": 53,
   "images": [
     {
       "name": "library/elasticsearch",
@@ -14,9 +14,9 @@
       "versions": [
         {
           "version": "9.2.4",
-          "digest": "sha256:e40ae5dc1e03bb8f5d30ee2491e39629b5d5ef51f7a069fe3de177fe2a09a70e",
-          "created_at": "2026-01-22T03:43:06+00:00",
-          "synced_at": "2026-01-22T03:43:06+00:00",
+          "digest": "sha256:ba3ca06dc9121baad53ec025c87eef9352fcae11d89cd2e4cba8821977e81319",
+          "created_at": "2026-01-27T03:19:52+00:00",
+          "synced_at": "2026-01-27T03:19:52+00:00",
           "target": "ghcr.io/freemankevin/library__elasticsearch:9.2.4",
           "source": "docker.io/library/elasticsearch:9.2.4"
         }
@@ -327,9 +327,17 @@
       "name": "kartoza/geoserver",
       "description": "GeoServer 地理信息服务",
       "repository": "kartoza__geoserver",
-      "total_versions": 1,
-      "latest_version": "2.28.0",
+      "total_versions": 2,
+      "latest_version": "2.28.1",
       "versions": [
+        {
+          "version": "2.28.1",
+          "digest": "sha256:185a18a8908ae823d33b564d028c12c0625510ba7cd3dd425319f071c3044b50",
+          "created_at": "2026-01-27T03:20:04+00:00",
+          "synced_at": "2026-01-27T03:20:04+00:00",
+          "target": "ghcr.io/freemankevin/kartoza__geoserver:2.28.1",
+          "source": "docker.io/kartoza/geoserver:2.28.1"
+        },
         {
           "version": "2.28.0",
           "digest": "sha256:e3c1142169be58543e2cce1219671fc004a617868fa68fec00c0016bf0fe3480",
