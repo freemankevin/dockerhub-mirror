@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-01-30T03:38:49.646521+00:00",
+  "updated_at": "2026-01-31T03:34:36.130342+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 10,
@@ -65,9 +65,9 @@
       "versions": [
         {
           "version": "1.29.4-alpine",
-          "digest": "sha256:7d7a15b8a280c661051955f14c2b91fed3e23724ddba18d2f53e8b44e74ab37a",
-          "created_at": "2026-01-29T03:38:19+00:00",
-          "synced_at": "2026-01-29T03:38:19+00:00",
+          "digest": "sha256:4870c12cd2ca986de501a804b4f506ad3875a0b1874940ba0a2c7f763f1855b2",
+          "created_at": "2026-01-31T03:34:15+00:00",
+          "synced_at": "2026-01-31T03:34:15+00:00",
           "target": "ghcr.io/freemankevin/library__nginx:1.29.4-alpine",
           "source": "docker.io/library/nginx:1.29.4-alpine"
         }
