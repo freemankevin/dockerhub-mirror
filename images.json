@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-01-31T03:34:36.130342+00:00",
+  "updated_at": "2026-02-01T04:08:15.822235+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 10,
@@ -332,9 +332,9 @@
       "versions": [
         {
           "version": "2.28.2",
-          "digest": "sha256:d02da6b708d2496c77740c8689fcb0f89c300f917b1fcd67e428f850633aaae4",
-          "created_at": "2026-01-28T03:17:23+00:00",
-          "synced_at": "2026-01-28T03:17:23+00:00",
+          "digest": "sha256:ad465f7e2aa25caee70500c0a85e10440598bf046295a348707da1103f16cec1",
+          "created_at": "2026-02-01T04:08:07+00:00",
+          "synced_at": "2026-02-01T04:08:07+00:00",
           "target": "ghcr.io/freemankevin/kartoza__geoserver:2.28.2",
           "source": "docker.io/kartoza/geoserver:2.28.2"
         },
@@ -502,9 +502,9 @@
       "versions": [
         {
           "version": "latest",
-          "digest": "sha256:3f951523d2096480245f0910ac1f5a09504e76da4682347cf7722caabdfcc035",
-          "created_at": "2026-01-22T06:12:10+00:00",
-          "synced_at": "2026-01-22T06:12:10+00:00",
+          "digest": "sha256:bc6ece5e1c32c9916886517f9143c123dc92946986009ee159db4e96dddd8d17",
+          "created_at": "2026-02-01T04:08:13+00:00",
+          "synced_at": "2026-02-01T04:08:13+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-backup:latest",
           "source": "docker.io/freelabspace/postgresql-backup:latest"
         }
