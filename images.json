@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-02-01T04:08:15.822235+00:00",
+  "updated_at": "2026-02-02T04:00:47.510526+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 10,
@@ -82,9 +82,9 @@
       "versions": [
         {
           "version": "4.2.3-management-alpine",
-          "digest": "sha256:f012bdaab5c1551591bed24579ea744e01f34e2ff52c9c284ccde59bf0ec247a",
-          "created_at": "2026-01-29T03:38:25+00:00",
-          "synced_at": "2026-01-29T03:38:25+00:00",
+          "digest": "sha256:426aa8163d714142a902fe50cca1af49d75fb2351863331647c1976339f49809",
+          "created_at": "2026-02-02T04:00:32+00:00",
+          "synced_at": "2026-02-02T04:00:32+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:4.2.3-management-alpine",
           "source": "docker.io/library/rabbitmq:4.2.3-management-alpine"
         },
