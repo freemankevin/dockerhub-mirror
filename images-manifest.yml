@@ -1,5 +1,5 @@
 images:
-- source: library/elasticsearch:9.2.4
+- source: library/elasticsearch:9.3.0
   enabled: true
   description: Elasticsearch 搜索引擎和分析引擎
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
@@ -67,4 +67,4 @@ config:
   retention:
     max_versions: 3
     cleanup_old_versions: false
-  last_checked: '2026-01-28T03:16:38.261807+00:00'
+  last_checked: '2026-02-04T03:42:17.597463+00:00'
