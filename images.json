@@ -1,17 +1,25 @@
 {
-  "updated_at": "2026-02-03T03:45:42.818213+00:00",
+  "updated_at": "2026-02-04T03:42:51.667652+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 10,
-  "total_versions": 54,
+  "total_versions": 55,
   "images": [
     {
       "name": "library/elasticsearch",
       "description": "Elasticsearch 搜索引擎和分析引擎",
       "repository": "library__elasticsearch",
-      "total_versions": 1,
-      "latest_version": "9.2.4",
+      "total_versions": 2,
+      "latest_version": "9.3.0",
       "versions": [
+        {
+          "version": "9.3.0",
+          "digest": "sha256:76045cd5895cb8b4655048c018eb23af6c4d1f2642659a4c3ee18b3bf984e07a",
+          "created_at": "2026-02-04T03:42:35+00:00",
+          "synced_at": "2026-02-04T03:42:35+00:00",
+          "target": "ghcr.io/freemankevin/library__elasticsearch:9.3.0",
+          "source": "docker.io/library/elasticsearch:9.3.0"
+        },
         {
           "version": "9.2.4",
           "digest": "sha256:ba3ca06dc9121baad53ec025c87eef9352fcae11d89cd2e4cba8821977e81319",
@@ -82,9 +90,9 @@
       "versions": [
         {
           "version": "4.2.3-management-alpine",
-          "digest": "sha256:426aa8163d714142a902fe50cca1af49d75fb2351863331647c1976339f49809",
-          "created_at": "2026-02-02T04:00:32+00:00",
-          "synced_at": "2026-02-02T04:00:32+00:00",
+          "digest": "sha256:97aa01edc8af7a62786bc2597cb18b848a22edc13bbb47cc40d391ffaf42334b",
+          "created_at": "2026-02-04T03:42:30+00:00",
+          "synced_at": "2026-02-04T03:42:30+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:4.2.3-management-alpine",
           "source": "docker.io/library/rabbitmq:4.2.3-management-alpine"
         },
@@ -315,9 +323,9 @@
       "versions": [
         {
           "version": "8.4.0",
-          "digest": "sha256:73dad4271642c5966db88db7a7585fae7cf10b685d1e48006f31e0294c29fdd7",
-          "created_at": "2026-01-22T03:43:33+00:00",
-          "synced_at": "2026-01-22T03:43:33+00:00",
+          "digest": "sha256:c22af04bb576503bf16b3e34a1fd2fd82de0f765afd866d2e380145e0af30d78",
+          "created_at": "2026-02-04T03:42:48+00:00",
+          "synced_at": "2026-02-04T03:42:48+00:00",
           "target": "ghcr.io/freemankevin/library__redis:8.4.0",
           "source": "docker.io/library/redis:8.4.0"
         }
