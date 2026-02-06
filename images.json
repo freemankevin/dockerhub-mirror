@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-02-05T03:44:18.410841+00:00",
+  "updated_at": "2026-02-06T03:44:20.878454+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 10,
@@ -14,9 +14,9 @@
       "versions": [
         {
           "version": "9.3.0",
-          "digest": "sha256:3a41ebcbbc50f201bf9d49beaa7c4d02e833bae9c014a669c6fe3b3579103d94",
-          "created_at": "2026-02-05T03:44:13+00:00",
-          "synced_at": "2026-02-05T03:44:13+00:00",
+          "digest": "sha256:89738cb1d6042ac20eddc3768eb3bb7e92bdf816a83a261b3bf11fb3544ae751",
+          "created_at": "2026-02-06T03:43:46+00:00",
+          "synced_at": "2026-02-06T03:43:46+00:00",
           "target": "ghcr.io/freemankevin/library__elasticsearch:9.3.0",
           "source": "docker.io/library/elasticsearch:9.3.0"
         },
@@ -73,9 +73,9 @@
       "versions": [
         {
           "version": "1.29.5-alpine",
-          "digest": "sha256:eb37f58646a901dc7727cf448cae36daaefaba79de33b5058dab79aa4c04aefb",
-          "created_at": "2026-02-05T03:43:49+00:00",
-          "synced_at": "2026-02-05T03:43:49+00:00",
+          "digest": "sha256:05fcc6f6c80dc65c0f241f250677aad26e0962d118abaa65a513796862ff915d",
+          "created_at": "2026-02-06T03:43:43+00:00",
+          "synced_at": "2026-02-06T03:43:43+00:00",
           "target": "ghcr.io/freemankevin/library__nginx:1.29.5-alpine",
           "source": "docker.io/library/nginx:1.29.5-alpine"
         },
@@ -98,9 +98,9 @@
       "versions": [
         {
           "version": "4.2.3-management-alpine",
-          "digest": "sha256:97aa01edc8af7a62786bc2597cb18b848a22edc13bbb47cc40d391ffaf42334b",
-          "created_at": "2026-02-04T03:42:30+00:00",
-          "synced_at": "2026-02-04T03:42:30+00:00",
+          "digest": "sha256:9a2ad4f5472b616e2985ed91cf51ac9bb7b76806303f5e92a279702f93d02c1f",
+          "created_at": "2026-02-06T03:44:16+00:00",
+          "synced_at": "2026-02-06T03:44:16+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:4.2.3-management-alpine",
           "source": "docker.io/library/rabbitmq:4.2.3-management-alpine"
         },
