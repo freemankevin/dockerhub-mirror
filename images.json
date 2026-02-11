@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-02-10T04:11:10.948415+00:00",
+  "updated_at": "2026-02-11T04:08:04.525318+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 10,
-  "total_versions": 56,
+  "total_versions": 57,
   "images": [
     {
       "name": "library/elasticsearch",
@@ -326,9 +326,17 @@
       "name": "library/redis",
       "description": "Redis 内存数据库",
       "repository": "library__redis",
-      "total_versions": 1,
-      "latest_version": "8.4.0",
+      "total_versions": 2,
+      "latest_version": "8.6.0",
       "versions": [
+        {
+          "version": "8.6.0",
+          "digest": "sha256:7b6fb55d8b0adcd77269dc52b3cfffe5f59ca5d43dec3c90dbe18aacce7942e1",
+          "created_at": "2026-02-11T04:08:00+00:00",
+          "synced_at": "2026-02-11T04:08:00+00:00",
+          "target": "ghcr.io/freemankevin/library__redis:8.6.0",
+          "source": "docker.io/library/redis:8.6.0"
+        },
         {
           "version": "8.4.0",
           "digest": "sha256:c22af04bb576503bf16b3e34a1fd2fd82de0f765afd866d2e380145e0af30d78",
