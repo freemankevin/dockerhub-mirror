@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-02-12T04:02:08.723873+00:00",
+  "updated_at": "2026-02-13T03:58:50.129272+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 10,
@@ -493,9 +493,9 @@
         },
         {
           "version": "13.23",
-          "digest": "sha256:68253e12132ed0896874315c196f7bdcae329b6be3a9f1fe779ca0359850fc10",
-          "created_at": "2026-01-23T01:40:41+00:00",
-          "synced_at": "2026-01-23T01:40:41+00:00",
+          "digest": "sha256:dcf79029cb1748d709094be38a6c118107d39694cafab53b7f028b8381487e91",
+          "created_at": "2026-02-13T03:58:37+00:00",
+          "synced_at": "2026-02-13T03:58:37+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:13.23",
           "source": "docker.io/freelabspace/postgresql-postgis:13.23"
         },
