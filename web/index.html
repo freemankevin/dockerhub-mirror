@@ -1,207 +1,156 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en" class="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Docker Sync Engine</title>
-  <meta name="description" content="Docker Hub 镜像同步到 GitHub Container Registry">
-  <!-- Docker 官方图标 -->
-  <link rel="icon" href="https://www.docker.com/wp-content/uploads/2022/03/vertical-logo-monochromatic.png" type="image/png">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Sync Engine</title>
+    <meta name="description" content="Mirror images from Docker Hub, GHCR, GCR and Quay to GitHub Container Registry">
+    <link rel="icon" href="https://www.docker.com/wp-content/uploads/2022/03/vertical-logo-monochromatic.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
-<body class="bg-gray-50">
-  <header class="gradient-bg text-white shadow-lg">
-    <div class="container mx-auto px-4 py-6">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-          <div class="bg-white rounded-lg p-2">
-            <!-- Docker 官方 SVG 图标 -->
-            <svg class="docker-logo" viewBox="0 0 24 24" fill="#2496ED">
-              <path d="M13.983 11.078h2.119a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.119a.185.185 0 0 0-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 0 0 .186-.186V3.574a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.186m0 2.716h2.118a.187.187 0 0 0 .186-.186V6.29a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 0 0 .184-.186V6.29a.185.185 0 0 0-.185-.185H8.1a.185.185 0 0 0-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 0 0 .185-.186V6.29a.185.185 0 0 0-.185-.185H5.136a.186.186 0 0 0-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 0 0 .185-.185V9.006a.185.185 0 0 0-.185-.186h-2.12a.186.186 0 0 0-.185.186v1.887c0 .102.084.185.186.185m-2.929 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.887c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 0 0-.75.748 11.376 11.376 0 0 0 .692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 0 0 3.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288z"/>
-            </svg>
-          </div>
-          <div>
-            <h1 class="text-2xl font-bold">Docker Sync Engine</h1>
-          </div>
-        </div>
-        <a href="https://github.com/freemankevin/dockerhub-mirror" target="_blank" class="github-corner-link">
-          <svg class="github-corner-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-          </svg>
-        </a>
-      </div>
-    </div>
-  </header>
+<body class="min-h-screen">
 
-  <main class="container mx-auto px-4 py-8">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <div class="bg-white rounded-xl shadow-sm p-6 card-hover glass-card">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-gray-600 text-sm font-medium">总镜像数</p>
-            <p id="total-count" class="text-3xl font-bold text-gray-900 mt-1">-</p>
-          </div>
-          <div class="bg-blue-100 rounded-full p-3">
-            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
-          </div>
-        </div>
-      </div>
-      <div class="bg-white rounded-xl shadow-sm p-6 card-hover glass-card">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-gray-600 text-sm font-medium">最后更新</p>
-            <p id="last-update" class="text-lg font-semibold text-gray-900 mt-1">-</p>
-          </div>
-          <div class="bg-green-100 rounded-full p-3">
-            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          </div>
-        </div>
-      </div>
-      <div class="bg-white rounded-xl shadow-sm p-6 card-hover glass-card">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-gray-600 text-sm font-medium">注册表</p>
-            <p class="text-sm font-semibold text-gray-900 mt-1" id="registry-info">ghcr.io/freemankevin</p>
-          </div>
-          <div class="bg-purple-100 rounded-full p-3">
-            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-8 search-container card-hover">
-      <div class="relative">
-        <input type="text" id="search-input" placeholder="搜索镜像名称或描述..." class="w-full px-5 py-3 pl-12 border border-gray-300 rounded-lg search-input focus:outline-none focus:border-indigo-500 transition">
-        <svg class="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-      </div>
-    </div>
-
-    <div id="images-container" class="grid grid-cols-1 gap-6"></div>
-    <div id="empty-state" class="hidden text-center py-12">
-      <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-      <h3 class="mt-4 text-lg font-medium text-gray-900">未找到匹配的镜像</h3>
-      <p class="mt-2 text-gray-500">尝试使用不同的关键词搜索</p>
-    </div>
-  </main>
-
-  <footer class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 mt-12 relative overflow-hidden">
-    <!-- 背景装饰 -->
-    <div class="absolute inset-0 opacity-5">
-      <div class="absolute top-0 left-0 w-96 h-96 bg-purple-500 rounded-full filter blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
-      <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl translate-x-1/2 translate-y-1/2"></div>
-    </div>
-    
-    <div class="container mx-auto px-4 py-8 relative z-10">
-      <!-- 主要内容区域 -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-        <!-- 项目信息 -->
-        <div>
-          <div class="flex items-center gap-3 mb-4">
-            <div class="bg-white/10 rounded-lg p-2 backdrop-blur-sm">
-              <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="#2496ED">
-                <path d="M13.983 11.078h2.119a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.119a.185.185 0 0 0-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 0 0 .186-.186V3.574a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.186m0 2.716h2.118a.187.187 0 0 0 .186-.186V6.29a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 0 0 .184-.186V6.29a.185.185 0 0 0-.185-.185H8.1a.185.185 0 0 0-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 0 0 .185-.186V6.29a.185.185 0 0 0-.185-.185H5.136a.186.186 0 0 0-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 0 0 .185-.185V9.006a.185.185 0 0 0-.185-.186h-2.12a.186.186 0 0 0-.185.186v1.887c0 .102.084.185.186.185m-2.929 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.887c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 0 0-.75.748 11.376 11.376 0 0 0 .692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 0 0 3.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288z"/>
-              </svg>
+    <!-- Header -->
+    <header class="surface border-b sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+                    <i class="fab fa-docker text-white text-base"></i>
+                </div>
+                <h1 class="text-lg font-semibold text-primary">Docker Sync Engine</h1>
             </div>
-            <h3 class="text-white font-bold text-lg">Docker Sync Engine</h3>
-          </div>
-          <p class="text-gray-400 text-sm leading-relaxed">
-            高效的 Docker Hub 镜像同步工具，自动将镜像同步到 GitHub Container Registry，提供更快的访问速度和更稳定的镜像源。
-          </p>
+            
+            <div class="flex items-center gap-2">
+                <button onclick="toggleTheme()" class="w-9 h-9 rounded-xl flex items-center justify-center text-secondary hover:bg-emphasis transition-all duration-300 hover:scale-110 group" title="Toggle Theme" aria-label="Toggle theme">
+                    <i id="themeIcon" class="fas fa-sun text-sm text-secondary group-hover:text-amber-400 transition-colors"></i>
+                </button>
+                
+                <a href="https://github.com/freemankevin/dockerhub-mirror" target="_blank" 
+                   class="w-9 h-9 rounded-xl flex items-center justify-center text-secondary hover:bg-emphasis transition-all duration-300 hover:scale-110"
+                   aria-label="View on GitHub">
+                    <i class="fab fa-github text-base"></i>
+                </a>
+            </div>
         </div>
-        
-        <!-- 快速链接 -->
-        <div>
-          <h4 class="text-white font-semibold mb-4 flex items-center gap-2">
-            <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
-            </svg>
-            快速链接
-          </h4>
-          <ul class="space-y-2">
-            <li>
-              <a href="https://github.com/freemankevin/dockerhub-mirror" target="_blank" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2 text-sm">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-                GitHub 仓库
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/freemankevin?tab=packages&repo_name=dockerhub-mirror" target="_blank" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2 text-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.0 0 003 15z"/>
-                </svg>
-                Container Registry
-              </a>
-            </li>
-            <li>
-              <a href="https://hub.docker.com" target="_blank" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2 text-sm">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="#2496ED">
-                  <path d="M13.983 11.078h2.119a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.119a.185.185 0 0 0-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 0 0 .186-.186V3.574a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.186m0 2.716h2.118a.187.187 0 0 0 .186-.186V6.29a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 0 0 .184-.186V6.29a.185.185 0 0 0-.185-.185H8.1a.185.185 0 0 0-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 0 0 .185-.186V6.29a.185.185 0 0 0-.185-.185H5.136a.186.186 0 0 0-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 0 0 .185-.185V9.006a.185.185 0 0 0-.185-.186h-2.12a.186.186 0 0 0-.185.186v1.887c0 .102.084.185.186.185m-2.929 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.887c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 0 0-.75.748 11.376 11.376 0 0 0 .692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 0 0 3.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288z"/>
-                </svg>
-                Docker Hub
-              </a>
-            </li>
-          </ul>
-        </div>
-        
-        <!-- 技术支持 -->
-        <div>
-          <h4 class="text-white font-semibold mb-4 flex items-center gap-2">
-            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-            </svg>
-            技术支持
-          </h4>
-          <div class="space-y-3">
-            <a href="https://vercel.com" target="_blank" class="flex items-center gap-3 bg-white/5 hover:bg-white/10 rounded-lg p-3 transition-all group">
-              <svg height="20" viewBox="0 0 75 65" fill="#ffffff" class="group-hover:scale-110 transition-transform">
-                <path d="M37.59.25l36.95 64H.64l36.95-64z"></path>
-              </svg>
-              <div>
-                <p class="text-white text-sm font-medium">Powered by Vercel</p>
-                <p class="text-gray-500 text-xs">Next.js 前端部署</p>
-              </div>
-            </a>
-            <a href="https://github.com/freemankevin/dockerhub-mirror/issues" target="_blank" class="flex items-center gap-3 bg-white/5 hover:bg-white/10 rounded-lg p-3 transition-all group">
-              <svg class="w-5 h-5 text-white group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-              </svg>
-              <div>
-                <p class="text-white text-sm font-medium">提交 Issue</p>
-                <p class="text-gray-500 text-xs">反馈问题与建议</p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-      
-      <!-- 底部版权信息 -->
-      <div class="border-t border-white/10 pt-6">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-          <p class="text-gray-500 text-sm">
-            © 2026 Docker Sync Engine. All rights reserved.
-          </p>
-          <div class="flex items-center gap-4">
-            <a href="https://github.com/freemankevin/dockerhub-mirror" target="_blank" class="text-gray-500 hover:text-white transition-colors">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-              </svg>
-            </a>
-            <span class="text-gray-600">|</span>
-            <a href="https://vercel.com" target="_blank" class="vercel-logo text-gray-500 hover:text-white transition-colors">
-              <svg height="16" viewBox="0 0 75 65" fill="currentColor">
-                <path d="M37.59.25l36.95 64H.64l36.95-64z"></path>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer>
+    </header>
 
-  <script src="/js/app.js"></script>
+    <main class="max-w-6xl mx-auto px-6 py-8">
+        
+        <!-- Stats Grid -->
+        <section class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 mb-8" aria-label="Statistics">
+            <article class="surface rounded-2xl p-4 stat-card">
+                <div class="text-xs text-secondary uppercase tracking-wide font-medium mb-1">Total Mirrors</div>
+                <div class="text-2xl font-semibold text-primary mono stat-value" id="statTotal">–</div>
+                <div class="mt-1 text-xs accent-green font-medium" id="statSub">loading…</div>
+            </article>
+            
+            <article class="surface rounded-2xl p-4 stat-card">
+                <div class="text-xs text-secondary uppercase tracking-wide font-medium mb-1">Storage Space</div>
+                <div class="text-2xl font-semibold accent-blue mono stat-value" id="statStorage">–</div>
+                <div class="mt-1 text-xs text-secondary">total size</div>
+            </article>
+            
+            <article class="surface rounded-2xl p-4 stat-card">
+                <div class="text-xs text-secondary uppercase tracking-wide font-medium mb-1">Avg Image Size</div>
+                <div class="text-2xl font-semibold text-primary mono stat-value" id="statAvg">–</div>
+                <div class="mt-1 text-xs text-secondary">per image</div>
+            </article>
+            
+            <article class="surface rounded-2xl p-4 stat-card">
+                <div class="text-xs text-secondary uppercase tracking-wide font-medium mb-1">Latest Updates</div>
+                <div class="text-2xl font-semibold accent-green mono stat-value" id="statLatestCount">–</div>
+                <div class="mt-1 text-xs text-secondary">updated this week</div>
+            </article>
+            
+            <article class="surface rounded-2xl p-4 stat-card">
+                <div class="text-xs text-secondary uppercase tracking-wide font-medium mb-1">Available Versions</div>
+                <div class="text-2xl font-semibold accent-purple mono stat-value" id="statAvgVersions">–</div>
+                <div class="mt-1 text-xs text-secondary">per image</div>
+            </article>
+            
+            <article class="surface rounded-2xl p-4 stat-card">
+                <div class="text-xs text-secondary uppercase tracking-wide font-medium mb-1">Last Sync</div>
+                <div class="text-xl font-semibold text-primary mono" id="statLastSyncAge">–</div>
+                <div class="mt-1 text-xs text-secondary truncate" id="statLastSyncName">–</div>
+            </article>
+        </section>
+
+        <!-- Filter Tabs -->
+        <nav class="flex items-center gap-1 flex-wrap border-b border-muted mb-6 pb-2" aria-label="Filter mirrors">
+            <button onclick="setFilter('all')" class="filter-tab active" data-filter="all" aria-pressed="true">
+                All <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-all">0</span>
+            </button>
+            <button onclick="setFilter('dockerhub')" class="filter-tab text-secondary" data-filter="dockerhub" aria-pressed="false">
+                <i class="fab fa-docker mr-1.5 accent-blue"></i>
+                Docker <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-dockerhub">0</span>
+            </button>
+            <button onclick="setFilter('github')" class="filter-tab text-secondary" data-filter="github" aria-pressed="false">
+                <i class="fab fa-github mr-1.5"></i>
+                GitHub <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-github">0</span>
+            </button>
+            <button onclick="setFilter('google')" class="filter-tab text-secondary opacity-50" data-filter="google" aria-pressed="false" disabled>
+                <i class="fab fa-google mr-1.5 accent-red"></i>
+                Google <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-google">0</span>
+            </button>
+            <button onclick="setFilter('redhat')" class="filter-tab text-secondary opacity-50" data-filter="redhat" aria-pressed="false" disabled>
+                <i class="fab fa-redhat mr-1.5 accent-red"></i>
+                Red Hat <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-redhat">0</span>
+            </button>
+        </nav>
+
+        <!-- Search Box -->
+        <div class="mb-6">
+            <div class="relative">
+                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-tertiary" aria-hidden="true"></i>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Search mirrors..." 
+                    class="w-full pl-10 pr-4 py-2.5 rounded-2xl border transition-all"
+                    oninput="handleSearch(this.value)"
+                    aria-label="Search mirrors"
+                    autocomplete="off">
+            </div>
+        </div>
+
+        <!-- Mirror List -->
+        <div id="mirrorList" class="space-y-3" role="list"></div>
+        
+        <!-- Pagination -->
+        <nav id="pagination" aria-label="Pagination"></nav>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden py-20 text-center" role="status">
+            <div class="w-12 h-12 rounded-2xl bg-emphasis flex items-center justify-center mx-auto mb-3 border border-default empty-icon">
+                <i class="fas fa-search text-lg text-tertiary"></i>
+            </div>
+            <h3 class="text-sm font-medium text-secondary">No mirrors found</h3>
+            <p class="text-xs text-tertiary mt-1">Try adjusting your search or filters</p>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-muted mt-20 py-6">
+        <div class="max-w-6xl mx-auto px-6 flex items-center justify-between text-sm text-secondary">
+            <span>© 2026 Docker Sync Engine</span>
+            <a href="https://github.com/freemankevin/dockerhub-mirror" target="_blank" 
+               class="flex items-center gap-2 hover:text-primary transition-colors">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                <span class="mono text-xs">v2.1.0</span>
+            </a>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toastWrap" class="toast-queue"></div>
+
+    <script src="/js/app.js"></script>
 </body>
 </html>
