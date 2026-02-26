@@ -1,22 +1,30 @@
 {
-  "updated_at": "2026-01-23T09:17:47.393085+00:00",
+  "updated_at": "2026-02-25T03:57:34.698959+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 10,
-  "total_versions": 52,
+  "total_versions": 59,
   "images": [
     {
       "name": "library/elasticsearch",
       "description": "Elasticsearch 搜索引擎和分析引擎",
       "repository": "library__elasticsearch",
-      "total_versions": 1,
-      "latest_version": "9.2.4",
+      "total_versions": 2,
+      "latest_version": "9.3.0",
       "versions": [
         {
+          "version": "9.3.0",
+          "digest": "sha256:d6dbcf006047aafb87719e6e0b673c2067a760c902bd207059e84b27b22e2bb2",
+          "created_at": "2026-02-19T03:57:11+00:00",
+          "synced_at": "2026-02-19T03:57:11+00:00",
+          "target": "ghcr.io/freemankevin/library__elasticsearch:9.3.0",
+          "source": "docker.io/library/elasticsearch:9.3.0"
+        },
+        {
           "version": "9.2.4",
-          "digest": "sha256:e40ae5dc1e03bb8f5d30ee2491e39629b5d5ef51f7a069fe3de177fe2a09a70e",
-          "created_at": "2026-01-22T03:43:06+00:00",
-          "synced_at": "2026-01-22T03:43:06+00:00",
+          "digest": "sha256:ba3ca06dc9121baad53ec025c87eef9352fcae11d89cd2e4cba8821977e81319",
+          "created_at": "2026-01-27T03:19:52+00:00",
+          "synced_at": "2026-01-27T03:19:52+00:00",
           "target": "ghcr.io/freemankevin/library__elasticsearch:9.2.4",
           "source": "docker.io/library/elasticsearch:9.2.4"
         }
@@ -60,14 +68,22 @@
       "name": "library/nginx",
       "description": "Nginx 高性能 Web 服务器",
       "repository": "library__nginx",
-      "total_versions": 1,
-      "latest_version": "1.29.4-alpine",
+      "total_versions": 2,
+      "latest_version": "1.29.5-alpine",
       "versions": [
         {
+          "version": "1.29.5-alpine",
+          "digest": "sha256:1d13701a5f9f3fb01aaa88cef2344d65b6b5bf6b7d9fa4cf0dca557a8d7702ba",
+          "created_at": "2026-02-08T04:13:34+00:00",
+          "synced_at": "2026-02-08T04:13:34+00:00",
+          "target": "ghcr.io/freemankevin/library__nginx:1.29.5-alpine",
+          "source": "docker.io/library/nginx:1.29.5-alpine"
+        },
+        {
           "version": "1.29.4-alpine",
-          "digest": "sha256:b0f7830b6bfaa1258f45d94c240ab668ced1b3651c8a222aefe6683447c7bf55",
-          "created_at": "2026-01-22T03:43:19+00:00",
-          "synced_at": "2026-01-22T03:43:19+00:00",
+          "digest": "sha256:4870c12cd2ca986de501a804b4f506ad3875a0b1874940ba0a2c7f763f1855b2",
+          "created_at": "2026-01-31T03:34:15+00:00",
+          "synced_at": "2026-01-31T03:34:15+00:00",
           "target": "ghcr.io/freemankevin/library__nginx:1.29.4-alpine",
           "source": "docker.io/library/nginx:1.29.4-alpine"
         }
@@ -77,14 +93,22 @@
       "name": "library/rabbitmq",
       "description": "RabbitMQ 消息队列管理",
       "repository": "library__rabbitmq",
-      "total_versions": 28,
-      "latest_version": "4.2.3-management-alpine",
+      "total_versions": 29,
+      "latest_version": "4.2.4-management-alpine",
       "versions": [
         {
+          "version": "4.2.4-management-alpine",
+          "digest": "sha256:ffb3b678cb5325932abdaf195eedff89003d901e44eae811f1272add969af295",
+          "created_at": "2026-02-25T03:57:18+00:00",
+          "synced_at": "2026-02-25T03:57:18+00:00",
+          "target": "ghcr.io/freemankevin/library__rabbitmq:4.2.4-management-alpine",
+          "source": "docker.io/library/rabbitmq:4.2.4-management-alpine"
+        },
+        {
           "version": "4.2.3-management-alpine",
-          "digest": "sha256:6c8d766b26943aa29f527ca99f56da4a9f4c0fecbc821d69f9e9ec4e59e43005",
-          "created_at": "2026-01-23T03:15:19+00:00",
-          "synced_at": "2026-01-23T03:15:19+00:00",
+          "digest": "sha256:f33dc8cef83be952791356850d88b965111d11ec736133b58acc5e5103efc9f4",
+          "created_at": "2026-02-10T04:11:04+00:00",
+          "synced_at": "2026-02-10T04:11:04+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:4.2.3-management-alpine",
           "source": "docker.io/library/rabbitmq:4.2.3-management-alpine"
         },
@@ -310,14 +334,30 @@
       "name": "library/redis",
       "description": "Redis 内存数据库",
       "repository": "library__redis",
-      "total_versions": 1,
-      "latest_version": "8.4.0",
+      "total_versions": 3,
+      "latest_version": "8.6.1",
       "versions": [
         {
+          "version": "8.6.1",
+          "digest": "sha256:5cb00b0f236e286254ce9f3eea989b00bb69d04fb9b6c9a9d0b07e588e49f44e",
+          "created_at": "2026-02-25T03:57:28+00:00",
+          "synced_at": "2026-02-25T03:57:28+00:00",
+          "target": "ghcr.io/freemankevin/library__redis:8.6.1",
+          "source": "docker.io/library/redis:8.6.1"
+        },
+        {
+          "version": "8.6.0",
+          "digest": "sha256:7b6fb55d8b0adcd77269dc52b3cfffe5f59ca5d43dec3c90dbe18aacce7942e1",
+          "created_at": "2026-02-11T04:08:00+00:00",
+          "synced_at": "2026-02-11T04:08:00+00:00",
+          "target": "ghcr.io/freemankevin/library__redis:8.6.0",
+          "source": "docker.io/library/redis:8.6.0"
+        },
+        {
           "version": "8.4.0",
-          "digest": "sha256:73dad4271642c5966db88db7a7585fae7cf10b685d1e48006f31e0294c29fdd7",
-          "created_at": "2026-01-22T03:43:33+00:00",
-          "synced_at": "2026-01-22T03:43:33+00:00",
+          "digest": "sha256:c22af04bb576503bf16b3e34a1fd2fd82de0f765afd866d2e380145e0af30d78",
+          "created_at": "2026-02-04T03:42:48+00:00",
+          "synced_at": "2026-02-04T03:42:48+00:00",
           "target": "ghcr.io/freemankevin/library__redis:8.4.0",
           "source": "docker.io/library/redis:8.4.0"
         }
@@ -327,14 +367,30 @@
       "name": "kartoza/geoserver",
       "description": "GeoServer 地理信息服务",
       "repository": "kartoza__geoserver",
-      "total_versions": 1,
-      "latest_version": "2.28.0",
+      "total_versions": 3,
+      "latest_version": "2.28.2",
       "versions": [
         {
+          "version": "2.28.2",
+          "digest": "sha256:ad465f7e2aa25caee70500c0a85e10440598bf046295a348707da1103f16cec1",
+          "created_at": "2026-02-01T04:08:07+00:00",
+          "synced_at": "2026-02-01T04:08:07+00:00",
+          "target": "ghcr.io/freemankevin/kartoza__geoserver:2.28.2",
+          "source": "docker.io/kartoza/geoserver:2.28.2"
+        },
+        {
+          "version": "2.28.1",
+          "digest": "sha256:185a18a8908ae823d33b564d028c12c0625510ba7cd3dd425319f071c3044b50",
+          "created_at": "2026-01-27T03:20:04+00:00",
+          "synced_at": "2026-01-27T03:20:04+00:00",
+          "target": "ghcr.io/freemankevin/kartoza__geoserver:2.28.1",
+          "source": "docker.io/kartoza/geoserver:2.28.1"
+        },
+        {
           "version": "2.28.0",
-          "digest": "sha256:505b3904cb47075aef16d13009b21fd06ac8002b322bb27a0d5efe22cec9ce37",
-          "created_at": "2026-01-22T03:43:38+00:00",
-          "synced_at": "2026-01-22T03:43:38+00:00",
+          "digest": "sha256:e3c1142169be58543e2cce1219671fc004a617868fa68fec00c0016bf0fe3480",
+          "created_at": "2026-01-26T03:28:24+00:00",
+          "synced_at": "2026-01-26T03:28:24+00:00",
           "target": "ghcr.io/freemankevin/kartoza__geoserver:2.28.0",
           "source": "docker.io/kartoza/geoserver:2.28.0"
         }
@@ -453,9 +509,9 @@
         },
         {
           "version": "13.23",
-          "digest": "sha256:68253e12132ed0896874315c196f7bdcae329b6be3a9f1fe779ca0359850fc10",
-          "created_at": "2026-01-23T01:40:41+00:00",
-          "synced_at": "2026-01-23T01:40:41+00:00",
+          "digest": "sha256:dcf79029cb1748d709094be38a6c118107d39694cafab53b7f028b8381487e91",
+          "created_at": "2026-02-13T03:58:37+00:00",
+          "synced_at": "2026-02-13T03:58:37+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:13.23",
           "source": "docker.io/freelabspace/postgresql-postgis:13.23"
         },
@@ -486,9 +542,9 @@
       "versions": [
         {
           "version": "latest",
-          "digest": "sha256:3f951523d2096480245f0910ac1f5a09504e76da4682347cf7722caabdfcc035",
-          "created_at": "2026-01-22T06:12:10+00:00",
-          "synced_at": "2026-01-22T06:12:10+00:00",
+          "digest": "sha256:bc6ece5e1c32c9916886517f9143c123dc92946986009ee159db4e96dddd8d17",
+          "created_at": "2026-02-01T04:08:13+00:00",
+          "synced_at": "2026-02-01T04:08:13+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-backup:latest",
           "source": "docker.io/freelabspace/postgresql-backup:latest"
         }
@@ -503,9 +559,9 @@
       "versions": [
         {
           "version": "latest",
-          "digest": "sha256:b50c9f73bd815c5dd2778d115cb57e7fe538f9ea66650b432f491fdc12f6d104",
-          "created_at": "2026-01-23T09:16:35+00:00",
-          "synced_at": "2026-01-23T09:16:35+00:00",
+          "digest": "sha256:57cd64b07bb76db3108a22c2322f4308ff461d2db3a74ff5e1ebbe8852fd00ee",
+          "created_at": "2026-01-23T09:24:31+00:00",
+          "synced_at": "2026-01-23T09:24:31+00:00",
           "target": "ghcr.io/freemankevin/network-tools:latest",
           "source": "ghcr.io/freemankevin/network-tools:latest"
         }
