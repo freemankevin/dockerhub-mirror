@@ -255,7 +255,9 @@ def generate_images_json(
                             'created_at': tag.get('created_at'),
                             'synced_at': tag.get('created_at'),
                             'target': full_source,  # GHCR 源镜像本身就是目标
-                            'source': full_source
+                            'source': full_source,
+                            'size': tag.get('size', ''),  # 镜像大小
+                            'layers': tag.get('layers', 0)  # 层数
                         })
                     
                     total_versions += len(versions)
@@ -267,6 +269,11 @@ def generate_images_json(
                         'repository': source_repo_name,
                         'total_versions': len(versions),
                         'latest_version': versions[0]['version'] if versions else None,
+                        'updated': versions[0]['created_at'] if versions else '',  # 更新时间
+                        'size': versions[0]['size'] if versions else '',  # 最新版本大小
+                        'layers': versions[0]['layers'] if versions else 0,  # 层数
+                        'stars': 0,  # 星标数（暂不支持）
+                        'platforms': ['AMD64', 'ARM64'],  # 支持的平台
                         'versions': versions
                     })
                     
@@ -318,7 +325,9 @@ def generate_images_json(
                         'created_at': tag.get('created_at'),
                         'synced_at': tag.get('created_at'),  # 使用创建时间作为同步时间
                         'target': f"{registry}/{owner}/{repo_name}:{tag['name']}",
-                        'source': full_source
+                        'source': full_source,
+                        'size': tag.get('size', ''),  # 镜像大小
+                        'layers': tag.get('layers', 0)  # 层数
                     })
                 
                 total_versions += len(versions)
@@ -330,6 +339,11 @@ def generate_images_json(
                     'repository': repo_name,
                     'total_versions': len(versions),
                     'latest_version': versions[0]['version'] if versions else None,
+                    'updated': versions[0]['created_at'] if versions else '',  # 更新时间
+                    'size': versions[0]['size'] if versions else '',  # 最新版本大小
+                    'layers': versions[0]['layers'] if versions else 0,  # 层数
+                    'stars': 0,  # 星标数（暂不支持）
+                    'platforms': ['AMD64', 'ARM64'],  # 支持的平台
                     'versions': versions
                 })
                 

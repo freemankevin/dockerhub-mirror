@@ -65,6 +65,19 @@ function processData(data) {
 
   const records = Array.isArray(data) ? data : (data.images || Object.values(data));
 
+  // Helper to convert Chinese description to English (simple mapping)
+  function getEnglishDescription(desc, name) {
+    if (!desc) return '';
+    // If description contains Chinese characters, replace with a generic English description based on image name
+    const hasChinese = /[\u4e00-\u9fff]/.test(desc);
+    if (hasChinese) {
+      // Use image name as description, capitalize first letter
+      const displayName = getDisplayName(name);
+      return displayName.charAt(0).toUpperCase() + displayName.slice(1) + ' container image';
+    }
+    return desc;
+  }
+
   records.forEach(img => {
     const name = img.name || img.image || '';
     if (!name) return;
@@ -74,12 +87,16 @@ function processData(data) {
     const latestSrc = img.source || (versions[0] && versions[0].source) || '';
     const latestSize = img.size || (versions[0] && versions[0].size) || '';
 
+    // Ensure numeric fields
+    const stars = Number(img.stars || img.pulls || 0);
+    const layers = Number(img.layers || 0);
+
     const record = {
       name,
       displayName: getDisplayName(name),
-      description: img.description || '',
-      stars:       img.stars  || img.pulls || 0,
-      layers:      img.layers || 0,
+      description: getEnglishDescription(img.description || '', name),
+      stars,
+      layers,
       updated:     img.updated || img.last_updated || img.synced_at || '',
       platforms:   img.platforms || img.architectures || ['AMD64','ARM64'],
       official:    isOfficial(name),
