@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-02-26T03:45:46.724597+00:00",
+  "updated_at": "2026-02-26T07:09:43.246120+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 10,
@@ -11,6 +11,14 @@
       "repository": "library__elasticsearch",
       "total_versions": 2,
       "latest_version": "9.3.0",
+      "updated": "2026-02-19T03:57:11+00:00",
+      "size": "",
+      "layers": 0,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
       "versions": [
         {
           "version": "9.3.0",
@@ -18,7 +26,9 @@
           "created_at": "2026-02-19T03:57:11+00:00",
           "synced_at": "2026-02-19T03:57:11+00:00",
           "target": "ghcr.io/freemankevin/library__elasticsearch:9.3.0",
-          "source": "docker.io/library/elasticsearch:9.3.0"
+          "source": "docker.io/library/elasticsearch:9.3.0",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "9.2.4",
@@ -26,7 +36,9 @@
           "created_at": "2026-01-27T03:19:52+00:00",
           "synced_at": "2026-01-27T03:19:52+00:00",
           "target": "ghcr.io/freemankevin/library__elasticsearch:9.2.4",
-          "source": "docker.io/library/elasticsearch:9.2.4"
+          "source": "docker.io/library/elasticsearch:9.2.4",
+          "size": "",
+          "layers": 0
         }
       ]
     },
@@ -36,6 +48,14 @@
       "repository": "derklaro__minio",
       "total_versions": 1,
       "latest_version": "RELEASE.2025-10-15T17-29-55Z",
+      "updated": "2026-01-22T03:43:10+00:00",
+      "size": "",
+      "layers": 0,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
       "versions": [
         {
           "version": "RELEASE.2025-10-15T17-29-55Z",
@@ -43,7 +63,9 @@
           "created_at": "2026-01-22T03:43:10+00:00",
           "synced_at": "2026-01-22T03:43:10+00:00",
           "target": "ghcr.io/freemankevin/derklaro__minio:RELEASE.2025-10-15T17-29-55Z",
-          "source": "docker.io/derklaro/minio:RELEASE.2025-10-15T17-29-55Z"
+          "source": "docker.io/derklaro/minio:RELEASE.2025-10-15T17-29-55Z",
+          "size": "",
+          "layers": 0
         }
       ]
     },
@@ -53,6 +75,14 @@
       "repository": "nacos__nacos-server",
       "total_versions": 1,
       "latest_version": "v3.1.1",
+      "updated": "2026-01-22T03:43:13+00:00",
+      "size": "",
+      "layers": 0,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
       "versions": [
         {
           "version": "v3.1.1",
@@ -60,7 +90,9 @@
           "created_at": "2026-01-22T03:43:13+00:00",
           "synced_at": "2026-01-22T03:43:13+00:00",
           "target": "ghcr.io/freemankevin/nacos__nacos-server:v3.1.1",
-          "source": "docker.io/nacos/nacos-server:v3.1.1"
+          "source": "docker.io/nacos/nacos-server:v3.1.1",
+          "size": "",
+          "layers": 0
         }
       ]
     },
@@ -70,6 +102,14 @@
       "repository": "library__nginx",
       "total_versions": 2,
       "latest_version": "1.29.5-alpine",
+      "updated": "2026-02-08T04:13:34+00:00",
+      "size": "",
+      "layers": 0,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
       "versions": [
         {
           "version": "1.29.5-alpine",
@@ -77,7 +117,9 @@
           "created_at": "2026-02-08T04:13:34+00:00",
           "synced_at": "2026-02-08T04:13:34+00:00",
           "target": "ghcr.io/freemankevin/library__nginx:1.29.5-alpine",
-          "source": "docker.io/library/nginx:1.29.5-alpine"
+          "source": "docker.io/library/nginx:1.29.5-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "1.29.4-alpine",
@@ -85,7 +127,9 @@
           "created_at": "2026-01-31T03:34:15+00:00",
           "synced_at": "2026-01-31T03:34:15+00:00",
           "target": "ghcr.io/freemankevin/library__nginx:1.29.4-alpine",
-          "source": "docker.io/library/nginx:1.29.4-alpine"
+          "source": "docker.io/library/nginx:1.29.4-alpine",
+          "size": "",
+          "layers": 0
         }
       ]
     },
@@ -95,6 +139,14 @@
       "repository": "library__rabbitmq",
       "total_versions": 29,
       "latest_version": "4.2.4-management-alpine",
+      "updated": "2026-02-26T03:45:26+00:00",
+      "size": "",
+      "layers": 0,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
       "versions": [
         {
           "version": "4.2.4-management-alpine",
@@ -102,7 +154,9 @@
           "created_at": "2026-02-26T03:45:26+00:00",
           "synced_at": "2026-02-26T03:45:26+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:4.2.4-management-alpine",
-          "source": "docker.io/library/rabbitmq:4.2.4-management-alpine"
+          "source": "docker.io/library/rabbitmq:4.2.4-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "4.2.3-management-alpine",
@@ -110,7 +164,9 @@
           "created_at": "2026-02-10T04:11:04+00:00",
           "synced_at": "2026-02-10T04:11:04+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:4.2.3-management-alpine",
-          "source": "docker.io/library/rabbitmq:4.2.3-management-alpine"
+          "source": "docker.io/library/rabbitmq:4.2.3-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "4.2.2-management-alpine",
@@ -118,7 +174,9 @@
           "created_at": "2026-01-22T03:43:27+00:00",
           "synced_at": "2026-01-22T03:43:27+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:4.2.2-management-alpine",
-          "source": "docker.io/library/rabbitmq:4.2.2-management-alpine"
+          "source": "docker.io/library/rabbitmq:4.2.2-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.12.1-management-alpine",
@@ -126,7 +184,9 @@
           "created_at": "2026-01-23T03:45:38+00:00",
           "synced_at": "2026-01-23T03:45:38+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.12.1-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.12.1-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.12.1-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.12.0-management-alpine",
@@ -134,7 +194,9 @@
           "created_at": "2026-01-23T03:45:07+00:00",
           "synced_at": "2026-01-23T03:45:07+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.12.0-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.12.0-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.12.0-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.11.28-management-alpine",
@@ -142,7 +204,9 @@
           "created_at": "2026-01-23T03:44:57+00:00",
           "synced_at": "2026-01-23T03:44:57+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.11.28-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.11.28-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.11.28-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.11.27-management-alpine",
@@ -150,7 +214,9 @@
           "created_at": "2026-01-23T03:44:21+00:00",
           "synced_at": "2026-01-23T03:44:21+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.11.27-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.11.27-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.11.27-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.11.26-management-alpine",
@@ -158,7 +224,9 @@
           "created_at": "2026-01-23T03:43:21+00:00",
           "synced_at": "2026-01-23T03:43:21+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.11.26-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.11.26-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.11.26-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.11.25-management-alpine",
@@ -166,7 +234,9 @@
           "created_at": "2026-01-23T03:42:26+00:00",
           "synced_at": "2026-01-23T03:42:26+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.11.25-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.11.25-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.11.25-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.11.24-management-alpine",
@@ -174,7 +244,9 @@
           "created_at": "2026-01-23T03:41:38+00:00",
           "synced_at": "2026-01-23T03:41:38+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.11.24-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.11.24-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.11.24-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.11.23-management-alpine",
@@ -182,7 +254,9 @@
           "created_at": "2026-01-23T03:40:37+00:00",
           "synced_at": "2026-01-23T03:40:37+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.11.23-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.11.23-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.11.23-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.11.22-management-alpine",
@@ -190,7 +264,9 @@
           "created_at": "2026-01-23T03:39:36+00:00",
           "synced_at": "2026-01-23T03:39:36+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.11.22-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.11.22-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.11.22-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.11.21-management-alpine",
@@ -198,7 +274,9 @@
           "created_at": "2026-01-23T03:38:40+00:00",
           "synced_at": "2026-01-23T03:38:40+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.11.21-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.11.21-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.11.21-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.11.20-management-alpine",
@@ -206,7 +284,9 @@
           "created_at": "2026-01-23T03:37:56+00:00",
           "synced_at": "2026-01-23T03:37:56+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.11.20-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.11.20-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.11.20-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.11.19-management-alpine",
@@ -214,7 +294,9 @@
           "created_at": "2026-01-23T03:36:57+00:00",
           "synced_at": "2026-01-23T03:36:57+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.11.19-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.11.19-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.11.19-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.11.18-management-alpine",
@@ -222,7 +304,9 @@
           "created_at": "2026-01-23T03:36:18+00:00",
           "synced_at": "2026-01-23T03:36:18+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.11.18-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.11.18-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.11.18-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.11.17-management-alpine",
@@ -230,7 +314,9 @@
           "created_at": "2026-01-23T03:36:01+00:00",
           "synced_at": "2026-01-23T03:36:01+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.11.17-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.11.17-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.11.17-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.11.16-management-alpine",
@@ -238,7 +324,9 @@
           "created_at": "2026-01-23T03:35:31+00:00",
           "synced_at": "2026-01-23T03:35:31+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.11.16-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.11.16-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.11.16-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.11.15-management-alpine",
@@ -246,7 +334,9 @@
           "created_at": "2026-01-23T03:34:58+00:00",
           "synced_at": "2026-01-23T03:34:58+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.11.15-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.11.15-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.11.15-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.11.14-management-alpine",
@@ -254,7 +344,9 @@
           "created_at": "2026-01-23T03:34:25+00:00",
           "synced_at": "2026-01-23T03:34:25+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.11.14-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.11.14-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.11.14-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.11.13-management-alpine",
@@ -262,7 +354,9 @@
           "created_at": "2026-01-23T03:33:52+00:00",
           "synced_at": "2026-01-23T03:33:52+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.11.13-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.11.13-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.11.13-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.11.11-management-alpine",
@@ -270,7 +364,9 @@
           "created_at": "2026-01-23T03:33:14+00:00",
           "synced_at": "2026-01-23T03:33:14+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.11.11-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.11.11-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.11.11-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.10.25-management-alpine",
@@ -278,7 +374,9 @@
           "created_at": "2026-01-23T03:31:35+00:00",
           "synced_at": "2026-01-23T03:31:35+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.10.25-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.10.25-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.10.25-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.10.23-management-alpine",
@@ -286,7 +384,9 @@
           "created_at": "2026-01-23T03:25:53+00:00",
           "synced_at": "2026-01-23T03:25:53+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.10.23-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.10.23-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.10.23-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.10.22-management-alpine",
@@ -294,7 +394,9 @@
           "created_at": "2026-01-23T03:24:34+00:00",
           "synced_at": "2026-01-23T03:24:34+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.10.22-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.10.22-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.10.22-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.10.21-management-alpine",
@@ -302,7 +404,9 @@
           "created_at": "2026-01-23T03:23:46+00:00",
           "synced_at": "2026-01-23T03:23:46+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.10.21-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.10.21-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.10.21-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.10.20-management-alpine",
@@ -310,7 +414,9 @@
           "created_at": "2026-01-23T03:23:12+00:00",
           "synced_at": "2026-01-23T03:23:12+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.10.20-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.10.20-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.10.20-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.10.19-management-alpine",
@@ -318,7 +424,9 @@
           "created_at": "2026-01-23T03:22:20+00:00",
           "synced_at": "2026-01-23T03:22:20+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.10.19-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.10.19-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.10.19-management-alpine",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "3.9.29-management-alpine",
@@ -326,7 +434,9 @@
           "created_at": "2026-01-23T03:21:31+00:00",
           "synced_at": "2026-01-23T03:21:31+00:00",
           "target": "ghcr.io/freemankevin/library__rabbitmq:3.9.29-management-alpine",
-          "source": "docker.io/library/rabbitmq:3.9.29-management-alpine"
+          "source": "docker.io/library/rabbitmq:3.9.29-management-alpine",
+          "size": "",
+          "layers": 0
         }
       ]
     },
@@ -336,6 +446,14 @@
       "repository": "library__redis",
       "total_versions": 3,
       "latest_version": "8.6.1",
+      "updated": "2026-02-25T03:57:28+00:00",
+      "size": "",
+      "layers": 0,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
       "versions": [
         {
           "version": "8.6.1",
@@ -343,7 +461,9 @@
           "created_at": "2026-02-25T03:57:28+00:00",
           "synced_at": "2026-02-25T03:57:28+00:00",
           "target": "ghcr.io/freemankevin/library__redis:8.6.1",
-          "source": "docker.io/library/redis:8.6.1"
+          "source": "docker.io/library/redis:8.6.1",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "8.6.0",
@@ -351,7 +471,9 @@
           "created_at": "2026-02-11T04:08:00+00:00",
           "synced_at": "2026-02-11T04:08:00+00:00",
           "target": "ghcr.io/freemankevin/library__redis:8.6.0",
-          "source": "docker.io/library/redis:8.6.0"
+          "source": "docker.io/library/redis:8.6.0",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "8.4.0",
@@ -359,7 +481,9 @@
           "created_at": "2026-02-04T03:42:48+00:00",
           "synced_at": "2026-02-04T03:42:48+00:00",
           "target": "ghcr.io/freemankevin/library__redis:8.4.0",
-          "source": "docker.io/library/redis:8.4.0"
+          "source": "docker.io/library/redis:8.4.0",
+          "size": "",
+          "layers": 0
         }
       ]
     },
@@ -369,6 +493,14 @@
       "repository": "kartoza__geoserver",
       "total_versions": 3,
       "latest_version": "2.28.2",
+      "updated": "2026-02-01T04:08:07+00:00",
+      "size": "",
+      "layers": 0,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
       "versions": [
         {
           "version": "2.28.2",
@@ -376,7 +508,9 @@
           "created_at": "2026-02-01T04:08:07+00:00",
           "synced_at": "2026-02-01T04:08:07+00:00",
           "target": "ghcr.io/freemankevin/kartoza__geoserver:2.28.2",
-          "source": "docker.io/kartoza/geoserver:2.28.2"
+          "source": "docker.io/kartoza/geoserver:2.28.2",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "2.28.1",
@@ -384,7 +518,9 @@
           "created_at": "2026-01-27T03:20:04+00:00",
           "synced_at": "2026-01-27T03:20:04+00:00",
           "target": "ghcr.io/freemankevin/kartoza__geoserver:2.28.1",
-          "source": "docker.io/kartoza/geoserver:2.28.1"
+          "source": "docker.io/kartoza/geoserver:2.28.1",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "2.28.0",
@@ -392,7 +528,9 @@
           "created_at": "2026-01-26T03:28:24+00:00",
           "synced_at": "2026-01-26T03:28:24+00:00",
           "target": "ghcr.io/freemankevin/kartoza__geoserver:2.28.0",
-          "source": "docker.io/kartoza/geoserver:2.28.0"
+          "source": "docker.io/kartoza/geoserver:2.28.0",
+          "size": "",
+          "layers": 0
         }
       ]
     },
@@ -402,6 +540,14 @@
       "repository": "freelabspace__postgresql-postgis",
       "total_versions": 16,
       "latest_version": "18.1",
+      "updated": "2026-01-22T03:43:43+00:00",
+      "size": "",
+      "layers": 0,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
       "versions": [
         {
           "version": "18.1",
@@ -409,7 +555,9 @@
           "created_at": "2026-01-22T03:43:43+00:00",
           "synced_at": "2026-01-22T03:43:43+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:18.1",
-          "source": "docker.io/freelabspace/postgresql-postgis:18.1"
+          "source": "docker.io/freelabspace/postgresql-postgis:18.1",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "17.7",
@@ -417,7 +565,9 @@
           "created_at": "2026-01-23T01:44:00+00:00",
           "synced_at": "2026-01-23T01:44:00+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:17.7",
-          "source": "docker.io/freelabspace/postgresql-postgis:17.7"
+          "source": "docker.io/freelabspace/postgresql-postgis:17.7",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "17.6",
@@ -425,7 +575,9 @@
           "created_at": "2026-01-23T01:43:41+00:00",
           "synced_at": "2026-01-23T01:43:41+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:17.6",
-          "source": "docker.io/freelabspace/postgresql-postgis:17.6"
+          "source": "docker.io/freelabspace/postgresql-postgis:17.6",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "17.5",
@@ -433,7 +585,9 @@
           "created_at": "2026-01-23T01:43:25+00:00",
           "synced_at": "2026-01-23T01:43:25+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:17.5",
-          "source": "docker.io/freelabspace/postgresql-postgis:17.5"
+          "source": "docker.io/freelabspace/postgresql-postgis:17.5",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "16.11",
@@ -441,7 +595,9 @@
           "created_at": "2026-01-23T01:43:07+00:00",
           "synced_at": "2026-01-23T01:43:07+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:16.11",
-          "source": "docker.io/freelabspace/postgresql-postgis:16.11"
+          "source": "docker.io/freelabspace/postgresql-postgis:16.11",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "16.10",
@@ -449,7 +605,9 @@
           "created_at": "2026-01-23T01:42:50+00:00",
           "synced_at": "2026-01-23T01:42:50+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:16.10",
-          "source": "docker.io/freelabspace/postgresql-postgis:16.10"
+          "source": "docker.io/freelabspace/postgresql-postgis:16.10",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "16.9",
@@ -457,7 +615,9 @@
           "created_at": "2026-01-23T01:42:33+00:00",
           "synced_at": "2026-01-23T01:42:33+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:16.9",
-          "source": "docker.io/freelabspace/postgresql-postgis:16.9"
+          "source": "docker.io/freelabspace/postgresql-postgis:16.9",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "15.15",
@@ -465,7 +625,9 @@
           "created_at": "2026-01-23T01:42:17+00:00",
           "synced_at": "2026-01-23T01:42:17+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:15.15",
-          "source": "docker.io/freelabspace/postgresql-postgis:15.15"
+          "source": "docker.io/freelabspace/postgresql-postgis:15.15",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "15.14",
@@ -473,7 +635,9 @@
           "created_at": "2026-01-23T01:42:04+00:00",
           "synced_at": "2026-01-23T01:42:04+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:15.14",
-          "source": "docker.io/freelabspace/postgresql-postgis:15.14"
+          "source": "docker.io/freelabspace/postgresql-postgis:15.14",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "15.13",
@@ -481,7 +645,9 @@
           "created_at": "2026-01-23T01:41:47+00:00",
           "synced_at": "2026-01-23T01:41:47+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:15.13",
-          "source": "docker.io/freelabspace/postgresql-postgis:15.13"
+          "source": "docker.io/freelabspace/postgresql-postgis:15.13",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "14.20",
@@ -489,7 +655,9 @@
           "created_at": "2026-01-23T01:41:29+00:00",
           "synced_at": "2026-01-23T01:41:29+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:14.20",
-          "source": "docker.io/freelabspace/postgresql-postgis:14.20"
+          "source": "docker.io/freelabspace/postgresql-postgis:14.20",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "14.19",
@@ -497,7 +665,9 @@
           "created_at": "2026-01-23T01:41:15+00:00",
           "synced_at": "2026-01-23T01:41:15+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:14.19",
-          "source": "docker.io/freelabspace/postgresql-postgis:14.19"
+          "source": "docker.io/freelabspace/postgresql-postgis:14.19",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "14.18",
@@ -505,15 +675,19 @@
           "created_at": "2026-01-23T01:40:59+00:00",
           "synced_at": "2026-01-23T01:40:59+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:14.18",
-          "source": "docker.io/freelabspace/postgresql-postgis:14.18"
+          "source": "docker.io/freelabspace/postgresql-postgis:14.18",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "13.23",
-          "digest": "sha256:dcf79029cb1748d709094be38a6c118107d39694cafab53b7f028b8381487e91",
-          "created_at": "2026-02-13T03:58:37+00:00",
-          "synced_at": "2026-02-13T03:58:37+00:00",
+          "digest": "sha256:0f58fa4d21f3ed3d0e727fe1d71a7aef1e5193fe12533dfa3fd5a804a35a2a2c",
+          "created_at": "2026-02-26T07:09:30+00:00",
+          "synced_at": "2026-02-26T07:09:30+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:13.23",
-          "source": "docker.io/freelabspace/postgresql-postgis:13.23"
+          "source": "docker.io/freelabspace/postgresql-postgis:13.23",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "13.22",
@@ -521,7 +695,9 @@
           "created_at": "2026-01-23T01:40:22+00:00",
           "synced_at": "2026-01-23T01:40:22+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:13.22",
-          "source": "docker.io/freelabspace/postgresql-postgis:13.22"
+          "source": "docker.io/freelabspace/postgresql-postgis:13.22",
+          "size": "",
+          "layers": 0
         },
         {
           "version": "13.21",
@@ -529,7 +705,9 @@
           "created_at": "2026-01-23T01:40:01+00:00",
           "synced_at": "2026-01-23T01:40:01+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-postgis:13.21",
-          "source": "docker.io/freelabspace/postgresql-postgis:13.21"
+          "source": "docker.io/freelabspace/postgresql-postgis:13.21",
+          "size": "",
+          "layers": 0
         }
       ]
     },
@@ -539,6 +717,14 @@
       "repository": "freelabspace__postgresql-backup",
       "total_versions": 1,
       "latest_version": "latest",
+      "updated": "2026-02-01T04:08:13+00:00",
+      "size": "",
+      "layers": 0,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
       "versions": [
         {
           "version": "latest",
@@ -546,7 +732,9 @@
           "created_at": "2026-02-01T04:08:13+00:00",
           "synced_at": "2026-02-01T04:08:13+00:00",
           "target": "ghcr.io/freemankevin/freelabspace__postgresql-backup:latest",
-          "source": "docker.io/freelabspace/postgresql-backup:latest"
+          "source": "docker.io/freelabspace/postgresql-backup:latest",
+          "size": "",
+          "layers": 0
         }
       ]
     },
@@ -556,6 +744,14 @@
       "repository": "network-tools",
       "total_versions": 1,
       "latest_version": "latest",
+      "updated": "2026-01-23T09:24:31+00:00",
+      "size": "",
+      "layers": 0,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
       "versions": [
         {
           "version": "latest",
@@ -563,7 +759,9 @@
           "created_at": "2026-01-23T09:24:31+00:00",
           "synced_at": "2026-01-23T09:24:31+00:00",
           "target": "ghcr.io/freemankevin/network-tools:latest",
-          "source": "ghcr.io/freemankevin/network-tools:latest"
+          "source": "ghcr.io/freemankevin/network-tools:latest",
+          "size": "",
+          "layers": 0
         }
       ]
     }
