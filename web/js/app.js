@@ -5,7 +5,7 @@
 'use strict';
 
 // ── State ──────────────────────────────────────
-const ITEMS_PER_PAGE = 10;
+let itemsPerPage = parseInt(localStorage.getItem('itemsPerPage')) || 10;
 let allImages    = [];   // flat list of display objects
 let imageData    = {};   // name → full record (with versions[])
 let currentFilter = 'all';
@@ -532,6 +532,11 @@ document.addEventListener('click', (e) => {
       el.classList.remove('open');
     });
   }
+  if (!e.target.closest('.pag-size-select')) {
+    document.querySelectorAll('.pag-size-select.open').forEach(el => {
+      el.classList.remove('open');
+    });
+  }
 });
 
 // ── Version switching ─────────────────────────
@@ -666,48 +671,97 @@ function showToast(msg, type = 'green') {
 }
 
 // ── Pagination ────────────────────────────────
+function changePageSize(size) {
+  itemsPerPage = parseInt(size);
+  localStorage.setItem('itemsPerPage', itemsPerPage);
+  currentPage = 1;
+  render();
+}
+
+function togglePageSizeSelect() {
+  const selectEl = document.getElementById('pag-size-select');
+  if (!selectEl) return;
+  
+  // Close all other selects first
+  document.querySelectorAll('.pag-size-select.open').forEach(el => {
+    if (el.id !== 'pag-size-select') {
+      el.classList.remove('open');
+    }
+  });
+  
+  selectEl.classList.toggle('open');
+}
+
+function selectPageSize(size) {
+  itemsPerPage = parseInt(size);
+  localStorage.setItem('itemsPerPage', itemsPerPage);
+  currentPage = 1;
+  
+  // Close dropdown
+  const selectEl = document.getElementById('pag-size-select');
+  if (selectEl) selectEl.classList.remove('open');
+  
+  render();
+}
+
 function buildPagination(total, filtered) {
-  const totalPages = Math.ceil(filtered / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filtered / itemsPerPage);
   const container  = document.getElementById('pagination');
   if (!container) return;
 
-  if (totalPages <= 1) { container.innerHTML = ''; return; }
+  if (filtered === 0) { container.innerHTML = ''; return; }
 
-  const from = (currentPage - 1) * ITEMS_PER_PAGE + 1;
-  const to   = Math.min(currentPage * ITEMS_PER_PAGE, filtered);
+  const from = (currentPage - 1) * itemsPerPage + 1;
+  const to   = Math.min(currentPage * itemsPerPage, filtered);
 
   const pages = [];
-  for (let p = 1; p <= totalPages; p++) {
-    if (p === 1 || p === totalPages || (p >= currentPage - 1 && p <= currentPage + 1)) {
-      pages.push(p);
-    } else if (pages[pages.length - 1] !== '…') {
-      pages.push('…');
-    }
+  const maxVisible = 5;
+  let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+  let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+  
+  if (endPage - startPage + 1 < maxVisible) {
+    startPage = Math.max(1, endPage - maxVisible + 1);
+  }
+
+  for (let p = startPage; p <= endPage; p++) {
+    pages.push(p);
   }
 
   const btns = pages.map(p => {
-    if (p === '…') return `<span class="pag-ellipsis">…</span>`;
-    return `<button class="pag-btn ${p === currentPage ? 'active' : ''}" onclick="goToPage(${p})">${p}</button>`;
+    return `<button class="pag-btn num ${p === currentPage ? 'active' : ''}" onclick="goToPage(${p})">${p}</button>`;
   }).join('');
+
+  const sizeOptions = [10, 20, 50, 100].map(size => 
+    `<div class="pag-size-option ${size === itemsPerPage ? 'selected' : ''}" onclick="selectPageSize(${size})">${size}</div>`
+  ).join('');
 
   container.innerHTML = `
     <div class="pag-wrap">
-      <span class="pag-info">Showing <strong>${from}–${to}</strong> of <strong>${filtered}</strong></span>
-      <div class="pag-btns">
-        <button class="pag-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
-          <i class="fas fa-chevron-left"></i>
-        </button>
-        ${btns}
-        <button class="pag-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
-          <i class="fas fa-chevron-right"></i>
-        </button>
+      <span class="pag-info">Showing ${from}–${to} of ${filtered}</span>
+      <div class="pag-controls">
+        <div class="pag-size-select" id="pag-size-select">
+          <div class="pag-size-trigger" onclick="togglePageSizeSelect()">
+            <span>${itemsPerPage}</span>
+            <i class="fas fa-chevron-down" style="font-size: 10px; transition: transform 0.2s ease;"></i>
+          </div>
+          <div class="pag-size-options">${sizeOptions}</div>
+        </div>
+        <div class="pag-btns">
+          <button class="pag-btn nav" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+            <i class="fas fa-chevron-left" style="font-size: 12px;"></i>
+          </button>
+          ${btns}
+          <button class="pag-btn nav" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages || totalPages === 0 ? 'disabled' : ''}>
+            <i class="fas fa-chevron-right" style="font-size: 12px;"></i>
+          </button>
+        </div>
       </div>
     </div>`;
 }
 
 function goToPage(p) {
   const filtered = getFiltered();
-  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
   if (p < 1 || p > totalPages) return;
   currentPage = p;
   renderList(filtered);
@@ -729,8 +783,8 @@ function renderList(filtered) {
 
   empty.classList.add('hidden');
 
-  const start = (currentPage - 1) * ITEMS_PER_PAGE;
-  const page  = filtered.slice(start, start + ITEMS_PER_PAGE);
+  const start = (currentPage - 1) * itemsPerPage;
+  const page  = filtered.slice(start, start + itemsPerPage);
 
   list.innerHTML = page.map((img, i) => buildCard(img, i)).join('');
 

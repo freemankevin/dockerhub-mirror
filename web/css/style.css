@@ -38,9 +38,9 @@
             transform: translateY(-3px);
         }
         
-        html.dark .text-primary { color: #f5f7fb; }
-        html.dark .text-secondary { color: #9ca3af; }
-        html.dark .text-tertiary { color: #6b7280; }
+        html.dark .text-primary { color: #ffffff; }
+        html.dark .text-secondary { color: #b8c0cc; }
+        html.dark .text-tertiary { color: #8b95a5; }
         html.dark .border-default { border-color: rgba(255, 255, 255, 0.1); }
         html.dark .border-muted { border-color: rgba(255, 255, 255, 0.04); }
         
@@ -220,12 +220,12 @@
         }
         
         html.dark .filter-tab {
-            color: #9ca3af;
+            color: #b8c0cc;
         }
         
         html.dark .filter-tab:hover {
             background: rgba(138, 180, 248, 0.1);
-            color: #e8eaed;
+            color: #ffffff;
             border-color: rgba(138, 180, 248, 0.2);
         }
         
@@ -309,16 +309,16 @@
         }
         
         html.dark .tag {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.06) 100%);
-            color: #9ca3af;
-            border-color: rgba(138, 180, 248, 0.2);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 100%);
+            color: #c4cdd8;
+            border-color: rgba(138, 180, 248, 0.25);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         }
         
         html.dark .tag:hover {
-            background: linear-gradient(135deg, rgba(138, 180, 248, 0.18) 0%, rgba(59, 130, 246, 0.1) 100%);
-            border-color: rgba(138, 180, 248, 0.4);
-            color: #e8eaed;
+            background: linear-gradient(135deg, rgba(138, 180, 248, 0.22) 0%, rgba(59, 130, 246, 0.12) 100%);
+            border-color: rgba(138, 180, 248, 0.45);
+            color: #ffffff;
             transform: translateY(-1px);
         }
         
@@ -502,24 +502,212 @@
             opacity: 0.6;
         }
         
-        #pagination button {
+        /* Pagination Styles - Circular Design */
+        .pag-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 16px 0;
+        }
+        
+        .pag-info {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 400;
+        }
+        
+        html.dark .pag-info {
+            color: #b8c0cc;
+        }
+        
+        .pag-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* Page size selector - Custom dropdown */
+        .pag-size-select {
+            position: relative;
+        }
+        
+        .pag-size-trigger {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            height: 32px;
+            padding: 0 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
             transition: all 0.2s ease;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            color: #374151;
         }
         
-        html.dark #pagination button:not(:disabled):hover {
-            background: rgba(138, 180, 248, 0.1);
-            border-color: rgba(138, 180, 248, 0.3);
-            color: #8ab4f8;
+        html.dark .pag-size-trigger {
+            border-color: #374151;
+            background: #1f2937;
+            color: #e5e7eb;
         }
         
-        html:not(.dark) #pagination button:not(:disabled):hover {
-            background: rgba(59, 130, 246, 0.08);
-            border-color: rgba(59, 130, 246, 0.3);
-            color: #3b82f6;
+        .pag-size-trigger:hover {
+            border-color: #d1d5db;
         }
         
-        #pagination button:disabled {
+        html.dark .pag-size-trigger:hover {
+            border-color: #4b5563;
+        }
+        
+        .pag-size-options {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            margin-bottom: 4px;
+            min-width: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(8px);
+            transition: all 0.2s ease;
+            z-index: 50;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .pag-size-select.open .pag-size-options {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .pag-size-select.open .pag-size-trigger i {
+            transform: rotate(180deg);
+        }
+        
+        html:not(.dark) .pag-size-options {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+        }
+        
+        html.dark .pag-size-options {
+            background: #1f2937;
+            border: 1px solid #374151;
+        }
+        
+        .pag-size-option {
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        
+        html:not(.dark) .pag-size-option {
+            color: #374151;
+        }
+        
+        html:not(.dark) .pag-size-option:hover,
+        html:not(.dark) .pag-size-option.selected {
+            background: #f3f4f6;
+            color: #2563eb;
+        }
+        
+        html.dark .pag-size-option {
+            color: #e5e7eb;
+        }
+        
+        html.dark .pag-size-option:hover,
+        html.dark .pag-size-option.selected {
+            background: #374151;
+            color: #60a5fa;
+        }
+        
+        .pag-btns {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .pag-btn {
+            min-width: 32px;
+            height: 32px;
+            padding: 0;
+            border-radius: 50%;  /* Circular design */
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            color: #6b7280;
+        }
+        
+        html.dark .pag-btn {
+            color: #b8c0cc;
+        }
+        
+        /* Navigation arrows (prev/next) */
+        .pag-btn.nav {
+            color: #9ca3af;
+        }
+        
+        .pag-btn.nav:hover:not(:disabled) {
+            color: #374151;
+            background: #f3f4f6;
+        }
+        
+        html.dark .pag-btn.nav:hover:not(:disabled) {
+            color: #e5e7eb;
+            background: #374151;
+        }
+        
+        /* Page numbers */
+        .pag-btn.num:hover:not(.active):not(:disabled) {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        
+        html.dark .pag-btn.num:hover:not(.active):not(:disabled) {
+            background: #374151;
+            color: #e5e7eb;
+        }
+        
+        /* Active page - Blue circular background */
+        .pag-btn.active {
+            background: #2563eb;
+            color: white;
+            font-weight: 600;
+        }
+        
+        html.dark .pag-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .pag-btn:disabled {
+            opacity: 0.3;
             cursor: not-allowed;
+        }
+        
+        /* Responsive pagination */
+        @media (max-width: 640px) {
+            .pag-wrap {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+            
+            .pag-btns {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
         }
         
         /* Animation */

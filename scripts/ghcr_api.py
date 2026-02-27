@@ -286,6 +286,7 @@ class GHCRRegistryAPI:
         """
         try:
             # 使用 GitHub REST API 获取所有容器包
+            # 首先尝试组织端点，如果失败则尝试用户端点
             url = f"{self.base_url}/orgs/{owner}/packages"
             params = {
                 'package_type': 'container',
@@ -294,10 +295,26 @@ class GHCRRegistryAPI:
             
             repositories = []
             page = 1
+            use_org_endpoint = True
             
             while True:
                 params['page'] = page
                 response = self.session.get(url, params=params, timeout=30)
+                
+                # 如果返回 404 且第一次尝试组织端点，尝试用户端点
+                if response.status_code == 404 and use_org_endpoint:
+                    if self.logger:
+                        self.logger.debug(f"组织端点返回 404，尝试用户端点")
+                    url = f"{self.base_url}/users/{owner}/packages"
+                    use_org_endpoint = False
+                    continue
+                
+                # 如果返回 404，说明没有包
+                if response.status_code == 404:
+                    if self.logger:
+                        self.logger.warning(f"未找到 {owner} 的包")
+                    return []
+                
                 response.raise_for_status()
                 packages = response.json()
                 
