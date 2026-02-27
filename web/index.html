@@ -1,13 +1,41 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
+    <!-- Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Docker Sync Engine</title>
-    <meta name="description" content="Mirror images from Docker Hub, GHCR, GCR and Quay to GitHub Container Registry">
-    <link rel="icon" href="https://www.docker.com/wp-content/uploads/2022/03/vertical-logo-monochromatic.png" type="image/png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- SEO Meta Tags -->
+    <title>Docker Sync Engine - Container Image Mirror Service</title>
+    <meta name="description" content="Mirror and sync Docker container images from Docker Hub, GHCR, GCR and Quay to GitHub Container Registry for faster pulls and better availability">
+    <meta name="keywords" content="docker, container, registry, docker hub, ghcr, github container registry, mirror, sync">
+    <meta name="author" content="Freeman Kevin">
+    <link rel="canonical" href="https://dockerhub.freemankevin.com">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Docker Sync Engine - Container Image Mirror Service">
+    <meta property="og:description" content="Mirror and sync Docker container images from multiple registries to GitHub Container Registry">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dockerhub.freemankevin.com">
+    <meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'%3E%3Crect width='1200' height='630' fill='%230f0f15'/%3E%3Ctext x='50%25' y='50%25' font-family='Inter' font-size='48' fill='%238ab4f8' text-anchor='middle' dominant-baseline='middle'%3EDocker Sync Engine%3C/text%3E%3C/svg%3E">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Docker Sync Engine - Container Image Mirror Service">
+    <meta name="twitter:description" content="Mirror and sync Docker container images from multiple registries to GitHub Container Registry">
+    <meta name="twitter:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'%3E%3Crect width='1200' height='630' fill='%230f0f15'/%3E%3Ctext x='50%25' y='50%25' font-family='Inter' font-size='48' fill='%238ab4f8' text-anchor='middle' dominant-baseline='middle'%3EDocker Sync Engine%3C/text%3E%3C/svg%3E">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%233b82f6' d='M13.983 11.078h2.119a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.119a.185.185 0 0 0-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 0 0 .186-.186V3.574a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.186m0 2.716h2.118a.187.187 0 0 0 .186-.186V6.29a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 0 0 .184-.186V6.29a.185.185 0 0 0-.185-.185H8.1a.185.185 0 0 0-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 0 0 .185-.186V6.29a.185.185 0 0 0-.185-.185H5.136a.186.186 0 0 0-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 0 0 .185-.185V9.006a.185.185 0 0 0-.185-.186h-2.12a.186.186 0 0 0-.185.186v1.887c0 .102.084.185.186.185m-2.929 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.887c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 0 0-.75.748 11.376 11.376 0 0 0 .692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 0 0 3.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288z'/%3E%3C/svg%3E" type="image/svg+xml">
+    
+    <!-- Preconnect and Preload -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Stylesheets -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/css/style.css">
@@ -17,22 +45,26 @@
     <!-- Header -->
     <header class="surface border-b sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
-                    <i class="fab fa-docker text-white text-base"></i>
+            <div class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-md transition-all duration-300 group-hover:scale-110" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+                    <i class="fab fa-docker text-white text-xl group-hover:rotate-6 transition-transform"></i>
                 </div>
-                <h1 class="text-lg font-semibold text-primary">Docker Sync Engine</h1>
+                <div>
+                    <h1 class="text-xl font-semibold text-primary tracking-tight group-hover:text-accent-blue transition-colors">Docker Sync Engine</h1>
+                    <p class="text-xs text-secondary hidden md:block">Fast container image mirror service</p>
+                </div>
             </div>
             
-            <div class="flex items-center gap-2">
-                <button onclick="toggleTheme()" class="w-9 h-9 rounded-xl flex items-center justify-center text-secondary hover:bg-emphasis transition-all duration-300 hover:scale-110 group" title="Toggle Theme" aria-label="Toggle theme">
-                    <i id="themeIcon" class="fas fa-sun text-sm text-secondary group-hover:text-amber-400 transition-colors"></i>
+            <div class="flex items-center gap-3">
+                <button onclick="toggleTheme()" class="w-11 h-11 rounded-xl flex items-center justify-center text-secondary hover:text-primary hover:bg-emphasis transition-all duration-300 hover:scale-110 group" id="themeBtn" title="Dark Mode" aria-label="Toggle theme">
+                    <i id="themeIcon" class="fas fa-sun text-xl text-secondary group-hover:text-amber-400 transition-colors"></i>
                 </button>
-                
-                <a href="https://github.com/freemankevin/dockerhub-mirror" target="_blank" 
-                   class="w-9 h-9 rounded-xl flex items-center justify-center text-secondary hover:bg-emphasis transition-all duration-300 hover:scale-110"
-                   aria-label="View on GitHub">
-                    <i class="fab fa-github text-base"></i>
+
+                <a href="https://github.com/freemankevin/dockerhub-mirror" target="_blank"
+                   rel="noopener noreferrer"
+                   class="w-11 h-11 rounded-xl flex items-center justify-center text-secondary hover:text-primary hover:bg-emphasis transition-all duration-300 hover:scale-110"
+                   aria-label="View on GitHub" title="freemankevin/dockerhub-mirror">
+                    <i class="fab fa-github text-xl"></i>
                 </a>
             </div>
         </div>
@@ -41,7 +73,7 @@
     <main class="max-w-6xl mx-auto px-6 py-8">
         
         <!-- Stats Grid -->
-        <section class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 mb-8" aria-label="Statistics">
+        <section class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 mb-8" aria-label="Service statistics summary">
             <article class="surface rounded-2xl p-4 stat-card">
                 <div class="text-xs text-secondary uppercase tracking-wide font-medium mb-1">Total Mirrors</div>
                 <div class="text-2xl font-semibold text-primary mono stat-value" id="statTotal">–</div>
@@ -80,48 +112,125 @@
         </section>
 
         <!-- Filter Tabs -->
-        <nav class="flex items-center gap-1 flex-wrap border-b border-muted mb-6 pb-2" aria-label="Filter mirrors">
+        <nav class="flex items-center gap-1 flex-wrap border-b border-muted mb-6 pb-2" aria-label="Filter mirrors by registry">
             <button onclick="setFilter('all')" class="filter-tab active" data-filter="all" aria-pressed="true">
                 All <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-all">0</span>
             </button>
             <button onclick="setFilter('dockerhub')" class="filter-tab text-secondary" data-filter="dockerhub" aria-pressed="false">
                 <i class="fab fa-docker mr-1.5 accent-blue"></i>
-                Docker <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-dockerhub">0</span>
+                Docker Hub <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-dockerhub">0</span>
             </button>
             <button onclick="setFilter('github')" class="filter-tab text-secondary" data-filter="github" aria-pressed="false">
                 <i class="fab fa-github mr-1.5"></i>
-                GitHub <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-github">0</span>
+                GitHub Container <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-github">0</span>
             </button>
-            <button onclick="setFilter('google')" class="filter-tab text-secondary opacity-50" data-filter="google" aria-pressed="false" disabled>
-                <i class="fab fa-google mr-1.5 accent-red"></i>
-                Google <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-google">0</span>
+            <button onclick="setFilter('google')" class="filter-tab text-secondary" data-filter="google" aria-pressed="false">
+                <svg class="mr-1.5 inline align-middle" viewBox="0 0 24 24" width="16" height="16"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                Google Container <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-google">0</span>
             </button>
-            <button onclick="setFilter('redhat')" class="filter-tab text-secondary opacity-50" data-filter="redhat" aria-pressed="false" disabled>
+            <button onclick="setFilter('redhat')" class="filter-tab text-secondary" data-filter="redhat" aria-pressed="false">
                 <i class="fab fa-redhat mr-1.5 accent-red"></i>
-                Red Hat <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-redhat">0</span>
+                Red Hat Quay <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-redhat">0</span>
             </button>
         </nav>
 
         <!-- Search Box -->
         <div class="mb-6">
-            <div class="relative">
-                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-tertiary" aria-hidden="true"></i>
-                <input 
-                    type="text" 
-                    id="searchInput" 
-                    placeholder="Search mirrors..." 
-                    class="w-full pl-10 pr-4 py-2.5 rounded-2xl border transition-all"
+            <div class="relative group">
+                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-tertiary group-focus-within:text-accent-blue transition-colors" aria-hidden="true"></i>
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Search by image name, source repository, or version tag"
+                    class="w-full pl-10 pr-4 py-2.5 rounded-2xl border transition-all focus:border-accent-blue focus:ring-2 focus:ring-accent-blue/20"
                     oninput="handleSearch(this.value)"
-                    aria-label="Search mirrors"
-                    autocomplete="off">
+                    aria-label="Search container images"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false">
             </div>
         </div>
 
+        <!-- Loading State -->
+        <div id="loadingState" class="py-20 text-center" role="status" aria-live="polite">
+            <div class="inline-block w-6 h-6 border-2 border-accent-blue/30 border-t-accent-blue rounded-full animate-spin mb-4"></div>
+            <p class="text-sm text-secondary mb-8">Loading container images...</p>
+            <!-- Skeleton Screen -->
+            <div class="space-y-3 max-w-6xl mx-auto px-6">
+                <div class="surface rounded-lg p-4 skeleton-card">
+                    <div class="flex flex-col lg:flex-row gap-4">
+                        <div class="flex gap-3 flex-1 min-w-0">
+                            <div class="w-10 h-10 rounded-lg skeleton-pulse skeleton-icon"></div>
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <div class="h-5 w-32 skeleton-pulse rounded"></div>
+                                    <div class="h-4 w-16 skeleton-pulse rounded"></div>
+                                    <div class="h-4 w-20 skeleton-pulse rounded"></div>
+                                </div>
+                                <div class="h-4 w-full skeleton-pulse rounded mb-2"></div>
+                                <div class="flex items-center gap-3">
+                                    <div class="h-3 w-20 skeleton-pulse rounded"></div>
+                                    <div class="h-3 w-24 skeleton-pulse rounded"></div>
+                                    <div class="h-3 w-16 skeleton-pulse rounded"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="h-8 w-24 skeleton-pulse rounded"></div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-muted">
+                        <div class="h-16 skeleton-pulse rounded-lg"></div>
+                        <div class="mt-2 flex items-center justify-between">
+                            <div class="h-3 w-48 skeleton-pulse rounded"></div>
+                            <div class="h-3 w-16 skeleton-pulse rounded"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="surface rounded-lg p-4 skeleton-card">
+                    <div class="flex flex-col lg:flex-row gap-4">
+                        <div class="flex gap-3 flex-1 min-w-0">
+                            <div class="w-10 h-10 rounded-lg skeleton-pulse skeleton-icon"></div>
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <div class="h-5 w-40 skeleton-pulse rounded"></div>
+                                    <div class="h-4 w-16 skeleton-pulse rounded"></div>
+                                    <div class="h-4 w-20 skeleton-pulse rounded"></div>
+                                </div>
+                                <div class="h-4 w-full skeleton-pulse rounded mb-2"></div>
+                                <div class="flex items-center gap-3">
+                                    <div class="h-3 w-20 skeleton-pulse rounded"></div>
+                                    <div class="h-3 w-24 skeleton-pulse rounded"></div>
+                                    <div class="h-3 w-16 skeleton-pulse rounded"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="h-8 w-24 skeleton-pulse rounded"></div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-muted">
+                        <div class="h-16 skeleton-pulse rounded-lg"></div>
+                        <div class="mt-2 flex items-center justify-between">
+                            <div class="h-3 w-48 skeleton-pulse rounded"></div>
+                            <div class="h-3 w-16 skeleton-pulse rounded"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="hidden py-20 text-center">
+            <div class="w-12 h-12 rounded-2xl bg-emphasis flex items-center justify-center mx-auto mb-3 border border-default">
+                <i class="fas fa-exclamation-triangle text-lg text-amber-500"></i>
+            </div>
+            <h3 class="text-sm font-medium text-secondary">Failed to load images</h3>
+            <p class="text-xs text-tertiary mt-1">Using cached data instead</p>
+        </div>
+
         <!-- Mirror List -->
-        <div id="mirrorList" class="space-y-3" role="list"></div>
+        <div id="mirrorList" class="space-y-3" role="list" aria-label="Container image mirrors"></div>
         
         <!-- Pagination -->
-        <nav id="pagination" aria-label="Pagination"></nav>
+        <nav id="pagination" aria-label="Pagination navigation" class="mt-8"></nav>
 
         <!-- Empty State -->
         <div id="emptyState" class="hidden py-20 text-center" role="status">
@@ -131,15 +240,15 @@
             <h3 class="text-sm font-medium text-secondary">No mirrors found</h3>
             <p class="text-xs text-tertiary mt-1">Try adjusting your search or filters</p>
         </div>
-
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-muted mt-20 py-6">
+    <footer class="border-t border-muted mt-20 py-6" role="contentinfo">
         <div class="max-w-6xl mx-auto px-6 flex items-center justify-between text-sm text-secondary">
-            <span>© 2026 Docker Sync Engine</span>
+            <span>&copy; 2026 Docker Sync Engine</span>
             <a href="https://github.com/freemankevin/dockerhub-mirror" target="_blank" 
-               class="flex items-center gap-2 hover:text-primary transition-colors">
+               rel="noopener noreferrer"
+               class="flex items-center gap-2 hover:text-primary transition-colors group">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                 </svg>
@@ -149,8 +258,52 @@
     </footer>
 
     <!-- Toast Container -->
-    <div id="toastWrap" class="toast-queue"></div>
+    <div id="toastWrap" class="toast-queue" aria-live="polite" aria-atomic="true"></div>
 
-    <script src="/js/app.js"></script>
+    <!-- Back to Top Button -->
+    <button id="backToTop" 
+            onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" 
+            class="fixed right-6 rounded-2xl surface border shadow-lg flex items-center justify-center text-tertiary hover:text-primary transition-all duration-300 hover:scale-110 hover:shadow-xl group z-50"
+            aria-label="Back to top" 
+            style="bottom: 110px; opacity: 0; visibility: hidden; transform: translateY(16px); width: 56px; height: 56px;">
+        <div class="flex flex-col items-center justify-center">
+            <i class="fas fa-arrow-up text-sm transition-transform group-hover:-translate-y-0.5 mb-0.5"></i>
+            <span id="scrollProgress" class="text-[10px] font-semibold mono">0%</span>
+        </div>
+    </button>
+
+    <!-- Scripts -->
+    <script src="/js/app.js?v=2"></script>
+    <script>
+    // Back to top button functionality with scroll progress
+    window.addEventListener('scroll', () => {
+        const btn = document.getElementById('backToTop');
+        const progressEl = document.getElementById('scrollProgress');
+        
+        // Calculate scroll progress
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
+        
+        // Update progress text
+        if (progressEl) {
+            progressEl.textContent = scrollPercent + '%';
+        }
+        
+        // Show/hide button
+        if (window.scrollY > 100) {
+            btn.style.opacity = '1';
+            btn.style.visibility = 'visible';
+            btn.style.transform = 'translateY(0)';
+        } else {
+            btn.style.opacity = '0';
+            btn.style.visibility = 'hidden';
+            btn.style.transform = 'translateY(16px)';
+        }
+    });
+
+    // Add loading class to body
+    document.body.classList.add('loading');
+    </script>
 </body>
 </html>

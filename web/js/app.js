@@ -43,7 +43,13 @@ function toggleTheme() {
 
 function updateThemeIcon(isDark) {
   const icon = document.getElementById('themeIcon');
-  if (icon) icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+  const btn = document.getElementById('themeBtn');
+  if (icon) {
+    icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+  }
+  if (btn) {
+    btn.title = isDark ? 'Light Mode' : 'Dark Mode';
+  }
 }
 
 // ── Data loading ──────────────────────────────
@@ -65,16 +71,10 @@ function processData(data) {
 
   const records = Array.isArray(data) ? data : (data.images || Object.values(data));
 
-  // Helper to convert Chinese description to English (simple mapping)
+  // Helper to get description (removed Chinese-to-English conversion)
   function getEnglishDescription(desc, name) {
     if (!desc) return '';
-    // If description contains Chinese characters, replace with a generic English description based on image name
-    const hasChinese = /[\u4e00-\u9fff]/.test(desc);
-    if (hasChinese) {
-      // Use image name as description, capitalize first letter
-      const displayName = getDisplayName(name);
-      return displayName.charAt(0).toUpperCase() + displayName.slice(1) + ' container image';
-    }
+    // Use original description directly
     return desc;
   }
 
@@ -91,6 +91,8 @@ function processData(data) {
     const stars = Number(img.stars || img.pulls || 0);
     const layers = Number(img.layers || 0);
 
+    const sourceType = getSourceType({ source: latestSrc || img.source || '' });
+    
     const record = {
       name,
       displayName: getDisplayName(name),
@@ -99,9 +101,9 @@ function processData(data) {
       layers,
       updated:     img.updated || img.last_updated || img.synced_at || '',
       platforms:   img.platforms || img.architectures || ['AMD64','ARM64'],
-      official:    isOfficial(name),
+      official:    isOfficial(name, sourceType),
       source:      latestSrc,
-      sourceType:  getSourceType({ source: latestSrc || img.source || '' }),
+      sourceType:  sourceType,
       size:        latestSize,
       currentVersion: latestVer,
       versions,
@@ -110,6 +112,12 @@ function processData(data) {
     imageData[name] = record;
     allImages.push(record);
   });
+
+  // Hide loading and error states
+  const loadingEl = document.getElementById('loadingState');
+  if (loadingEl) loadingEl.classList.add('hidden');
+  const errorEl = document.getElementById('errorState');
+  if (errorEl) errorEl.classList.add('hidden');
 
   render();
 }
@@ -120,8 +128,10 @@ function getDisplayName(name) {
   return parts[parts.length - 1];
 }
 
-function isOfficial(name) {
-  return name.startsWith('library/') || !name.includes('/');
+function isOfficial(name, sourceType) {
+  // Only Docker Hub official images (library/*) are marked as official
+  // Other registries (GHCR, GCR, Quay) don't have official images in the same sense
+  return sourceType === 'dockerhub' && (name.startsWith('library/') || !name.includes('/'));
 }
 
 function formatAgo(dateStr) {
@@ -194,10 +204,46 @@ function getFiltered() {
   return allImages.filter(img => {
     if (currentFilter !== 'all' && img.sourceType !== currentFilter) return false;
     if (currentSearch) {
-      const q = currentSearch.toLowerCase();
-      if (!img.displayName.toLowerCase().includes(q) &&
-          !img.description.toLowerCase().includes(q) &&
-          !img.name.toLowerCase().includes(q)) return false;
+      const q = currentSearch.toLowerCase().trim();
+      // 构建完整的镜像路径用于搜索
+      const { path: mirrorPath, ver: version } = buildPullCmd(img);
+      const fullMirrorPath = `${mirrorPath}:${version}`.toLowerCase();
+      const sourcePath = (img.source || '').toLowerCase();
+      
+      // 检查各个字段是否匹配
+      const searchableFields = [
+        img.displayName.toLowerCase(),
+        img.description.toLowerCase(),
+        img.name.toLowerCase(),
+        fullMirrorPath,
+        sourcePath,
+        version.toLowerCase()
+      ];
+      
+      // 支持多种匹配方式：
+      // 1. 完整镜像路径搜索（如 ghcr.io/freemankevin/library__elasticsearch:9.3.0）
+      // 2. 源镜像搜索（如 docker.io/library/elasticsearch）
+      // 3. 名称/描述/标签模糊匹配
+      const matches = searchableFields.some(field => {
+        if (!field) return false;
+        // 完全包含匹配
+        if (field.includes(q)) return true;
+        // 忽略特殊字符的匹配（如 ghcr.io/freemankevin/library__elasticsearch 可以匹配 library__elasticsearch 或 library/elasticsearch）
+        const normalizedField = field.replace(/[:_\/\-]/g, '').toLowerCase();
+        const normalizedQuery = q.replace(/[:_\/\-]/g, '').toLowerCase();
+        if (normalizedField.includes(normalizedQuery)) return true;
+        // 关键词分词匹配（空格分隔的多个关键词）
+        const keywords = q.split(/\s+/).filter(k => k.length > 0);
+        if (keywords.length > 1) {
+          return keywords.every(keyword => {
+            const normKeyword = keyword.replace(/[:_\/\-]/g, '');
+            return field.includes(keyword) || normalizedField.includes(normKeyword);
+          });
+        }
+        return false;
+      });
+      
+      if (!matches) return false;
     }
     return true;
   });
@@ -228,19 +274,22 @@ function updateStats() {
   const weekAgo = Date.now() - 7 * 86400000;
   const recent  = allImages.filter(img => img.updated && new Date(img.updated) > weekAgo).length;
 
-  // storage size (sum of all version sizes)
+  // storage size (计算所有版本的总和)
   let totalSizeMB = 0;
+  let currentVersionsSizeMB = 0;
   for (const img of allImages) {
-    // sum each version's size, fallback to img.size if no versions
-    if (img.versions && img.versions.length) {
+    // 累加该镜像所有版本的大小（用于Storage Space）
+    if (img.versions && img.versions.length > 0) {
       for (const v of img.versions) {
         totalSizeMB += parseSizeToMB(v.size);
       }
     } else {
       totalSizeMB += parseSizeToMB(img.size);
     }
+    // 只计算当前版本大小（用于Avg Image Size）
+    currentVersionsSizeMB += parseSizeToMB(img.size);
   }
-  const avgSizeMB = total ? totalSizeMB / total : 0;
+  const avgSizeMB = allImages.length > 0 ? currentVersionsSizeMB / allImages.length : 0;
 
   // last synced image
   let lastImg = allImages.reduce((best, img) => {
@@ -258,7 +307,8 @@ function updateStats() {
   animateStatValue('statTotal', total);
   // animateStatValue('statVersions', versions); // No corresponding UI element
   animateStatValue('statLatestCount', recent || total);
-  animateStatValue('statAvgVersions', parseFloat(avgVersions));
+  // Available Versions 显示整数
+  setText('statAvgVersions', Math.round(parseFloat(avgVersions)));
 
   // Format size stats
   setText('statStorage', formatSize(totalSizeMB * 1e6)); // convert MB to bytes for formatSize
@@ -281,17 +331,37 @@ function setText(id, val) {
 }
 
 // ── Card rendering ────────────────────────────
-function buildIcon(sourceType) {
-  const icons = {
-    dockerhub: `<div class="card-icon icon-docker"><svg viewBox="0 0 24 24" fill="#2496ED" width="20" height="20"><path d="M13.983 11.078h2.119a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.119a.185.185 0 0 0-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 0 0 .186-.186V3.574a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.186m0 2.716h2.118a.187.187 0 0 0 .186-.186V6.29a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 0 0 .184-.186V6.29a.185.185 0 0 0-.185-.185H8.1a.185.185 0 0 0-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 0 0 .185-.186V6.29a.185.185 0 0 0-.185-.185H5.136a.186.186 0 0 0-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 0 0 .185-.185V9.006a.185.185 0 0 0-.185-.186h-2.12a.186.186 0 0 0-.185.186v1.887c0 .102.084.185.186.185m-2.929 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.887c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 0 0-.75.748 11.376 11.376 0 0 0 .692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 0 0 3.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288z"/></svg></div>`,
-    github:    `<div class="card-icon icon-github"><i class="fab fa-github" style="font-size:20px;color:#6b7280"></i></div>`,
-    google:    `<div class="card-icon icon-google"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg></div>`,
-    redhat:    `<div class="card-icon icon-redhat"><svg viewBox="0 0 256 256" width="22" height="22"><circle cx="128" cy="128" r="128" fill="#EE0000"/><path fill="white" d="M155 118c12 0 30-5 30-18 0-9-7-14-19-14h-47l-10 32h46zm-53 61h-30l6-18h30l-6 18zm-8-33l6-18h50c7 0 11 2 11 7 0 8-12 11-22 11H94z"/></svg></div>`,
-  };
-  return icons[sourceType] || icons.dockerhub;
-}
+  function buildIcon(sourceType) {
+    const icons = {
+      dockerhub: `<div class="card-icon icon-docker"><svg viewBox="0 0 24 24" fill="#2496ED" width="20" height="20"><path d="M13.983 11.078h2.119a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.119a.185.185 0 0 0-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 0 0 .186-.186V3.574a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.186m0 2.716h2.118a.187.187 0 0 0 .186-.186V6.29a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 0 0 .184-.186V6.29a.185.185 0 0 0-.185-.185H8.1a.185.185 0 0 0-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 0 0 .185-.186V6.29a.185.185 0 0 0-.185-.185H5.136a.186.186 0 0 0-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 0 0 .185-.185V9.006a.185.185 0 0 0-.185-.186h-2.12a.186.186 0 0 0-.185.186v1.887c0 .102.084.185.186.185m-2.929 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.887c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 0 0-.75.748 11.376 11.376 0 0 0 .692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 0 0 3.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288z"/></svg></div>`,
+      github:    `<div class="card-icon icon-github"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></div>`,
+      google:    `<div class="card-icon icon-google"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg></div>`,
+      redhat:    `<div class="card-icon icon-redhat"><svg viewBox="0 0 256 256" width="20" height="20"><circle cx="128" cy="128" r="128" fill="#CC0000"/><path fill="white" d="M155 118c12 0 30-5 30-18 0-9-7-14-19-14h-47l-10 32h46zm-53 61h-30l6-18h30l-6 18zm-8-33l6-18h50c7 0 11 2 11 7 0 8-12 11-22 11H94z"/></svg></div>`,
+    };
+    return icons[sourceType] || icons.dockerhub;
+  }
 
-function buildPullCmd(img) {
+  function buildVersionSelect(img, ver) {
+    const versions = img.versions.length > 1
+      ? img.versions.map(v => v.version || v.tag || v)
+      : [ver];
+    
+    const optionsHtml = versions.map(v => {
+      const isSelected = v === ver;
+      return `<div class="custom-select-option ${isSelected ? 'selected' : ''}" data-value="${v}" onclick="selectVersion('${img.name}', '${v}')">${v}</div>`;
+    }).join('');
+    
+    return `
+      <div class="custom-select" id="version-select-${img.name}">
+        <div class="custom-select-trigger" onclick="toggleVersionSelect('${img.name}')">
+          <span class="mono">${ver}</span>
+          <i class="fas fa-chevron-down custom-select-arrow"></i>
+        </div>
+        <div class="custom-select-options">${optionsHtml}</div>
+      </div>`;
+  }
+
+  function buildPullCmd(img) {
   // Prefer the target field from the version object if available
   const ver = img.currentVersion;
   const src = img.source || '';
@@ -318,50 +388,35 @@ function buildPullCmd(img) {
   return { path: mirrorPath, ver };
 }
 
-function buildCard(img, index) {
-  const { path, ver } = buildPullCmd(img);
-  const sourceLabel = getSourceLabel(img.sourceType);
-  const ago = formatAgo(img.updated);
-  const size = formatSize(img.size);
-  const isDark = document.documentElement.classList.contains('dark');
+  function buildCard(img, index) {
+    const { path, ver } = buildPullCmd(img);
+    const sourceLabel = getSourceLabel(img.sourceType);
+    const ago = formatAgo(img.updated);
+    const size = formatSize(img.size);
+    const isDark = document.documentElement.classList.contains('dark');
 
-  // Icon classes
-  const iconClass = img.sourceType === 'dockerhub' ? 'source-icon-docker' : 'source-icon-github';
-  const iconColor = img.sourceType === 'dockerhub' ? 'accent-blue' : (isDark ? 'text-gray-300' : 'text-gray-600');
+    // Icon rendering based on source type
+    const iconHtml = img.sourceType === 'dockerhub'
+      ? `<div class="w-12 h-12 rounded-xl source-icon-docker border flex items-center justify-center flex-shrink-0"><i class="fab fa-docker accent-blue text-2xl"></i></div>`
+      : `<div class="w-12 h-12 rounded-xl source-icon-github border flex items-center justify-center flex-shrink-0"><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></div>`;
 
-  // Platform badges
-  const platforms = Array.isArray(img.platforms) ? img.platforms : ['AMD64', 'ARM64'];
-  const archBadges = platforms.map(a => {
-    const colorClass = a.toUpperCase().includes('ARM') ? 'text-purple-500' : 'text-blue-500';
-    const bgClass = isDark ? '' : (a.toUpperCase().includes('ARM') ? 'bg-purple-50' : 'bg-blue-50');
-    return `<span class="text-[11px] font-medium ${colorClass} ${bgClass} px-1.5 py-0.5 rounded">${a.toUpperCase()}</span>`;
-  }).join('');
+    // Platform info - 图标+文字形式，与层数、时间保持一致
+    const platforms = Array.isArray(img.platforms) ? img.platforms : ['AMD64', 'ARM64'];
+    const archText = platforms.map(a => a.toLowerCase()).join(' & ');
+    const archColor = platforms.some(a => a.toUpperCase().includes('ARM')) ? 'text-purple-500' : 'text-blue-500';
 
-  // Version options
-  const versionOptions = img.versions.length > 1
-    ? img.versions.map(v => {
-        const tag = v.version || v.tag || v;
-        return `<option value="${tag}" ${tag === ver ? 'selected' : ''}>${tag}</option>`;
-      }).join('')
-    : `<option>${ver}</option>`;
+    // Version selector - always show select element for consistent styling
+    const versionEl = buildVersionSelect(img, ver);
 
-  const versionEl = img.versions.length > 1
-    ? `<select onchange="changeVersion('${img.name}', this.value)" class="version-select px-3 py-1.5 rounded-lg text-sm border cursor-pointer mono" aria-label="Select version for ${escHtml(img.displayName)}">${versionOptions}</select>`
-    : `<span class="version-select">${ver}</span>`;
-
-  const officialBadge = img.official
-    ? '<span class="badge badge-official">official</span>'
-    : '';
+    const officialBadge = img.official
+      ? '<span class="badge badge-official">official</span>'
+      : '';
 
   return `
 <article class="surface rounded-lg p-4 animate-fade-in" role="listitem" data-name="${img.name}" style="animation-delay:${index * 0.05}s" aria-label="${escHtml(img.displayName)} mirror">
   <div class="flex flex-col lg:flex-row gap-4">
-    <div class="flex gap-3 flex-1 min-w-0">
-      <div class="w-10 h-10 rounded-lg ${iconClass} border flex items-center justify-center flex-shrink-0">
-        ${img.sourceType === 'dockerhub'
-          ? '<i class="fab fa-docker ' + iconColor + ' text-lg"></i>'
-          : '<i class="fab fa-github ' + iconColor + ' text-lg"></i>'}
-      </div>
+    <div class="flex gap-3 flex-1 min-w-0 items-center">
+      ${iconHtml}
       
       <div class="min-w-0 flex-1">
         <div class="flex items-center gap-2 mb-1 flex-wrap">
@@ -381,10 +436,14 @@ function buildCard(img, index) {
             <i class="fas fa-layer-group text-purple-500/60"></i>
             ${img.layers} layers
           </span>` : ''}
-          ${ago ? `<span>${ago}</span>` : ''}
-          <div class="flex items-center gap-1.5">
-            ${archBadges}
-          </div>
+          ${ago ? `<span class="flex items-center gap-1">
+            <i class="far fa-clock text-tertiary/60"></i>
+            ${ago}
+          </span>` : ''}
+          <span class="flex items-center gap-1">
+            <i class="fas fa-microchip ${archColor}/60"></i>
+            ${archText}
+          </span>
         </div>
       </div>
     </div>
@@ -394,22 +453,21 @@ function buildCard(img, index) {
     </div>
   </div>
   
-  <div class="mt-4 pt-3 border-t border-muted">
-    <div class="code-window rounded-lg p-3 flex items-center gap-2 group">
-      <code class="code-block text-tertiary truncate flex-1">
+  <div class="mt-3">
+    <div class="terminal-window rounded-lg flex items-center gap-2 group">
+      <code class="code-block text-primary truncate flex-1">
         <span class="text-purple-500 select-none">$</span>
-        <span class="text-primary">docker pull</span>
-        <span class="accent-blue">${escHtml(path)}</span>:<span class="accent-yellow">${escHtml(ver)}</span>
+        <span class="text-secondary">docker pull</span>
+        <span class="text-blue-500">${escHtml(path)}</span>:<span class="text-amber-500">${escHtml(ver)}</span>
       </code>
       <button onclick="copyCmd('${img.name}')"
-              class="copy-btn p-2 rounded-lg hover:bg-emphasis transition-all text-tertiary hover:text-primary flex-shrink-0"
-              aria-label="Copy pull command"
-              title="Copy to clipboard">
-        <i class="fas fa-copy text-xs"></i>
+              class="copy-btn flex items-center justify-center"
+              aria-label="Copy pull command">
+        <i id="copy-icon-${img.name}" class="fas fa-copy" style="font-size: 13px;"></i>
       </button>
     </div>
     
-    <div class="mt-2 flex items-center justify-between text-xs text-tertiary mono">
+    <div class="mt-2.5 flex items-center justify-between text-xs text-tertiary mono">
       <span class="truncate" title="${escHtml(img.source || '')}">Source: ${escHtml(img.source || '')}</span>
       ${size ? `<span class="flex-shrink-0 ml-2">${size}</span>` : ''}
     </div>
@@ -424,6 +482,57 @@ function escHtml(s) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
+
+// ── Custom Version Select ─────────────────────
+function toggleVersionSelect(name) {
+  const selectEl = document.getElementById(`version-select-${name}`);
+  if (!selectEl) return;
+  
+  const isOpen = selectEl.classList.contains('open');
+  
+  // Close all other selects
+  document.querySelectorAll('.custom-select.open').forEach(el => {
+    if (el.id !== `version-select-${name}`) {
+      el.classList.remove('open');
+    }
+  });
+  
+  // Toggle current select
+  selectEl.classList.toggle('open', !isOpen);
+}
+
+function selectVersion(name, tag) {
+  const img = imageData[name];
+  if (!img) return;
+  
+  const vObj = img.versions.find(v => (v.version || v.tag || v) === tag);
+  img.currentVersion = tag;
+  if (vObj && vObj.source) img.source = vObj.source;
+  if (vObj && vObj.size) img.size = vObj.size;
+  
+  // Update allImages entry
+  const flat = allImages.find(i => i.name === name);
+  if (flat) {
+    flat.currentVersion = tag;
+    if (vObj && vObj.source) flat.source = vObj.source;
+  }
+  
+  // Close dropdown
+  const selectEl = document.getElementById(`version-select-${name}`);
+  if (selectEl) selectEl.classList.remove('open');
+  
+  // Re-render to update display
+  render();
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.custom-select')) {
+    document.querySelectorAll('.custom-select.open').forEach(el => {
+      el.classList.remove('open');
+    });
+  }
+});
 
 // ── Version switching ─────────────────────────
 function changeVersion(name, tag) {
@@ -460,25 +569,38 @@ function copyCmd(name) {
   const { path, ver } = buildPullCmd(img);
   const cmd = `docker pull ${path}:${ver}`;
 
+  const btn = document.querySelector(`button[onclick="copyCmd('${name}')"]`);
   const iconEl = document.getElementById('copy-icon-' + name);
 
+  const doFlash = () => flash(iconEl, btn);
+
   if (navigator.clipboard) {
-    navigator.clipboard.writeText(cmd).then(() => flash(iconEl));
+    navigator.clipboard.writeText(cmd).then(doFlash).catch(doFlash);
   } else {
     const ta = document.createElement('textarea');
     ta.value = cmd; ta.style.position = 'fixed'; ta.style.opacity = '0';
     document.body.appendChild(ta); ta.select();
     document.execCommand('copy'); document.body.removeChild(ta);
-    flash(iconEl);
+    doFlash();
   }
-
-  showToast('Copied to clipboard!');
 }
 
-function flash(iconEl) {
-  if (!iconEl) return;
+function flash(iconEl, btnEl) {
+  if (!iconEl || !btnEl) return;
+  
+  // Add copied state
   iconEl.className = 'fas fa-check';
-  setTimeout(() => { iconEl.className = 'fas fa-copy'; }, 1500);
+  btnEl.classList.add('copied');
+  
+  // Add bounce animation to icon
+  iconEl.style.animation = 'copySuccess 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+  
+  // Remove states after animation
+  setTimeout(() => {
+    iconEl.className = 'fas fa-copy';
+    iconEl.style.animation = '';
+    btnEl.classList.remove('copied');
+  }, 2000);
 }
 
 // ── Star toggle ──────────────────────────────
@@ -512,17 +634,35 @@ function toggleStar(name) {
 }
 
 // ── Toast ─────────────────────────────────────
-function showToast(msg) {
+function showToast(msg, type = 'green') {
   const wrap = document.getElementById('toastWrap');
   const t = document.createElement('div');
-  t.className = 'toast';
-  t.innerHTML = `<i class="fas fa-check-circle"></i> ${msg}`;
+  
+  // Enhanced toast with better styling
+  t.className = `toast ${type}`;
+  t.innerHTML = `
+    <div class="flex items-center gap-3">
+      <div class="toast-icon w-6 h-6 rounded-full flex items-center justify-center">
+        <i class="fas fa-check text-sm"></i>
+      </div>
+      <span class="font-medium">${msg}</span>
+    </div>
+  `;
+  
   wrap.appendChild(t);
-  requestAnimationFrame(() => { requestAnimationFrame(() => { t.classList.add('show'); }); });
+  
+  // Animate in
+  requestAnimationFrame(() => { 
+    requestAnimationFrame(() => { 
+      t.classList.add('show'); 
+    }); 
+  });
+  
+  // Auto remove
   setTimeout(() => {
     t.classList.remove('show');
     setTimeout(() => t.remove(), 400);
-  }, 2000);
+  }, 3000);
 }
 
 // ── Pagination ────────────────────────────────
