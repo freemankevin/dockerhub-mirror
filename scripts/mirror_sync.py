@@ -16,6 +16,8 @@ from typing import Dict, List, Optional
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
 
+from scripts.utils import convert_to_ghcr_path, get_ghcr_image_name, parse_image_name
+
 
 class MirrorSync:
     """镜像同步管理器"""
@@ -186,8 +188,12 @@ class MirrorSync:
     ) -> bool:
         """同步单个版本"""
         source_image = f"{image_name}:{version}"
-        repo_name = image_name.replace('/', '__')
-        target_image = f"{self.registry}/{self.owner}/{repo_name}:{version}"
+        
+        # 使用新的命名规则生成目标镜像名称
+        # 示例: docker.io/library/elasticsearch:9.3.1 -> docker-io/library/elasticsearch
+        ghcr_path = convert_to_ghcr_path(image_name)
+        repo_name = ghcr_path.replace('/', '__')  # 用于存储的 repository 名称
+        target_image = f"{self.registry}/{self.owner}/{ghcr_path}:{version}"
         
         print(f"\n🔄 Processing {source_image}...")
         print(f"📦 Source: {source_image}")

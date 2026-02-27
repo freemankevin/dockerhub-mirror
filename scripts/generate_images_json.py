@@ -30,7 +30,7 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 from scripts.ghcr_api import GHCRRegistryAPI
-from scripts.utils import setup_logger
+from scripts.utils import setup_logger, convert_to_ghcr_path, parse_image_name
 
 
 def normalize_source_image(image_name: str) -> str:
@@ -225,9 +225,10 @@ def generate_images_json(
             parts = source.replace('ghcr.io/', '').split('/')
             if len(parts) >= 2:
                 source_owner = parts[0]
-                # 剩余部分是仓库名（可能包含斜杠），需要将斜杠替换为双下划线
+                # 剩余部分是仓库名（可能包含斜杠）
                 source_repo = '/'.join(parts[1:]).split(':')[0]
-                source_repo_name = source_repo.replace('/', '__')
+                # GHCR 源镜像保持原有格式（ghcr.io 已经是友好格式）
+                source_repo_name = source_repo.replace('/', '__')  # API 调用需要双下划线格式
                 
                 print(f"\n🔍 获取 GHCR 源镜像 {source_owner}/{source_repo_name} 的所有标签...")
                 logger.debug(f"原始源: {source}")
@@ -294,12 +295,15 @@ def generate_images_json(
                 logger.warning(f"GHCR 源镜像格式不正确: {source}")
         else:
             # 对于非 GHCR 源镜像，从目标仓库获取标签信息
-            # 转换为 GHCR 仓库名
-            repo_name = image_name.replace('/', '__')
+            # 使用新的命名规则转换为 GHCR 路径
+            # 示例: docker.io/library/elasticsearch -> docker-io/library/elasticsearch
+            ghcr_path = convert_to_ghcr_path(image_name)
+            # GHCR API 需要使用双下划线分隔的路径（因为 GHCR 的包名不支持斜杠）
+            repo_name = ghcr_path.replace('/', '__')
             
             # 获取 GHCR 中的所有标签信息
             print(f"\n🔍 获取 {owner}/{repo_name} 的所有标签...")
-            logger.debug(f"完整镜像路径: {registry}/{owner}/{repo_name}")
+            logger.debug(f"完整镜像路径: {registry}/{owner}/{ghcr_path}")
             logger.debug(f"原始源: {source}")
             logger.debug(f"标签匹配模式: {tag_pattern}")
             logger.debug(f"排除模式: {exclude_pattern}")
@@ -326,12 +330,14 @@ def generate_images_json(
                 for tag in tags_sorted:
                     # 生成完整的源镜像地址
                     full_source = f"{normalize_source_image(image_name)}:{tag['name']}"
+                    # 使用新的命名规则生成目标镜像地址（带斜杠格式，更友好）
+                    target_image = f"{registry}/{owner}/{ghcr_path}:{tag['name']}"
                     versions.append({
                         'version': tag['name'],
                         'digest': tag.get('digest', ''),
                         'created_at': tag.get('created_at'),
                         'synced_at': tag.get('created_at'),  # 使用创建时间作为同步时间
-                        'target': f"{registry}/{owner}/{repo_name}:{tag['name']}",
+                        'target': target_image,
                         'source': full_source,
                         'size': tag.get('size', ''),  # 镜像大小
                         'layers': tag.get('layers', 0)  # 层数
@@ -343,7 +349,7 @@ def generate_images_json(
                 images.append({
                     'name': image_name,
                     'description': description,
-                    'repository': repo_name,
+                    'repository': ghcr_path,  # 使用新的命名格式（带斜杠）
                     'total_versions': len(versions),
                     'latest_version': versions[0]['version'] if versions else None,
                     'updated': versions[0]['created_at'] if versions else '',  # 更新时间
