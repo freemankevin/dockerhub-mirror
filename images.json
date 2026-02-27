@@ -1,10 +1,523 @@
 {
-  "updated_at": "2026-02-27T08:19:05.121899+00:00",
+  "updated_at": "2026-02-27T08:24:00.579041+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
-  "total_images": 1,
-  "total_versions": 1,
+  "total_images": 30,
+  "total_versions": 57,
   "images": [
+    {
+      "name": "library/elasticsearch",
+      "description": "Elasticsearch 搜索引擎和分析引擎",
+      "repository": "docker-io/library/elasticsearch",
+      "total_versions": 1,
+      "latest_version": "9.3.1",
+      "updated": "2026-02-27T07:29:17+00:00",
+      "size": "1.2 GB",
+      "layers": 12,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "9.3.1",
+          "digest": "sha256:2cc6bb7210e693c9ee96a2d37833dbd8d3edaacfc0e468d9daa04cb7a125e9a0",
+          "created_at": "2026-02-27T07:29:17+00:00",
+          "synced_at": "2026-02-27T07:29:17+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/library/elasticsearch:9.3.1",
+          "source": "docker.io/library/elasticsearch:9.3.1",
+          "size": "1.2 GB",
+          "layers": 12
+        }
+      ]
+    },
+    {
+      "name": "derklaro/minio",
+      "description": "MinIO 高性能对象存储",
+      "repository": "docker-io/derklaro/minio",
+      "total_versions": 1,
+      "latest_version": "RELEASE.2025-10-15T17-29-55Z",
+      "updated": "2026-02-27T07:29:09+00:00",
+      "size": "284 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "RELEASE.2025-10-15T17-29-55Z",
+          "digest": "sha256:376ab1b6b91c0a6271999c5c610b34a2433f83643196f14dd68ef07bd5d77098",
+          "created_at": "2026-02-27T07:29:09+00:00",
+          "synced_at": "2026-02-27T07:29:09+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/derklaro/minio:RELEASE.2025-10-15T17-29-55Z",
+          "source": "docker.io/derklaro/minio:RELEASE.2025-10-15T17-29-55Z",
+          "size": "284 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "nacos/nacos-server",
+      "description": "Nacos 服务发现和配置中心",
+      "repository": "docker-io/nacos/nacos-server",
+      "total_versions": 1,
+      "latest_version": "v3.1.1",
+      "updated": "2026-02-27T07:29:56+00:00",
+      "size": "856 MB",
+      "layers": 15,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "v3.1.1",
+          "digest": "sha256:13e74786507abbacebe080fae2fc9c05aa2591eb99c97a0a78ff0e72beb21b13",
+          "created_at": "2026-02-27T07:29:56+00:00",
+          "synced_at": "2026-02-27T07:29:56+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/nacos/nacos-server:v3.1.1",
+          "source": "docker.io/nacos/nacos-server:v3.1.1",
+          "size": "856 MB",
+          "layers": 15
+        }
+      ]
+    },
+    {
+      "name": "library/nginx",
+      "description": "Nginx 高性能 Web 服务器",
+      "repository": "docker-io/library/nginx",
+      "total_versions": 1,
+      "latest_version": "1.29.5-alpine",
+      "updated": "2026-02-27T07:29:42+00:00",
+      "size": "67 MB",
+      "layers": 7,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "1.29.5-alpine",
+          "digest": "sha256:1d13701a5f9f3fb01aaa88cef2344d65b6b5bf6b7d9fa4cf0dca557a8d7702ba",
+          "created_at": "2026-02-27T07:29:42+00:00",
+          "synced_at": "2026-02-27T07:29:42+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/library/nginx:1.29.5-alpine",
+          "source": "docker.io/library/nginx:1.29.5-alpine",
+          "size": "67 MB",
+          "layers": 7
+        }
+      ]
+    },
+    {
+      "name": "library/rabbitmq",
+      "description": "RabbitMQ 消息队列管理",
+      "repository": "docker-io/library/rabbitmq",
+      "total_versions": 1,
+      "latest_version": "4.2.4-management-alpine",
+      "updated": "2026-02-27T07:30:19+00:00",
+      "size": "215 MB",
+      "layers": 9,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "4.2.4-management-alpine",
+          "digest": "sha256:9651ce95332b3774065981d2a65e26edf259dd7a1bea387712e73095a1cec185",
+          "created_at": "2026-02-27T07:30:19+00:00",
+          "synced_at": "2026-02-27T07:30:19+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/library/rabbitmq:4.2.4-management-alpine",
+          "source": "docker.io/library/rabbitmq:4.2.4-management-alpine",
+          "size": "215 MB",
+          "layers": 9
+        }
+      ]
+    },
+    {
+      "name": "library/redis",
+      "description": "Redis 内存数据库",
+      "repository": "docker-io/library/redis",
+      "total_versions": 1,
+      "latest_version": "8.6.1",
+      "updated": "2026-02-27T07:30:21+00:00",
+      "size": "138 MB",
+      "layers": 6,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "8.6.1",
+          "digest": "sha256:5cb00b0f236e286254ce9f3eea989b00bb69d04fb9b6c9a9d0b07e588e49f44e",
+          "created_at": "2026-02-27T07:30:21+00:00",
+          "synced_at": "2026-02-27T07:30:21+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/library/redis:8.6.1",
+          "source": "docker.io/library/redis:8.6.1",
+          "size": "138 MB",
+          "layers": 6
+        }
+      ]
+    },
+    {
+      "name": "kartoza/geoserver",
+      "description": "GeoServer 地理信息服务",
+      "repository": "docker-io/kartoza/geoserver",
+      "total_versions": 1,
+      "latest_version": "2.28.2",
+      "updated": "2026-02-27T07:31:00+00:00",
+      "size": "1.8 GB",
+      "layers": 15,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "2.28.2",
+          "digest": "sha256:ad465f7e2aa25caee70500c0a85e10440598bf046295a348707da1103f16cec1",
+          "created_at": "2026-02-27T07:31:00+00:00",
+          "synced_at": "2026-02-27T07:31:00+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/kartoza/geoserver:2.28.2",
+          "source": "docker.io/kartoza/geoserver:2.28.2",
+          "size": "1.8 GB",
+          "layers": 15
+        }
+      ]
+    },
+    {
+      "name": "freelabspace/postgresql-postgis",
+      "description": "PostgreSQL 数据库 + PostGIS 扩展",
+      "repository": "docker-io/freelabspace/postgresql-postgis",
+      "total_versions": 28,
+      "latest_version": "18.3",
+      "updated": "2026-02-27T07:33:40+00:00",
+      "size": "856 MB",
+      "layers": 15,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "18.3",
+          "digest": "sha256:64420f7625baac47f6f9ee12842561cbe4d99d3ff7415dae197faca8524e32ee",
+          "created_at": "2026-02-27T07:33:40+00:00",
+          "synced_at": "2026-02-27T07:33:40+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:18.3",
+          "source": "docker.io/freelabspace/postgresql-postgis:18.3",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "18.2",
+          "digest": "sha256:90101c8ede5595dd5bcca4739563b3cea1838f53a8740033668ab9744e13166f",
+          "created_at": "2026-02-27T07:33:36+00:00",
+          "synced_at": "2026-02-27T07:33:36+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:18.2",
+          "source": "docker.io/freelabspace/postgresql-postgis:18.2",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "18.1",
+          "digest": "sha256:a6ad698279b7888ab53a190272a9e37376851f5f1c6758f9e5e8ce8ac08c40d7",
+          "created_at": "2026-02-27T07:33:29+00:00",
+          "synced_at": "2026-02-27T07:33:29+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:18.1",
+          "source": "docker.io/freelabspace/postgresql-postgis:18.1",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "17.9",
+          "digest": "sha256:1a4899e22960b4d7cc3d39c97cc80b72fed78a7c5d26d26ec021648c88efa764",
+          "created_at": "2026-02-27T07:33:26+00:00",
+          "synced_at": "2026-02-27T07:33:26+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:17.9",
+          "source": "docker.io/freelabspace/postgresql-postgis:17.9",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "17.8",
+          "digest": "sha256:36d2721903a542e13e3a645f067850c7b03c371fe82d775245834ef2597ccb90",
+          "created_at": "2026-02-27T07:33:18+00:00",
+          "synced_at": "2026-02-27T07:33:18+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:17.8",
+          "source": "docker.io/freelabspace/postgresql-postgis:17.8",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "17.7",
+          "digest": "sha256:3cb569085a0832a8ba37a6c877c207ca95739c062f2816d2a4ccf16802054606",
+          "created_at": "2026-02-27T07:33:16+00:00",
+          "synced_at": "2026-02-27T07:33:16+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:17.7",
+          "source": "docker.io/freelabspace/postgresql-postgis:17.7",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "17.6",
+          "digest": "sha256:a79b95c1ccfe82e81f7be01821a88f02882fd47b20054bf2cb165eb074ce6ec0",
+          "created_at": "2026-02-27T07:33:06+00:00",
+          "synced_at": "2026-02-27T07:33:06+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:17.6",
+          "source": "docker.io/freelabspace/postgresql-postgis:17.6",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "17.5",
+          "digest": "sha256:22f36ca08a100419984b1c03ed2a1d0f1bccce93cb93dc7b627d6207f8ba7645",
+          "created_at": "2026-02-27T07:33:02+00:00",
+          "synced_at": "2026-02-27T07:33:02+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:17.5",
+          "source": "docker.io/freelabspace/postgresql-postgis:17.5",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "16.13",
+          "digest": "sha256:5973ab482687ac61c664ed4b0a4831b7264a91b5fcad7bee44284105403e0cfa",
+          "created_at": "2026-02-27T07:32:54+00:00",
+          "synced_at": "2026-02-27T07:32:54+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:16.13",
+          "source": "docker.io/freelabspace/postgresql-postgis:16.13",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "16.12",
+          "digest": "sha256:0748b5565217da8147cbfbdc38d32c07f5d4522f36469b614bc929c4a66355a7",
+          "created_at": "2026-02-27T07:32:50+00:00",
+          "synced_at": "2026-02-27T07:32:50+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:16.12",
+          "source": "docker.io/freelabspace/postgresql-postgis:16.12",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "16.11",
+          "digest": "sha256:5741d922d3d85eba6e9819e275e4bccc7d4d2140a86d232a057498d39fb15a7e",
+          "created_at": "2026-02-27T07:32:42+00:00",
+          "synced_at": "2026-02-27T07:32:42+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:16.11",
+          "source": "docker.io/freelabspace/postgresql-postgis:16.11",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "16.10",
+          "digest": "sha256:1d6d68d4deac89bae4ab9c30ca2346cd375585e920aeca57461017eafd944999",
+          "created_at": "2026-02-27T07:32:38+00:00",
+          "synced_at": "2026-02-27T07:32:38+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:16.10",
+          "source": "docker.io/freelabspace/postgresql-postgis:16.10",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "16.9",
+          "digest": "sha256:db8c0b76857412d89f0140e73327b358576ccca7da4b1613366692575fcb648b",
+          "created_at": "2026-02-27T07:32:28+00:00",
+          "synced_at": "2026-02-27T07:32:28+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:16.9",
+          "source": "docker.io/freelabspace/postgresql-postgis:16.9",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "15.17",
+          "digest": "sha256:eb8ca8c6ea3878bcc8c3e68a70d2f6cf6e766ae661f1479836ae1d82bf118f85",
+          "created_at": "2026-02-27T07:32:25+00:00",
+          "synced_at": "2026-02-27T07:32:25+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:15.17",
+          "source": "docker.io/freelabspace/postgresql-postgis:15.17",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "15.16",
+          "digest": "sha256:673c6cbb08df6a959b5192c2677318d6cace93f43696e5f03144438f98dda796",
+          "created_at": "2026-02-27T07:32:17+00:00",
+          "synced_at": "2026-02-27T07:32:17+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:15.16",
+          "source": "docker.io/freelabspace/postgresql-postgis:15.16",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "15.15",
+          "digest": "sha256:0fdf8d7fadfddc82fa223de9dca812e287217583578ca2b9fead409dcca3d799",
+          "created_at": "2026-02-27T07:32:13+00:00",
+          "synced_at": "2026-02-27T07:32:13+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:15.15",
+          "source": "docker.io/freelabspace/postgresql-postgis:15.15",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "15.14",
+          "digest": "sha256:39b852d979ab938a82a1b3a0f7d28f7c5aaf8c6e26248d03bc44d76e5018383b",
+          "created_at": "2026-02-27T07:32:05+00:00",
+          "synced_at": "2026-02-27T07:32:05+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:15.14",
+          "source": "docker.io/freelabspace/postgresql-postgis:15.14",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "15.13",
+          "digest": "sha256:7e3fb9c60c5930cc5b84b521275194510c6cddf0fa0fe298eb3d3a7bbb373069",
+          "created_at": "2026-02-27T07:32:02+00:00",
+          "synced_at": "2026-02-27T07:32:02+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:15.13",
+          "source": "docker.io/freelabspace/postgresql-postgis:15.13",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "15.9",
+          "digest": "sha256:966b31dc70790ab8feec6634be098416349d39768c46e9003d1eda643e152981",
+          "created_at": "2026-02-27T07:31:52+00:00",
+          "synced_at": "2026-02-27T07:31:52+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:15.9",
+          "source": "docker.io/freelabspace/postgresql-postgis:15.9",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "14.22",
+          "digest": "sha256:72572e991f5b3776fc066c5006312e86c668cea416f20bce4b7e7ddd79b73654",
+          "created_at": "2026-02-27T07:31:50+00:00",
+          "synced_at": "2026-02-27T07:31:50+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:14.22",
+          "source": "docker.io/freelabspace/postgresql-postgis:14.22",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "14.21",
+          "digest": "sha256:bf60dc422f509be7d8214cdbc7b8d8cf8d119a29737500a616c5bf01dc912ea8",
+          "created_at": "2026-02-27T07:31:37+00:00",
+          "synced_at": "2026-02-27T07:31:37+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:14.21",
+          "source": "docker.io/freelabspace/postgresql-postgis:14.21",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "14.20",
+          "digest": "sha256:870a63a3c2f91f21f49291ec9f0217d3ee2d99f54bcffb333419edceae525068",
+          "created_at": "2026-02-27T07:31:39+00:00",
+          "synced_at": "2026-02-27T07:31:39+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:14.20",
+          "source": "docker.io/freelabspace/postgresql-postgis:14.20",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "14.19",
+          "digest": "sha256:b209affe77bad3ee9cd00d771fbef16a9f2d2e629b496634d231f9898e8e7318",
+          "created_at": "2026-02-27T07:31:24+00:00",
+          "synced_at": "2026-02-27T07:31:24+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:14.19",
+          "source": "docker.io/freelabspace/postgresql-postgis:14.19",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "14.18",
+          "digest": "sha256:080db1ed0bd9eb587ac14ff2dbfed40caed5f52995ce886ae6a9713eab841330",
+          "created_at": "2026-02-27T07:31:24+00:00",
+          "synced_at": "2026-02-27T07:31:24+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:14.18",
+          "source": "docker.io/freelabspace/postgresql-postgis:14.18",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "14.9",
+          "digest": "sha256:09c7de6a0137681598d3d34eaaa3400233d4e1d82e60335c74c80b735a403073",
+          "created_at": "2026-02-27T07:31:14+00:00",
+          "synced_at": "2026-02-27T07:31:14+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:14.9",
+          "source": "docker.io/freelabspace/postgresql-postgis:14.9",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "13.23",
+          "digest": "sha256:4ceecbcfe8371122b5d2b3d68aeef9f96b0e1036967440b035737c353772e5eb",
+          "created_at": "2026-02-27T07:31:12+00:00",
+          "synced_at": "2026-02-27T07:31:12+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:13.23",
+          "source": "docker.io/freelabspace/postgresql-postgis:13.23",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "13.22",
+          "digest": "sha256:eddfb39f11237c251fe2d889307c1c0c7c7d9e4f452408a1245f73a616d91757",
+          "created_at": "2026-02-27T07:31:01+00:00",
+          "synced_at": "2026-02-27T07:31:01+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:13.22",
+          "source": "docker.io/freelabspace/postgresql-postgis:13.22",
+          "size": "856 MB",
+          "layers": 15
+        },
+        {
+          "version": "13.21",
+          "digest": "sha256:5b92c31063e16a8027e337a15203b61f3ae5ada91015199b3e66fd775dd9a231",
+          "created_at": "2026-02-27T07:30:37+00:00",
+          "synced_at": "2026-02-27T07:30:37+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-postgis:13.21",
+          "source": "docker.io/freelabspace/postgresql-postgis:13.21",
+          "size": "856 MB",
+          "layers": 15
+        }
+      ]
+    },
+    {
+      "name": "freelabspace/postgresql-backup",
+      "description": "PostgreSQL 备份工具",
+      "repository": "docker-io/freelabspace/postgresql-backup",
+      "total_versions": 1,
+      "latest_version": "latest",
+      "updated": "2026-02-27T07:33:49+00:00",
+      "size": "45 MB",
+      "layers": 5,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "latest",
+          "digest": "sha256:bc6ece5e1c32c9916886517f9143c123dc92946986009ee159db4e96dddd8d17",
+          "created_at": "2026-02-27T07:33:49+00:00",
+          "synced_at": "2026-02-27T07:33:49+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/freelabspace/postgresql-backup:latest",
+          "source": "docker.io/freelabspace/postgresql-backup:latest",
+          "size": "45 MB",
+          "layers": 5
+        }
+      ]
+    },
     {
       "name": "ghcr.io/freemankevin/network-tools",
       "description": "容器化环境的网络测试工具，包含 curl、wget、ping、nslookup、dig、telnet、nc、tcpdump 等常用网络诊断工具",
@@ -29,6 +542,546 @@
           "source": "ghcr.io/freemankevin/network-tools:latest",
           "size": "45 MB",
           "layers": 4
+        }
+      ]
+    },
+    {
+      "name": "gcr.io/kubeflow-images-public/katib/v1beta1/katib-controller",
+      "description": "Katib - Kubernetes Native AutoML",
+      "repository": "gcr-io/kubeflow-images-public/katib/v1beta1/katib-controller",
+      "total_versions": 1,
+      "latest_version": "v0.9.0",
+      "updated": "2026-02-27T07:33:44+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "v0.9.0",
+          "digest": "sha256:ef38886e952d5bc7198b327d6e053a67be284efe0c71413bcb0f6f2f3ebb2dac",
+          "created_at": "2026-02-27T07:33:44+00:00",
+          "synced_at": "2026-02-27T07:33:44+00:00",
+          "target": "ghcr.io/freemankevin/gcr-io/kubeflow-images-public/katib/v1beta1/katib-controller:v0.9.0",
+          "source": "gcr.io/kubeflow-images-public/katib/v1beta1/katib-controller:v0.9.0",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "gcr.io/kubeflow-images-public/katib/v1beta1/katib-db-manager",
+      "description": "Katib DB Manager",
+      "repository": "gcr-io/kubeflow-images-public/katib/v1beta1/katib-db-manager",
+      "total_versions": 1,
+      "latest_version": "v0.9.0",
+      "updated": "2026-02-27T07:33:48+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "v0.9.0",
+          "digest": "sha256:94145cd78d201cce8a267e81386041be3ec2263ba8d020f4803d87e2a933c4da",
+          "created_at": "2026-02-27T07:33:48+00:00",
+          "synced_at": "2026-02-27T07:33:48+00:00",
+          "target": "ghcr.io/freemankevin/gcr-io/kubeflow-images-public/katib/v1beta1/katib-db-manager:v0.9.0",
+          "source": "gcr.io/kubeflow-images-public/katib/v1beta1/katib-db-manager:v0.9.0",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "gcr.io/kubeflow-images-public/katib/v1beta1/katib-ui",
+      "description": "Katib Web UI",
+      "repository": "gcr-io/kubeflow-images-public/katib/v1beta1/katib-ui",
+      "total_versions": 1,
+      "latest_version": "v0.9.0",
+      "updated": "2026-02-27T07:33:53+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "v0.9.0",
+          "digest": "sha256:5460ab91cc696e9a856ad60b3f1b03a8b8ec29284f7603572a228b109cb9b298",
+          "created_at": "2026-02-27T07:33:53+00:00",
+          "synced_at": "2026-02-27T07:33:53+00:00",
+          "target": "ghcr.io/freemankevin/gcr-io/kubeflow-images-public/katib/v1beta1/katib-ui:v0.9.0",
+          "source": "gcr.io/kubeflow-images-public/katib/v1beta1/katib-ui:v0.9.0",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "gcr.io/google-samples/hello-app",
+      "description": "Google Sample - Hello App",
+      "repository": "gcr-io/google-samples/hello-app",
+      "total_versions": 1,
+      "latest_version": "2.0",
+      "updated": "2026-02-27T07:33:56+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "2.0",
+          "digest": "sha256:354693bb6163212a5678078a6859caf2e29e9589d2b60142b171494bcc692b0b",
+          "created_at": "2026-02-27T07:33:56+00:00",
+          "synced_at": "2026-02-27T07:33:56+00:00",
+          "target": "ghcr.io/freemankevin/gcr-io/google-samples/hello-app:2.0",
+          "source": "gcr.io/google-samples/hello-app:2.0",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "gcr.io/google-containers/busybox",
+      "description": "Google Busybox",
+      "repository": "gcr-io/google-containers/busybox",
+      "total_versions": 1,
+      "latest_version": "1.27",
+      "updated": "2026-02-27T07:33:55+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "1.27",
+          "digest": "sha256:545e6a6310a27636260920bc07b994a299b6708a1b26910cfefd335fdfb60d2b",
+          "created_at": "2026-02-27T07:33:55+00:00",
+          "synced_at": "2026-02-27T07:33:55+00:00",
+          "target": "ghcr.io/freemankevin/gcr-io/google-containers/busybox:1.27",
+          "source": "gcr.io/google-containers/busybox:1.27",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "gcr.io/istio-release/pilot",
+      "description": "Istio Pilot",
+      "repository": "gcr-io/istio-release/pilot",
+      "total_versions": 1,
+      "latest_version": "1.29.0",
+      "updated": "2026-02-27T07:34:02+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "1.29.0",
+          "digest": "sha256:32515653577393f5e6375ccc1350a0cf0aabdd733f8fe9265bb51003a10be26f",
+          "created_at": "2026-02-27T07:34:02+00:00",
+          "synced_at": "2026-02-27T07:34:02+00:00",
+          "target": "ghcr.io/freemankevin/gcr-io/istio-release/pilot:1.29.0",
+          "source": "gcr.io/istio-release/pilot:1.29.0",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "gcr.io/istio-release/proxyv2",
+      "description": "Istio Proxy",
+      "repository": "gcr-io/istio-release/proxyv2",
+      "total_versions": 1,
+      "latest_version": "1.29.0",
+      "updated": "2026-02-27T07:34:05+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "1.29.0",
+          "digest": "sha256:2d0090762c124e23294c4a3de023d98c7350d924ef0e37b14e80f6c8a755224f",
+          "created_at": "2026-02-27T07:34:05+00:00",
+          "synced_at": "2026-02-27T07:34:05+00:00",
+          "target": "ghcr.io/freemankevin/gcr-io/istio-release/proxyv2:1.29.0",
+          "source": "gcr.io/istio-release/proxyv2:1.29.0",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "gcr.io/google-containers/pause",
+      "description": "Kubernetes Pause Container",
+      "repository": "gcr-io/google-containers/pause",
+      "total_versions": 1,
+      "latest_version": "3.2",
+      "updated": "2026-02-27T07:34:08+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "3.2",
+          "digest": "sha256:927d98197ec1141a368550822d18fa1c60bdae27b78b0c004f705f548c07814f",
+          "created_at": "2026-02-27T07:34:08+00:00",
+          "synced_at": "2026-02-27T07:34:08+00:00",
+          "target": "ghcr.io/freemankevin/gcr-io/google-containers/pause:3.2",
+          "source": "gcr.io/google-containers/pause:3.2",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "gcr.io/google-containers/etcd",
+      "description": "etcd - Distributed Key-Value Store",
+      "repository": "gcr-io/google-containers/etcd",
+      "total_versions": 1,
+      "latest_version": "3.4.9",
+      "updated": "2026-02-27T07:34:23+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "3.4.9",
+          "digest": "sha256:735f090b15d5efc576da1602d8c678bf39a7605c0718ed915daec8f2297db2ff",
+          "created_at": "2026-02-27T07:34:23+00:00",
+          "synced_at": "2026-02-27T07:34:23+00:00",
+          "target": "ghcr.io/freemankevin/gcr-io/google-containers/etcd:3.4.9",
+          "source": "gcr.io/google-containers/etcd:3.4.9",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "quay.io/openshift/origin-cli",
+      "description": "OpenShift CLI",
+      "repository": "quay-io/openshift/origin-cli",
+      "total_versions": 1,
+      "latest_version": "4.22",
+      "updated": "2026-02-27T07:34:14+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "4.22",
+          "digest": "sha256:d13e3961173e4acfbfd8e715a45af8af3a5bc4f7f32b6a0897062048c535fef3",
+          "created_at": "2026-02-27T07:34:14+00:00",
+          "synced_at": "2026-02-27T07:34:14+00:00",
+          "target": "ghcr.io/freemankevin/quay-io/openshift/origin-cli:4.22",
+          "source": "quay.io/openshift/origin-cli:4.22",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "quay.io/openshift/origin-docker-builder",
+      "description": "OpenShift Docker Builder",
+      "repository": "quay-io/openshift/origin-docker-builder",
+      "total_versions": 1,
+      "latest_version": "4.22",
+      "updated": "2026-02-27T07:34:21+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "4.22",
+          "digest": "sha256:2ea704051783fb7c93da116881caad4b49134548f1e1cf2b474a79c18bd01839",
+          "created_at": "2026-02-27T07:34:21+00:00",
+          "synced_at": "2026-02-27T07:34:21+00:00",
+          "target": "ghcr.io/freemankevin/quay-io/openshift/origin-docker-builder:4.22",
+          "source": "quay.io/openshift/origin-docker-builder:4.22",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "quay.io/podman/stable",
+      "description": "Podman Stable",
+      "repository": "quay-io/podman/stable",
+      "total_versions": 1,
+      "latest_version": "v5.7",
+      "updated": "2026-02-27T07:34:41+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "v5.7",
+          "digest": "sha256:d28de958fc0c6d3bb1934f5c7ee74009241ac5a7e07b9bf6ac84054ff8c9c535",
+          "created_at": "2026-02-27T07:34:41+00:00",
+          "synced_at": "2026-02-27T07:34:41+00:00",
+          "target": "ghcr.io/freemankevin/quay-io/podman/stable:v5.7",
+          "source": "quay.io/podman/stable:v5.7",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "quay.io/buildah/stable",
+      "description": "Buildah Stable",
+      "repository": "quay-io/buildah/stable",
+      "total_versions": 1,
+      "latest_version": "v1.42",
+      "updated": "2026-02-27T07:34:43+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "v1.42",
+          "digest": "sha256:1bdcc5e1fad9156f24c4f6db930aa2527dc5b52875f815175134cae7e1b6af74",
+          "created_at": "2026-02-27T07:34:43+00:00",
+          "synced_at": "2026-02-27T07:34:43+00:00",
+          "target": "ghcr.io/freemankevin/quay-io/buildah/stable:v1.42",
+          "source": "quay.io/buildah/stable:v1.42",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "quay.io/skopeo/stable",
+      "description": "Skopeo - Container Image Management",
+      "repository": "quay-io/skopeo/stable",
+      "total_versions": 1,
+      "latest_version": "v1.21",
+      "updated": "2026-02-27T07:34:52+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "v1.21",
+          "digest": "sha256:1093c179d1a21ec02b8cc393f96bab6a4afeae50ac5db81f755f931fd2877722",
+          "created_at": "2026-02-27T07:34:52+00:00",
+          "synced_at": "2026-02-27T07:34:52+00:00",
+          "target": "ghcr.io/freemankevin/quay-io/skopeo/stable:v1.21",
+          "source": "quay.io/skopeo/stable:v1.21",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "quay.io/prometheus-operator/prometheus-operator",
+      "description": "Prometheus Operator",
+      "repository": "quay-io/prometheus-operator/prometheus-operator",
+      "total_versions": 1,
+      "latest_version": "v0.89.0",
+      "updated": "2026-02-27T07:34:52+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "v0.89.0",
+          "digest": "sha256:fea93ca9be807eee2f51f4d997b7a2bf073d4051d9012b45b3c84a7b9e8b3f25",
+          "created_at": "2026-02-27T07:34:52+00:00",
+          "synced_at": "2026-02-27T07:34:52+00:00",
+          "target": "ghcr.io/freemankevin/quay-io/prometheus-operator/prometheus-operator:v0.89.0",
+          "source": "quay.io/prometheus-operator/prometheus-operator:v0.89.0",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "quay.io/prometheus/prometheus",
+      "description": "Prometheus Monitoring",
+      "repository": "quay-io/prometheus/prometheus",
+      "total_versions": 1,
+      "latest_version": "v3.10.0",
+      "updated": "2026-02-27T07:35:15+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "v3.10.0",
+          "digest": "sha256:7571a304e67fbd794be02422b13627dc7de822152f74e99e2bef95d29eceecde",
+          "created_at": "2026-02-27T07:35:15+00:00",
+          "synced_at": "2026-02-27T07:35:15+00:00",
+          "target": "ghcr.io/freemankevin/quay-io/prometheus/prometheus:v3.10.0",
+          "source": "quay.io/prometheus/prometheus:v3.10.0",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "quay.io/keycloak/keycloak",
+      "description": "Keycloak - Identity and Access Management",
+      "repository": "quay-io/keycloak/keycloak",
+      "total_versions": 1,
+      "latest_version": "26.5",
+      "updated": "2026-02-27T07:35:08+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "26.5",
+          "digest": "sha256:ae8efb0d218d8921334b03a2dbee7069a0b868240691c50a3ffc9f42fabba8b4",
+          "created_at": "2026-02-27T07:35:08+00:00",
+          "synced_at": "2026-02-27T07:35:08+00:00",
+          "target": "ghcr.io/freemankevin/quay-io/keycloak/keycloak:26.5",
+          "source": "quay.io/keycloak/keycloak:26.5",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "quay.io/jetstack/cert-manager-controller",
+      "description": "cert-manager - Kubernetes Certificate Management",
+      "repository": "quay-io/jetstack/cert-manager-controller",
+      "total_versions": 1,
+      "latest_version": "v1.19.4",
+      "updated": "2026-02-27T07:35:23+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "v1.19.4",
+          "digest": "sha256:9cad8065bbf57815cbcfa813b903dd8822bcd0271f7443192082b54e96a55585",
+          "created_at": "2026-02-27T07:35:23+00:00",
+          "synced_at": "2026-02-27T07:35:23+00:00",
+          "target": "ghcr.io/freemankevin/quay-io/jetstack/cert-manager-controller:v1.19.4",
+          "source": "quay.io/jetstack/cert-manager-controller:v1.19.4",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "quay.io/jetstack/cert-manager-webhook",
+      "description": "cert-manager Webhook",
+      "repository": "quay-io/jetstack/cert-manager-webhook",
+      "total_versions": 1,
+      "latest_version": "v1.19.4",
+      "updated": "2026-02-27T07:35:30+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "v1.19.4",
+          "digest": "sha256:f41b4ac798c8ff200c29756cf86e70a00e73fe489fb6ab80d9210d1b5f476852",
+          "created_at": "2026-02-27T07:35:30+00:00",
+          "synced_at": "2026-02-27T07:35:30+00:00",
+          "target": "ghcr.io/freemankevin/quay-io/jetstack/cert-manager-webhook:v1.19.4",
+          "source": "quay.io/jetstack/cert-manager-webhook:v1.19.4",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "quay.io/thanos/thanos",
+      "description": "Thanos - Highly Available Prometheus",
+      "repository": "quay-io/thanos/thanos",
+      "total_versions": 1,
+      "latest_version": "v0.41.0",
+      "updated": "2026-02-27T07:35:34+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "v0.41.0",
+          "digest": "sha256:cf3e9b292e4302ad4a4955b56379703aea39516607d382a57604a3d003c35d10",
+          "created_at": "2026-02-27T07:35:34+00:00",
+          "synced_at": "2026-02-27T07:35:34+00:00",
+          "target": "ghcr.io/freemankevin/quay-io/thanos/thanos:v0.41.0",
+          "source": "quay.io/thanos/thanos:v0.41.0",
+          "size": "256 MB",
+          "layers": 8
         }
       ]
     }
