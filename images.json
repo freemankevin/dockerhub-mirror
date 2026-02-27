@@ -7,7 +7,7 @@
   "images": [
     {
       "name": "library/elasticsearch",
-      "description": "Elasticsearch 搜索引擎和分析引擎",
+      "description": "Distributed, RESTful search and analytics engine",
       "repository": "docker-io/library/elasticsearch",
       "total_versions": 1,
       "latest_version": "9.3.1",
@@ -34,7 +34,7 @@
     },
     {
       "name": "derklaro/minio",
-      "description": "MinIO 高性能对象存储",
+      "description": "High-performance object storage for AI and cloud-native workloads",
       "repository": "docker-io/derklaro/minio",
       "total_versions": 1,
       "latest_version": "RELEASE.2025-10-15T17-29-55Z",
@@ -61,7 +61,7 @@
     },
     {
       "name": "nacos/nacos-server",
-      "description": "Nacos 服务发现和配置中心",
+      "description": "Dynamic service discovery, configuration and service management",
       "repository": "docker-io/nacos/nacos-server",
       "total_versions": 1,
       "latest_version": "v3.1.1",
@@ -88,7 +88,7 @@
     },
     {
       "name": "library/nginx",
-      "description": "Nginx 高性能 Web 服务器",
+      "description": "High-performance HTTP server and reverse proxy",
       "repository": "docker-io/library/nginx",
       "total_versions": 1,
       "latest_version": "1.29.5-alpine",
@@ -115,7 +115,7 @@
     },
     {
       "name": "library/rabbitmq",
-      "description": "RabbitMQ 消息队列管理",
+      "description": "Message broker with management plugin",
       "repository": "docker-io/library/rabbitmq",
       "total_versions": 1,
       "latest_version": "4.2.4-management-alpine",
@@ -142,7 +142,7 @@
     },
     {
       "name": "library/redis",
-      "description": "Redis 内存数据库",
+      "description": "In-memory data structure store",
       "repository": "docker-io/library/redis",
       "total_versions": 1,
       "latest_version": "8.6.1",
@@ -169,7 +169,7 @@
     },
     {
       "name": "kartoza/geoserver",
-      "description": "GeoServer 地理信息服务",
+      "description": "Open-source geospatial data server",
       "repository": "docker-io/kartoza/geoserver",
       "total_versions": 1,
       "latest_version": "2.28.2",
@@ -196,7 +196,7 @@
     },
     {
       "name": "freelabspace/postgresql-postgis",
-      "description": "PostgreSQL 数据库 + PostGIS 扩展",
+      "description": "PostgreSQL database with PostGIS spatial extension",
       "repository": "docker-io/freelabspace/postgresql-postgis",
       "total_versions": 28,
       "latest_version": "18.3",
@@ -493,7 +493,7 @@
     },
     {
       "name": "freelabspace/postgresql-backup",
-      "description": "PostgreSQL 备份工具",
+      "description": "Backup utility for PostgreSQL databases",
       "repository": "docker-io/freelabspace/postgresql-backup",
       "total_versions": 1,
       "latest_version": "latest",
@@ -520,7 +520,7 @@
     },
     {
       "name": "ghcr.io/freemankevin/network-tools",
-      "description": "容器化环境的网络测试工具，包含 curl、wget、ping、nslookup、dig、telnet、nc、tcpdump 等常用网络诊断工具",
+      "description": "Network diagnostic tools for containerized environments including curl, wget, ping, nslookup, dig, telnet, nc, tcpdump",
       "repository": "network-tools",
       "total_versions": 1,
       "latest_version": "latest",
@@ -547,7 +547,7 @@
     },
     {
       "name": "gcr.io/kubeflow-images-public/katib/v1beta1/katib-controller",
-      "description": "Katib - Kubernetes Native AutoML",
+      "description": "Kubernetes native AutoML controller",
       "repository": "gcr-io/kubeflow-images-public/katib/v1beta1/katib-controller",
       "total_versions": 1,
       "latest_version": "v0.9.0",
@@ -574,7 +574,7 @@
     },
     {
       "name": "gcr.io/kubeflow-images-public/katib/v1beta1/katib-db-manager",
-      "description": "Katib DB Manager",
+      "description": "Database manager for Katib experiments",
       "repository": "gcr-io/kubeflow-images-public/katib/v1beta1/katib-db-manager",
       "total_versions": 1,
       "latest_version": "v0.9.0",
@@ -601,7 +601,7 @@
     },
     {
       "name": "gcr.io/kubeflow-images-public/katib/v1beta1/katib-ui",
-      "description": "Katib Web UI",
+      "description": "Web user interface for Katib",
       "repository": "gcr-io/kubeflow-images-public/katib/v1beta1/katib-ui",
       "total_versions": 1,
       "latest_version": "v0.9.0",
@@ -628,7 +628,7 @@
     },
     {
       "name": "gcr.io/google-samples/hello-app",
-      "description": "Google Sample - Hello App",
+      "description": "Sample Hello World application",
       "repository": "gcr-io/google-samples/hello-app",
       "total_versions": 1,
       "latest_version": "2.0",
@@ -655,7 +655,7 @@
     },
     {
       "name": "gcr.io/google-containers/busybox",
-      "description": "Google Busybox",
+      "description": "BusyBox - The Swiss Army Knife of embedded Linux",
       "repository": "gcr-io/google-containers/busybox",
       "total_versions": 1,
       "latest_version": "1.27",
@@ -682,7 +682,7 @@
     },
     {
       "name": "gcr.io/istio-release/pilot",
-      "description": "Istio Pilot",
+      "description": "Service mesh traffic management and configuration",
       "repository": "gcr-io/istio-release/pilot",
       "total_versions": 1,
       "latest_version": "1.29.0",
@@ -709,7 +709,7 @@
     },
     {
       "name": "gcr.io/istio-release/proxyv2",
-      "description": "Istio Proxy",
+      "description": "Service mesh sidecar proxy",
       "repository": "gcr-io/istio-release/proxyv2",
       "total_versions": 1,
       "latest_version": "1.29.0",
@@ -736,7 +736,7 @@
     },
     {
       "name": "gcr.io/google-containers/pause",
-      "description": "Kubernetes Pause Container",
+      "description": "Kubernetes infrastructure pause container",
       "repository": "gcr-io/google-containers/pause",
       "total_versions": 1,
       "latest_version": "3.2",
@@ -763,7 +763,7 @@
     },
     {
       "name": "gcr.io/google-containers/etcd",
-      "description": "etcd - Distributed Key-Value Store",
+      "description": "Distributed reliable key-value store",
       "repository": "gcr-io/google-containers/etcd",
       "total_versions": 1,
       "latest_version": "3.4.9",
@@ -790,7 +790,7 @@
     },
     {
       "name": "quay.io/openshift/origin-cli",
-      "description": "OpenShift CLI",
+      "description": "OpenShift command-line interface",
       "repository": "quay-io/openshift/origin-cli",
       "total_versions": 1,
       "latest_version": "4.22",
@@ -817,7 +817,7 @@
     },
     {
       "name": "quay.io/openshift/origin-docker-builder",
-      "description": "OpenShift Docker Builder",
+      "description": "OpenShift Docker build strategy implementation",
       "repository": "quay-io/openshift/origin-docker-builder",
       "total_versions": 1,
       "latest_version": "4.22",
@@ -844,7 +844,7 @@
     },
     {
       "name": "quay.io/podman/stable",
-      "description": "Podman Stable",
+      "description": "Container management tool without daemon",
       "repository": "quay-io/podman/stable",
       "total_versions": 1,
       "latest_version": "v5.7",
@@ -871,7 +871,7 @@
     },
     {
       "name": "quay.io/buildah/stable",
-      "description": "Buildah Stable",
+      "description": "OCI container image building tool",
       "repository": "quay-io/buildah/stable",
       "total_versions": 1,
       "latest_version": "v1.42",
@@ -898,7 +898,7 @@
     },
     {
       "name": "quay.io/skopeo/stable",
-      "description": "Skopeo - Container Image Management",
+      "description": "Container image inspection and transfer tool",
       "repository": "quay-io/skopeo/stable",
       "total_versions": 1,
       "latest_version": "v1.21",
@@ -925,7 +925,7 @@
     },
     {
       "name": "quay.io/prometheus-operator/prometheus-operator",
-      "description": "Prometheus Operator",
+      "description": "Kubernetes operator for Prometheus monitoring",
       "repository": "quay-io/prometheus-operator/prometheus-operator",
       "total_versions": 1,
       "latest_version": "v0.89.0",
@@ -952,7 +952,7 @@
     },
     {
       "name": "quay.io/prometheus/prometheus",
-      "description": "Prometheus Monitoring",
+      "description": "Systems and service monitoring system",
       "repository": "quay-io/prometheus/prometheus",
       "total_versions": 1,
       "latest_version": "v3.10.0",
@@ -979,7 +979,7 @@
     },
     {
       "name": "quay.io/keycloak/keycloak",
-      "description": "Keycloak - Identity and Access Management",
+      "description": "Identity and access management solution",
       "repository": "quay-io/keycloak/keycloak",
       "total_versions": 1,
       "latest_version": "26.5",
@@ -1006,7 +1006,7 @@
     },
     {
       "name": "quay.io/jetstack/cert-manager-controller",
-      "description": "cert-manager - Kubernetes Certificate Management",
+      "description": "Kubernetes certificate management controller",
       "repository": "quay-io/jetstack/cert-manager-controller",
       "total_versions": 1,
       "latest_version": "v1.19.4",
@@ -1033,7 +1033,7 @@
     },
     {
       "name": "quay.io/jetstack/cert-manager-webhook",
-      "description": "cert-manager Webhook",
+      "description": "Admission webhook for cert-manager",
       "repository": "quay-io/jetstack/cert-manager-webhook",
       "total_versions": 1,
       "latest_version": "v1.19.4",
@@ -1060,7 +1060,7 @@
     },
     {
       "name": "quay.io/thanos/thanos",
-      "description": "Thanos - Highly Available Prometheus",
+      "description": "Highly available Prometheus setup with long-term storage",
       "repository": "quay-io/thanos/thanos",
       "total_versions": 1,
       "latest_version": "v0.41.0",
