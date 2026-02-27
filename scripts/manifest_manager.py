@@ -156,7 +156,8 @@ class ManifestManager:
                     parts = item['image_name'].replace('ghcr.io/', '').split('/')
                     if len(parts) >= 2:
                         owner = parts[0]
-                        repo = '/'.join(parts[1:]).replace('/', '__')
+                        # GitHub API 使用带斜杠的包名路径
+                        repo = '/'.join(parts[1:])
                         
                         # 从 GHCR 获取标签
                         tags = ghcr_api.get_repository_tags(owner, repo)

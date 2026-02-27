@@ -298,16 +298,15 @@ def generate_images_json(
             # 使用新的命名规则转换为 GHCR 路径
             # 示例: docker.io/library/elasticsearch -> docker-io/library/elasticsearch
             ghcr_path = convert_to_ghcr_path(image_name)
-            # GHCR API 需要使用双下划线分隔的路径（因为 GHCR 的包名不支持斜杠）
-            repo_name = ghcr_path.replace('/', '__')
             
             # 获取 GHCR 中的所有标签信息
-            print(f"\n🔍 获取 {owner}/{repo_name} 的所有标签...")
+            # GitHub API 使用带斜杠的包名路径（不是双下划线）
+            print(f"\n🔍 获取 {owner}/{ghcr_path} 的所有标签...")
             logger.debug(f"完整镜像路径: {registry}/{owner}/{ghcr_path}")
             logger.debug(f"原始源: {source}")
             logger.debug(f"标签匹配模式: {tag_pattern}")
             logger.debug(f"排除模式: {exclude_pattern}")
-            tags = ghcr_api.get_repository_tags(owner, repo_name)
+            tags = ghcr_api.get_repository_tags(owner, ghcr_path)
             
             if tags:
                 logger.debug(f"找到 {len(tags)} 个标签")
@@ -364,7 +363,7 @@ def generate_images_json(
                 print(f"   📌 最新版本: {versions[0]['version'] if versions else 'N/A'}")
             else:
                 print(f"   ⚠️  未找到任何标签")
-                logger.warning(f"仓库 {owner}/{repo_name} 可能不存在或需要认证")
+                logger.warning(f"仓库 {owner}/{ghcr_path} 可能不存在或需要认证")
     
     # 生成输出数据
     output_data = {
