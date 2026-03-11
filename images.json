@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-03-10T03:54:28.154801+00:00",
+  "updated_at": "2026-03-11T03:55:15.424153+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 30,
-  "total_versions": 60,
+  "total_versions": 65,
   "images": [
     {
       "name": "library/elasticsearch",
@@ -90,9 +90,9 @@
       "name": "library/nginx",
       "description": "High-performance HTTP server and reverse proxy",
       "repository": "docker-io/library/nginx",
-      "total_versions": 1,
-      "latest_version": "1.29.5-alpine",
-      "updated": "2026-02-27T07:29:42+00:00",
+      "total_versions": 2,
+      "latest_version": "1.29.6-alpine",
+      "updated": "2026-03-11T03:53:27+00:00",
       "size": "67 MB",
       "layers": 7,
       "stars": 0,
@@ -101,6 +101,16 @@
         "ARM64"
       ],
       "versions": [
+        {
+          "version": "1.29.6-alpine",
+          "digest": "sha256:9a4a85e7006ced27ca077d759ffed671b8a094856703b0af15e2c28902800b1d",
+          "created_at": "2026-03-11T03:53:27+00:00",
+          "synced_at": "2026-03-11T03:53:27+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/library/nginx:1.29.6-alpine",
+          "source": "docker.io/library/nginx:1.29.6-alpine",
+          "size": "67 MB",
+          "layers": 7
+        },
         {
           "version": "1.29.5-alpine",
           "digest": "sha256:1d13701a5f9f3fb01aaa88cef2344d65b6b5bf6b7d9fa4cf0dca557a8d7702ba",
@@ -119,7 +129,7 @@
       "repository": "docker-io/library/rabbitmq",
       "total_versions": 1,
       "latest_version": "4.2.4-management-alpine",
-      "updated": "2026-03-10T03:53:02+00:00",
+      "updated": "2026-03-11T03:53:19+00:00",
       "size": "215 MB",
       "layers": 9,
       "stars": 0,
@@ -130,9 +140,9 @@
       "versions": [
         {
           "version": "4.2.4-management-alpine",
-          "digest": "sha256:bbf30d6c3602243fd847a8883745026cdea9eb071fd5b9f2213e1317a40e5a3e",
-          "created_at": "2026-03-10T03:53:02+00:00",
-          "synced_at": "2026-03-10T03:53:02+00:00",
+          "digest": "sha256:b764cbcd674d323a13eb5e1fb8e7e9025f31055cb444dd7a74d96e5981606731",
+          "created_at": "2026-03-11T03:53:19+00:00",
+          "synced_at": "2026-03-11T03:53:19+00:00",
           "target": "ghcr.io/freemankevin/docker-io/library/rabbitmq:4.2.4-management-alpine",
           "source": "docker.io/library/rabbitmq:4.2.4-management-alpine",
           "size": "215 MB",
@@ -684,9 +694,9 @@
       "name": "gcr.io/istio-release/pilot",
       "description": "Service mesh traffic management and configuration",
       "repository": "gcr-io/istio-release/pilot",
-      "total_versions": 1,
-      "latest_version": "1.29.0",
-      "updated": "2026-02-27T07:34:02+00:00",
+      "total_versions": 2,
+      "latest_version": "1.29.1",
+      "updated": "2026-03-11T03:53:59+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -695,6 +705,16 @@
         "ARM64"
       ],
       "versions": [
+        {
+          "version": "1.29.1",
+          "digest": "sha256:f8b0e412ac4affab035425a51c534d50fb8044f7e112c81d436cf547228526f2",
+          "created_at": "2026-03-11T03:53:59+00:00",
+          "synced_at": "2026-03-11T03:53:59+00:00",
+          "target": "ghcr.io/freemankevin/gcr-io/istio-release/pilot:1.29.1",
+          "source": "gcr.io/istio-release/pilot:1.29.1",
+          "size": "256 MB",
+          "layers": 8
+        },
         {
           "version": "1.29.0",
           "digest": "sha256:32515653577393f5e6375ccc1350a0cf0aabdd733f8fe9265bb51003a10be26f",
@@ -711,9 +731,9 @@
       "name": "gcr.io/istio-release/proxyv2",
       "description": "Service mesh sidecar proxy",
       "repository": "gcr-io/istio-release/proxyv2",
-      "total_versions": 1,
-      "latest_version": "1.29.0",
-      "updated": "2026-02-27T07:34:05+00:00",
+      "total_versions": 2,
+      "latest_version": "1.29.1",
+      "updated": "2026-03-11T03:54:01+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -722,6 +742,16 @@
         "ARM64"
       ],
       "versions": [
+        {
+          "version": "1.29.1",
+          "digest": "sha256:af6e9eb76266df63c897a93db0e14fd6002080a0586b101ce9531b3f901591dc",
+          "created_at": "2026-03-11T03:54:01+00:00",
+          "synced_at": "2026-03-11T03:54:01+00:00",
+          "target": "ghcr.io/freemankevin/gcr-io/istio-release/proxyv2:1.29.1",
+          "source": "gcr.io/istio-release/proxyv2:1.29.1",
+          "size": "256 MB",
+          "layers": 8
+        },
         {
           "version": "1.29.0",
           "digest": "sha256:2d0090762c124e23294c4a3de023d98c7350d924ef0e37b14e80f6c8a755224f",
@@ -794,7 +824,7 @@
       "repository": "quay-io/openshift/origin-cli",
       "total_versions": 1,
       "latest_version": "4.22",
-      "updated": "2026-03-05T03:57:27+00:00",
+      "updated": "2026-03-11T03:54:13+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -805,9 +835,9 @@
       "versions": [
         {
           "version": "4.22",
-          "digest": "sha256:9353674c586986392c0251708349b0b7bf6a3318715628f5859cbb7d03f8eb96",
-          "created_at": "2026-03-05T03:57:27+00:00",
-          "synced_at": "2026-03-05T03:57:27+00:00",
+          "digest": "sha256:7dfe58f9b100e5153877d4bf673708550e739b3824e0876f2a4dccea1be38e61",
+          "created_at": "2026-03-11T03:54:13+00:00",
+          "synced_at": "2026-03-11T03:54:13+00:00",
           "target": "ghcr.io/freemankevin/quay-io/openshift/origin-cli:4.22",
           "source": "quay.io/openshift/origin-cli:4.22",
           "size": "256 MB",
@@ -848,7 +878,7 @@
       "repository": "quay-io/podman/stable",
       "total_versions": 2,
       "latest_version": "v5.8",
-      "updated": "2026-03-10T03:54:05+00:00",
+      "updated": "2026-03-11T03:54:31+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -859,9 +889,9 @@
       "versions": [
         {
           "version": "v5.8",
-          "digest": "sha256:9c288498b89997eb94fae468dc0708e9c3734cfaaa0fbd72afbeecfdd3fa008e",
-          "created_at": "2026-03-10T03:54:05+00:00",
-          "synced_at": "2026-03-10T03:54:05+00:00",
+          "digest": "sha256:18a26d19df53831f9dd52ead584d253c1a19bab74ca45a8d3a9bd9b3f2251cd6",
+          "created_at": "2026-03-11T03:54:31+00:00",
+          "synced_at": "2026-03-11T03:54:31+00:00",
           "target": "ghcr.io/freemankevin/quay-io/podman/stable:v5.8",
           "source": "quay.io/podman/stable:v5.8",
           "size": "256 MB",
@@ -885,7 +915,7 @@
       "repository": "quay-io/buildah/stable",
       "total_versions": 2,
       "latest_version": "v1.43",
-      "updated": "2026-03-10T03:54:09+00:00",
+      "updated": "2026-03-11T03:55:01+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -896,9 +926,9 @@
       "versions": [
         {
           "version": "v1.43",
-          "digest": "sha256:ad8558488354277bc82f8c8d79695bae3822097d06f48c8c4f83b4fca0bc6149",
-          "created_at": "2026-03-10T03:54:09+00:00",
-          "synced_at": "2026-03-10T03:54:09+00:00",
+          "digest": "sha256:b2ec776b7bf67f2200433ebaef02926257b0e3635525aba2deeae9c5abf951ab",
+          "created_at": "2026-03-11T03:55:01+00:00",
+          "synced_at": "2026-03-11T03:55:01+00:00",
           "target": "ghcr.io/freemankevin/quay-io/buildah/stable:v1.43",
           "source": "quay.io/buildah/stable:v1.43",
           "size": "256 MB",
@@ -922,7 +952,7 @@
       "repository": "quay-io/skopeo/stable",
       "total_versions": 2,
       "latest_version": "v1.22",
-      "updated": "2026-03-10T03:54:19+00:00",
+      "updated": "2026-03-11T03:54:51+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -933,9 +963,9 @@
       "versions": [
         {
           "version": "v1.22",
-          "digest": "sha256:1cd50fe91230c90ef3eb10a0e8781d1515db28b10ef021d670b5d32bf8f1086e",
-          "created_at": "2026-03-10T03:54:19+00:00",
-          "synced_at": "2026-03-10T03:54:19+00:00",
+          "digest": "sha256:71aae314cf28b44b7ea060265c80c9dbcb3fde5398c7ecb7e3ecb9d1ee394688",
+          "created_at": "2026-03-11T03:54:51+00:00",
+          "synced_at": "2026-03-11T03:54:51+00:00",
           "target": "ghcr.io/freemankevin/quay-io/skopeo/stable:v1.22",
           "source": "quay.io/skopeo/stable:v1.22",
           "size": "256 MB",
@@ -1038,9 +1068,9 @@
       "name": "quay.io/jetstack/cert-manager-controller",
       "description": "Kubernetes certificate management controller",
       "repository": "quay-io/jetstack/cert-manager-controller",
-      "total_versions": 1,
-      "latest_version": "v1.19.4",
-      "updated": "2026-02-27T07:35:23+00:00",
+      "total_versions": 2,
+      "latest_version": "v1.20.0",
+      "updated": "2026-03-11T03:55:01+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -1049,6 +1079,16 @@
         "ARM64"
       ],
       "versions": [
+        {
+          "version": "v1.20.0",
+          "digest": "sha256:b9009aa6b45b59da1363a26dab15aee7d77c7ce01ac2c1cf05ecd1121462db16",
+          "created_at": "2026-03-11T03:55:01+00:00",
+          "synced_at": "2026-03-11T03:55:01+00:00",
+          "target": "ghcr.io/freemankevin/quay-io/jetstack/cert-manager-controller:v1.20.0",
+          "source": "quay.io/jetstack/cert-manager-controller:v1.20.0",
+          "size": "256 MB",
+          "layers": 8
+        },
         {
           "version": "v1.19.4",
           "digest": "sha256:9cad8065bbf57815cbcfa813b903dd8822bcd0271f7443192082b54e96a55585",
@@ -1065,9 +1105,9 @@
       "name": "quay.io/jetstack/cert-manager-webhook",
       "description": "Admission webhook for cert-manager",
       "repository": "quay-io/jetstack/cert-manager-webhook",
-      "total_versions": 1,
-      "latest_version": "v1.19.4",
-      "updated": "2026-02-27T07:35:30+00:00",
+      "total_versions": 2,
+      "latest_version": "v1.20.0",
+      "updated": "2026-03-11T03:55:09+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -1076,6 +1116,16 @@
         "ARM64"
       ],
       "versions": [
+        {
+          "version": "v1.20.0",
+          "digest": "sha256:2133daae1f08ad54bcfd317f4a19b48e2bba1c490dbf04e74c4666b3d5d6a69b",
+          "created_at": "2026-03-11T03:55:09+00:00",
+          "synced_at": "2026-03-11T03:55:09+00:00",
+          "target": "ghcr.io/freemankevin/quay-io/jetstack/cert-manager-webhook:v1.20.0",
+          "source": "quay.io/jetstack/cert-manager-webhook:v1.20.0",
+          "size": "256 MB",
+          "layers": 8
+        },
         {
           "version": "v1.19.4",
           "digest": "sha256:f41b4ac798c8ff200c29756cf86e70a00e73fe489fb6ab80d9210d1b5f476852",
