@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-03-24T04:03:01.737953+00:00",
+  "updated_at": "2026-03-25T04:05:05.126293+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 30,
-  "total_versions": 68,
+  "total_versions": 70,
   "images": [
     {
       "name": "library/elasticsearch",
@@ -100,9 +100,9 @@
       "name": "library/nginx",
       "description": "High-performance HTTP server and reverse proxy",
       "repository": "docker-io/library/nginx",
-      "total_versions": 2,
-      "latest_version": "1.29.6-alpine",
-      "updated": "2026-03-12T03:58:09+00:00",
+      "total_versions": 3,
+      "latest_version": "1.29.7-alpine",
+      "updated": "2026-03-25T04:03:49+00:00",
       "size": "67 MB",
       "layers": 7,
       "stars": 0,
@@ -111,6 +111,16 @@
         "ARM64"
       ],
       "versions": [
+        {
+          "version": "1.29.7-alpine",
+          "digest": "sha256:e3f5ac6fb2b0ab577300bad4a9df7d4d0632c4baaa7416ac84e56184cfde9f82",
+          "created_at": "2026-03-25T04:03:49+00:00",
+          "synced_at": "2026-03-25T04:03:49+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/library/nginx:1.29.7-alpine",
+          "source": "docker.io/library/nginx:1.29.7-alpine",
+          "size": "67 MB",
+          "layers": 7
+        },
         {
           "version": "1.29.6-alpine",
           "digest": "sha256:f46cb72c7df02710e693e863a983ac42f6a9579058a59a35f1ae36c9958e4ce0",
@@ -139,7 +149,7 @@
       "repository": "docker-io/library/rabbitmq",
       "total_versions": 2,
       "latest_version": "4.2.5-management-alpine",
-      "updated": "2026-03-24T04:01:43+00:00",
+      "updated": "2026-03-25T04:03:39+00:00",
       "size": "215 MB",
       "layers": 9,
       "stars": 0,
@@ -150,9 +160,9 @@
       "versions": [
         {
           "version": "4.2.5-management-alpine",
-          "digest": "sha256:707c2b19f56f16398b8904314f15111c8000d0d91c71a56411a226e985dfe3f2",
-          "created_at": "2026-03-24T04:01:43+00:00",
-          "synced_at": "2026-03-24T04:01:43+00:00",
+          "digest": "sha256:b618738ea52cb6d0073ee9f0412ede133411ecacd7afa40f17be748a6d9a9ee1",
+          "created_at": "2026-03-25T04:03:39+00:00",
+          "synced_at": "2026-03-25T04:03:39+00:00",
           "target": "ghcr.io/freemankevin/docker-io/library/rabbitmq:4.2.5-management-alpine",
           "source": "docker.io/library/rabbitmq:4.2.5-management-alpine",
           "size": "215 MB",
@@ -174,9 +184,9 @@
       "name": "library/redis",
       "description": "In-memory data structure store",
       "repository": "docker-io/library/redis",
-      "total_versions": 1,
-      "latest_version": "8.6.1",
-      "updated": "2026-03-19T04:06:30+00:00",
+      "total_versions": 2,
+      "latest_version": "8.6.2",
+      "updated": "2026-03-25T04:03:55+00:00",
       "size": "138 MB",
       "layers": 6,
       "stars": 0,
@@ -185,6 +195,16 @@
         "ARM64"
       ],
       "versions": [
+        {
+          "version": "8.6.2",
+          "digest": "sha256:009cc37796fbdbe1b631b4cc0582bed167e5e403ed8bcd06f77eb6cb5aeb6f93",
+          "created_at": "2026-03-25T04:03:55+00:00",
+          "synced_at": "2026-03-25T04:03:55+00:00",
+          "target": "ghcr.io/freemankevin/docker-io/library/redis:8.6.2",
+          "source": "docker.io/library/redis:8.6.2",
+          "size": "138 MB",
+          "layers": 6
+        },
         {
           "version": "8.6.1",
           "digest": "sha256:315270d166080f537bbdf1b489b603aaaa213cb55a544acfa51feb7481abb1c0",
@@ -844,7 +864,7 @@
       "repository": "quay-io/openshift/origin-cli",
       "total_versions": 1,
       "latest_version": "4.22",
-      "updated": "2026-03-24T04:02:18+00:00",
+      "updated": "2026-03-25T04:04:20+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -855,9 +875,9 @@
       "versions": [
         {
           "version": "4.22",
-          "digest": "sha256:b8fddcbd04e465df123024403b7a0f76fd4a8742f17357bfb1616d25dc69f770",
-          "created_at": "2026-03-24T04:02:18+00:00",
-          "synced_at": "2026-03-24T04:02:18+00:00",
+          "digest": "sha256:f247738022c70dcf9f3db5c48f5856a1fbcdcd7d441324756ca7fd04731797e5",
+          "created_at": "2026-03-25T04:04:20+00:00",
+          "synced_at": "2026-03-25T04:04:20+00:00",
           "target": "ghcr.io/freemankevin/quay-io/openshift/origin-cli:4.22",
           "source": "quay.io/openshift/origin-cli:4.22",
           "size": "256 MB",
@@ -898,7 +918,7 @@
       "repository": "quay-io/podman/stable",
       "total_versions": 2,
       "latest_version": "v5.8",
-      "updated": "2026-03-24T04:02:39+00:00",
+      "updated": "2026-03-25T04:04:44+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -909,9 +929,9 @@
       "versions": [
         {
           "version": "v5.8",
-          "digest": "sha256:93863424ec266a1fed605754fa2ca1ddc3f214858869152ef421fc4dd662d74c",
-          "created_at": "2026-03-24T04:02:39+00:00",
-          "synced_at": "2026-03-24T04:02:39+00:00",
+          "digest": "sha256:858bfa6c5ded879a64ca22bb465e506e3d96b3d9a353671a1242ff9fbe985051",
+          "created_at": "2026-03-25T04:04:44+00:00",
+          "synced_at": "2026-03-25T04:04:44+00:00",
           "target": "ghcr.io/freemankevin/quay-io/podman/stable:v5.8",
           "source": "quay.io/podman/stable:v5.8",
           "size": "256 MB",
@@ -935,7 +955,7 @@
       "repository": "quay-io/buildah/stable",
       "total_versions": 2,
       "latest_version": "v1.43",
-      "updated": "2026-03-24T04:02:41+00:00",
+      "updated": "2026-03-25T04:04:43+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -946,9 +966,9 @@
       "versions": [
         {
           "version": "v1.43",
-          "digest": "sha256:7708f1e1d02ab519dcf602933d8ca2de8d159179f6565e6f9c3b79c424d14262",
-          "created_at": "2026-03-24T04:02:41+00:00",
-          "synced_at": "2026-03-24T04:02:41+00:00",
+          "digest": "sha256:8f402e85a8779e269f535a47b9d04435d6d70b2c095ee1fa59213368832f625d",
+          "created_at": "2026-03-25T04:04:43+00:00",
+          "synced_at": "2026-03-25T04:04:43+00:00",
           "target": "ghcr.io/freemankevin/quay-io/buildah/stable:v1.43",
           "source": "quay.io/buildah/stable:v1.43",
           "size": "256 MB",
@@ -972,7 +992,7 @@
       "repository": "quay-io/skopeo/stable",
       "total_versions": 2,
       "latest_version": "v1.22",
-      "updated": "2026-03-24T04:02:54+00:00",
+      "updated": "2026-03-25T04:04:57+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -983,9 +1003,9 @@
       "versions": [
         {
           "version": "v1.22",
-          "digest": "sha256:637a0995653f3e71ebc9cd76451212fda811cf5a6ad562ec80bc13cd96bfc3ff",
-          "created_at": "2026-03-24T04:02:54+00:00",
-          "synced_at": "2026-03-24T04:02:54+00:00",
+          "digest": "sha256:08becacf589126f38764ac4870d0bc6b86493364057ad5bd50472aedec52396e",
+          "created_at": "2026-03-25T04:04:57+00:00",
+          "synced_at": "2026-03-25T04:04:57+00:00",
           "target": "ghcr.io/freemankevin/quay-io/skopeo/stable:v1.22",
           "source": "quay.io/skopeo/stable:v1.22",
           "size": "256 MB",
