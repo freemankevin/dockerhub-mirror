@@ -15,7 +15,7 @@ images:
   tag_pattern: ^v[0-9]+\.[0-9]+\.[0-9]+$
   exclude_pattern: .*BETA.*|.*RC.*|.*SNAPSHOT.*
   sync_all_matching: false
-- source: library/nginx:1.29.6-alpine
+- source: library/nginx:1.29.7-alpine
   enabled: true
   description: High-performance HTTP server and reverse proxy
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+-alpine$
@@ -27,7 +27,7 @@ images:
   sync_all_matching: false
   retention:
     max_versions: 5
-- source: library/redis:8.6.1
+- source: library/redis:8.6.2
   enabled: true
   description: In-memory data structure store
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
@@ -196,4 +196,4 @@ config:
   retention:
     max_versions: 3
     cleanup_old_versions: false
-  last_checked: '2026-03-20T03:57:52.441092+00:00'
+  last_checked: '2026-03-25T04:03:30.288036+00:00'
