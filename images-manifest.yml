@@ -9,7 +9,7 @@ images:
   description: High-performance object storage for AI and cloud-native workloads
   tag_pattern: ^RELEASE\.[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}-[0-9]{2}-[0-9]{2}Z$
   sync_all_matching: false
-- source: nacos/nacos-server:v3.1.1
+- source: nacos/nacos-server:v3.1.2
   enabled: true
   description: Dynamic service discovery, configuration and service management
   tag_pattern: ^v[0-9]+\.[0-9]+\.[0-9]+$
@@ -146,7 +146,7 @@ images:
   description: Container image inspection and transfer tool
   tag_pattern: ^v[0-9]+\.[0-9]+$
   sync_all_matching: false
-- source: quay.io/prometheus-operator/prometheus-operator:v0.90.0
+- source: quay.io/prometheus-operator/prometheus-operator:v0.90.1
   enabled: true
   description: Kubernetes operator for Prometheus monitoring
   tag_pattern: ^v[0-9]+\.[0-9]+\.[0-9]+$
@@ -196,4 +196,4 @@ config:
   retention:
     max_versions: 3
     cleanup_old_versions: false
-  last_checked: '2026-03-25T04:03:30.288036+00:00'
+  last_checked: '2026-03-26T04:16:58.496119+00:00'
