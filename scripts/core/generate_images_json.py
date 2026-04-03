@@ -366,7 +366,7 @@ def generate_images_json(
                 print(f"   📌 最新版本: {versions[0]['version'] if versions else 'N/A'}")
             else:
                 print(f"   ⚠️  未找到任何标签")
-                    logger.warning(f"仓库 {owner}/{ghcr_path} 可能不存在或需要认证")
+                logger.warning(f"仓库 {owner}/{ghcr_path} 可能不存在或需要认证")
     
     failed_images_data = []
     for failed in failed_images:
