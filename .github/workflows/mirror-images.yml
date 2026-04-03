@@ -124,7 +124,7 @@ jobs:
           GHCR_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           echo "::group::🚀 Sync images to GHCR"
-          python3 scripts/main.py -D sync --owner ${{ env.GITHUB_OWNER }} --registry ${{ env.GHCR_REGISTRY }} --max-workers 3 --max-retries 5 --retry-delay 5 --continue-on-error
+          python3 scripts/main.py sync --owner ${{ env.GITHUB_OWNER }} --registry ${{ env.GHCR_REGISTRY }} --max-workers 3 --max-retries 5 --retry-delay 5 --continue-on-error
           echo "::endgroup::"
           
           if [ -f images.json ]; then
@@ -140,7 +140,7 @@ jobs:
           GHCR_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           echo "::group::🗑️ Cleanup old images"
-          python3 scripts/main.py -D cleanup --owner ${{ env.GITHUB_OWNER }} --force
+          python3 scripts/main.py cleanup --owner ${{ env.GITHUB_OWNER }} --force
           echo "::endgroup::"
       
       - name: Cleanup preview (scheduled)
@@ -149,7 +149,7 @@ jobs:
           GHCR_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           echo "::group::🗑️ Preview old images to cleanup"
-          python3 scripts/main.py -D cleanup --owner ${{ env.GITHUB_OWNER }}
+          python3 scripts/main.py cleanup --owner ${{ env.GITHUB_OWNER }}
           echo "::endgroup::"
 
       - name: Commit sync results
