@@ -908,20 +908,9 @@ header a:hover {
     outline: none;
 }
 
-/* Theme toggle button hover glow effect */
-html.dark button[onclick="toggleTheme()"]:hover {
-    border-color: rgba(251, 191, 36, 0.6);
-    box-shadow: 0 0 8px rgba(251, 191, 36, 0.2);
-    background: rgba(251, 191, 36, 0.1);
-}
-
+/* Theme toggle button - same hover style as other header buttons */
 html.dark button[onclick="toggleTheme()"]:hover i {
     color: #fbbf24;
-}
-
-button[onclick="toggleTheme()"]:hover {
-    border-color: rgba(99, 102, 241, 0.4);
-    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
 }
 
 button[onclick="toggleTheme()"]:hover i {
