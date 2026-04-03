@@ -34,33 +34,6 @@
       ]
     },
     {
-      "name": "derklaro/minio",
-      "description": "High-performance object storage for AI and cloud-native workloads",
-      "repository": "derklaro/minio",
-      "total_versions": 1,
-      "latest_version": "RELEASE.2025-10-15T17-29-55Z",
-      "updated": "2026-04-03T04:51:01+00:00",
-      "size": "284 MB",
-      "layers": 8,
-      "stars": 0,
-      "platforms": [
-        "AMD64",
-        "ARM64"
-      ],
-      "versions": [
-        {
-          "version": "RELEASE.2025-10-15T17-29-55Z",
-          "digest": "sha256:376ab1b6b91c0a6271999c5c610b34a2433f83643196f14dd68ef07bd5d77098",
-          "created_at": "2026-04-03T04:51:01+00:00",
-          "synced_at": "2026-04-03T04:51:01+00:00",
-          "target": "ghcr.io/freemankevin/derklaro/minio:RELEASE.2025-10-15T17-29-55Z",
-          "source": "docker.io/derklaro/minio:RELEASE.2025-10-15T17-29-55Z",
-          "size": "284 MB",
-          "layers": 8
-        }
-      ]
-    },
-    {
       "name": "nacos/nacos-server",
       "description": "Dynamic service discovery, configuration and service management",
       "repository": "nacos/nacos-server",

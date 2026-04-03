@@ -4,11 +4,6 @@ images:
   description: Distributed, RESTful search and analytics engine
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
   sync_all_matching: false
-- source: derklaro/minio:RELEASE.2025-10-15T17-29-55Z
-  enabled: true
-  description: High-performance object storage for AI and cloud-native workloads
-  tag_pattern: ^RELEASE\.[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}-[0-9]{2}-[0-9]{2}Z$
-  sync_all_matching: false
 - source: nacos/nacos-server:v3.2.0
   enabled: true
   description: Dynamic service discovery, configuration and service management
