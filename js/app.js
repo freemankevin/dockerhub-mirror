@@ -85,10 +85,11 @@ function processData(data) {
     const name = img.name || img.image || '';
     if (!name) return;
 
-    const versions = img.versions || (img.version ? [{ tag: img.version, source: img.source, size: img.size }] : []);
-    const latestVer = img.latest_version || img.version || (versions[0] && versions[0].tag) || 'latest';
-    const latestSrc = img.source || (versions[0] && versions[0].source) || '';
-    const latestSize = img.size || (versions[0] && versions[0].size) || '';
+    const versions = img.versions || [];
+    const latestVer = img.latest_version || img.version || (versions[0] && (versions[0].version || versions[0].tag)) || 'latest';
+    const latestSrc = (versions[0] && versions[0].source) || img.source || '';
+    const latestSize = (versions[0] && versions[0].size) || img.size || '';
+    const latestTarget = (versions[0] && versions[0].target) || '';
 
     // Ensure numeric fields
     const stars = Number(img.stars || img.pulls || 0);
