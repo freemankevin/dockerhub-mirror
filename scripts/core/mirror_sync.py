@@ -134,13 +134,10 @@ class MirrorSync:
 
                 cmd = [
                     'regctl', 'image', 'copy',
-                    '--verbosity', 'info',
+                    '--verbosity', 'warn',
                     '--force-recursive',
                     source, target
                 ]
-
-                if self.logger:
-                    self.logger.debug(f"执行命令: {' '.join(cmd)}")
 
                 # 增加超时时间到 600 秒（10 分钟）以支持大镜像
                 result = subprocess.run(
@@ -163,30 +160,20 @@ class MirrorSync:
                     
                     # 所有错误都重试，除非是最后一次尝试
                     if attempt < self.max_retries - 1:
-                        if is_rate_limit:
-                            if self.logger:
-                                self.logger.warning(f"遇到速率限制，将重试... ({attempt + 1}/{self.max_retries})")
-                        elif is_network_error:
-                            if self.logger:
-                                self.logger.warning(f"网络错误，将重试... ({attempt + 1}/{self.max_retries})")
-                        elif is_temporary:
-                            if self.logger:
-                                self.logger.warning(f"临时错误，将重试... ({attempt + 1}/{self.max_retries})")
-                        else:
-                            if self.logger:
-                                self.logger.warning(f"同步失败，将重试... ({attempt + 1}/{self.max_retries})")
-                                self.logger.debug(f"错误详情: {result.stderr}")
+                        if self.logger:
+                            self.logger.warning(f"同步失败，重试中... ({attempt + 1}/{self.max_retries})")
                         continue
                     else:
-                        # 最后一次尝试失败
+                        # 最后一次尝试失败，显示详细错误
                         if self.logger:
-                            self.logger.error(f"同步失败（已重试 {self.max_retries} 次）: {result.stderr}")
+                            self.logger.error(f"同步失败（已重试 {self.max_retries} 次）")
+                            self.logger.error(f"错误详情: {result.stderr}")
                         return False
 
             except subprocess.TimeoutExpired:
                 last_error = f"同步超时（600秒）"
                 if self.logger:
-                    self.logger.warning(f"同步超时: {source} ({attempt + 1}/{self.max_retries})")
+                    self.logger.warning(f"同步超时，重试中... ({attempt + 1}/{self.max_retries})")
                 if attempt < self.max_retries - 1:
                     continue
                 if self.logger:
@@ -196,11 +183,11 @@ class MirrorSync:
             except Exception as e:
                 last_error = str(e)
                 if self.logger:
-                    self.logger.warning(f"镜像同步异常: {str(e)} ({attempt + 1}/{self.max_retries})")
+                    self.logger.warning(f"同步异常，重试中... ({attempt + 1}/{self.max_retries})")
                 if attempt < self.max_retries - 1:
                     continue
                 if self.logger:
-                    self.logger.error(f"镜像同步异常（已重试 {self.max_retries} 次）: {str(e)}")
+                    self.logger.error(f"同步异常（已重试 {self.max_retries} 次）: {str(e)}")
                 return False
 
         return False
@@ -220,17 +207,13 @@ class MirrorSync:
             target_image = source_image
             repo_name = image_name.replace('ghcr.io/', '').replace('/', '__')
             
-            print(f"\n🔄 Processing {source_image}...")
-            print(f"📦 Source: {source_image}")
-            print(f"🎯 Target: {target_image}")
-            print(f"ℹ️  源镜像来自 GHCR，跳过同步步骤")
+            print(f"✓ {source_image} (GHCR source, skipped)")
             
-            # 直接添加到镜像列表，不执行同步
             with self._lock:
                 self.mirrored_images.append({
                     'name': image_name,
                     'source': source_image,
-                    'target': target_image,  # GHCR 镜像本身就是目标
+                    'target': target_image,
                     'version': version,
                     'description': description,
                     'repository': repo_name,
@@ -239,20 +222,13 @@ class MirrorSync:
                 self.success_count += 1
             return True
         
-        # 使用新的命名规则生成目标镜像名称（移除域名前缀）
-        # 示例: docker.io/library/elasticsearch:9.3.1 -> library/elasticsearch
         ghcr_path = convert_to_ghcr_path(image_name)
-        repo_name = ghcr_path.replace('/', '__')  # 用于存储的 repository 名称
+        repo_name = ghcr_path.replace('/', '__')
         target_image = f"{self.registry}/{self.owner}/{ghcr_path}:{version}"
         
-        print(f"\n🔄 Processing {source_image}...")
-        print(f"📦 Source: {source_image}")
-        print(f"🎯 Target: {target_image}")
-        
         if self.mirror_image(source_image, target_image):
-            print(f"✅ Successfully mirrored {source_image}")
+            print(f"✓ {source_image} -> {ghcr_path}:{version}")
             
-            # 线程安全地更新结果
             with self._lock:
                 self.mirrored_images.append({
                     'name': image_name,
@@ -266,9 +242,8 @@ class MirrorSync:
                 self.success_count += 1
             return True
         else:
-            print(f"❌ Failed to mirror {source_image}")
+            print(f"✗ {source_image} (failed)")
             
-            # 线程安全地更新失败计数和列表
             with self._lock:
                 self.fail_count += 1
                 self.failed_images.append({
@@ -318,24 +293,20 @@ class MirrorSync:
             versions_to_sync = []
 
             if sync_all:
-                # 获取所有匹配的版本
-                print(f"\n🔍 Fetching all matching versions for {image_name}...")
                 all_versions = api.get_all_matching_versions(
                     source, tag_pattern, exclude_pattern
                 )
 
                 if all_versions:
                     versions_to_sync = all_versions
-                    print(f"📋 Found {len(versions_to_sync)} versions to sync")
                 else:
-                    print(f"⚠️  No matching versions found for {image_name}")
+                    if self.logger:
+                        self.logger.warning(f"No matching versions found for {image_name}")
                     continue
             else:
-                # 只同步当前版本
                 current_version = source.split(':')[1] if ':' in source else 'latest'
                 versions_to_sync = [current_version]
 
-            # 添加到同步任务列表
             for version in versions_to_sync:
                 sync_tasks.append({
                     'image_name': image_name,
@@ -343,20 +314,14 @@ class MirrorSync:
                     'description': description
                 })
 
-        # 执行同步
         if use_concurrency and sync_tasks:
-            print(f"\n🚀 开始并发同步 {len(sync_tasks)} 个镜像...")
-            print(f"⚙️  并发数: {self.max_workers}, 最大重试次数: {self.max_retries}")
+            print(f"Syncing {len(sync_tasks)} images (workers: {self.max_workers}, retries: {self.max_retries})")
 
             with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
-                # 提交所有同步任务，添加延迟避免同时发送请求
                 future_to_task = {}
                 for i, task in enumerate(sync_tasks):
-                    # 添加随机延迟，避免同时发送请求
                     if i > 0:
                         delay = random.uniform(0.5, 1.5)
-                        if self.logger:
-                            self.logger.debug(f"等待 {delay:.2f} 秒后提交下一个任务...")
                         time.sleep(delay)
 
                     future = executor.submit(
@@ -367,20 +332,16 @@ class MirrorSync:
                     )
                     future_to_task[future] = task
 
-                # 等待所有任务完成
                 for future in as_completed(future_to_task):
                     task = future_to_task[future]
                     try:
                         future.result()
                     except Exception as e:
                         if self.logger:
-                            self.logger.error(
-                                f"同步 {task['image_name']}:{task['version']} 异常: {str(e)}"
-                            )
+                            self.logger.error(f"Sync {task['image_name']}:{task['version']} failed: {str(e)}")
                         with self._lock:
                             self.fail_count += 1
         else:
-            # 串行同步
             for task in sync_tasks:
                 self.sync_single_version(
                     task['image_name'],
@@ -388,19 +349,13 @@ class MirrorSync:
                     task['description']
                 )
 
-        # 打印统计
-        print(f"\n📊 Summary:")
-        print(f"   Total: {len(self.mirrored_images) + len(self.failed_images)}")
-        print(f"   Success: {self.success_count}")
-        print(f"   Failed: {self.fail_count}")
+        print(f"\nSummary: {self.success_count} success, {self.fail_count} failed")
         
-        # 显示失败的镜像列表
         if self.failed_images:
-            print(f"\n❌ Failed Images ({len(self.failed_images)}):")
+            print(f"Failed images:")
             for img in self.failed_images:
-                print(f"   - {img['source']} ({img['description']})")
+                print(f"  - {img['source']}")
 
-        # 返回简单的统计结果
         return {
             'success_count': self.success_count,
             'fail_count': self.fail_count,

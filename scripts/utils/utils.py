@@ -190,21 +190,16 @@ def setup_logger(name: str, debug: bool = False, log_dir: Path = None) -> loggin
     logger = logging.getLogger(name)
     logger.handlers.clear()
     
-    level = logging.DEBUG if debug else logging.INFO
+    level = logging.DEBUG if debug else logging.WARNING
     logger.setLevel(level)
     
-    # 控制台处理器（带颜色）
-    formatter = logging.Formatter(
-        f'{COLOR_CYAN}%(asctime)s{COLOR_RESET} - '
-        f'{COLOR_YELLOW}%(levelname)s{COLOR_RESET} - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
-    )
+    formatter = logging.Formatter('%(levelname)s: %(message)s')
     
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
+    console_handler.setLevel(level)
     logger.addHandler(console_handler)
     
-    # 文件处理器（无颜色）
     if log_dir:
         log_dir.mkdir(parents=True, exist_ok=True)
         log_file = log_dir / f"{name}_{datetime.now().strftime('%Y%m%d')}.log"
@@ -216,6 +211,7 @@ def setup_logger(name: str, debug: bool = False, log_dir: Path = None) -> loggin
         
         file_handler = logging.FileHandler(log_file, encoding='utf-8')
         file_handler.setFormatter(file_formatter)
+        file_handler.setLevel(logging.DEBUG)
         logger.addHandler(file_handler)
     
     logger.propagate = False

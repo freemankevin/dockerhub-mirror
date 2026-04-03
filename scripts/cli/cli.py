@@ -30,43 +30,28 @@ def cmd_update(args):
     """更新清单版本"""
     logger = setup_logger('update', args.debug, LOGS_DIR)
     
-    print(f"\n{COLOR_BLUE}{'='*80}{COLOR_RESET}")
-    print(f"{COLOR_GREEN}📄 更新镜像清单{COLOR_RESET}")
-    print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}\n")
-    
     manifest_file = args.manifest or MANIFEST_FILE
     
     if not manifest_file.exists():
         logger.error(f"清单文件不存在: {manifest_file}")
         return 1
     
-    # 初始化 API 和管理器
     max_workers = getattr(args, 'max_workers', 5)
     registry_api = RegistryAPI(logger, max_workers=max_workers)
     
-    # 从环境变量获取 GHCR token
     ghcr_token = get_env_variable('GHCR_TOKEN')
     
-    # 调试信息（仅在 debug 模式下显示）
-    if args.debug:
-        if ghcr_token:
-            masked_token = ghcr_token[:4] + '*' * (len(ghcr_token) - 8) + ghcr_token[-4:] if len(ghcr_token) > 8 else '****'
-            print(f"{COLOR_CYAN}[DEBUG] GHCR_TOKEN loaded: {masked_token}{COLOR_RESET}")
-        else:
-            print(f"{COLOR_YELLOW}[DEBUG] GHCR_TOKEN not found in environment variables{COLOR_RESET}")
-            # 显示所有可用的环境变量（用于调试）
-            env_vars = [k for k in os.environ.keys() if 'TOKEN' in k.upper() or 'GHCR' in k.upper() or 'GITHUB' in k.upper()]
-            if env_vars:
-                print(f"{COLOR_CYAN}[DEBUG] Available token-related env vars: {env_vars}{COLOR_RESET}")
+    if args.debug and ghcr_token:
+        masked_token = ghcr_token[:4] + '*' * (len(ghcr_token) - 8) + ghcr_token[-4:] if len(ghcr_token) > 8 else '****'
+        print(f"[DEBUG] GHCR_TOKEN: {masked_token}")
     
     ghcr_api = GHCRRegistryAPI(logger, token=ghcr_token) if ghcr_token else None
     
     if not ghcr_api:
-        print(f"{COLOR_YELLOW}⚠️  未设置 GHCR_TOKEN，无法更新 GHCR 镜像版本信息{COLOR_RESET}")
+        logger.warning("未设置 GHCR_TOKEN，无法更新 GHCR 镜像版本信息")
     
     manager = ManifestManager(manifest_file, logger)
     
-    # 更新版本
     use_concurrency = getattr(args, 'concurrency', True)
     updated_count = manager.update_versions(
         registry_api, 
@@ -75,12 +60,10 @@ def cmd_update(args):
         use_concurrency=use_concurrency
     )
     
-    if updated_count > 0 and not args.dry_run:
-        print(f"\n{COLOR_GREEN}✓ 成功更新 {updated_count} 个镜像版本{COLOR_RESET}\n")
-    elif updated_count > 0 and args.dry_run:
-        print(f"\n{COLOR_YELLOW}ℹ️  预演模式：发现 {updated_count} 个可更新镜像{COLOR_RESET}\n")
+    if updated_count > 0:
+        print(f"Updated {updated_count} images")
     else:
-        print(f"\n{COLOR_GREEN}✓ 所有镜像都是最新版本{COLOR_RESET}\n")
+        print("All images are up-to-date")
     
     return 0
 
@@ -89,24 +72,15 @@ def cmd_sync(args):
     """同步镜像"""
     logger = setup_logger('sync', args.debug, LOGS_DIR)
 
-    print(f"\n{COLOR_BLUE}{'='*80}{COLOR_RESET}")
-    print(f"{COLOR_GREEN}🚀 同步镜像到远程仓库{COLOR_RESET}")
-    print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}")
-    print(f"📍 目标仓库: {args.registry}/{args.owner}")
-    print(f"📄 清单文件: {args.manifest or MANIFEST_FILE}")
-    print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}\n")
-
     manifest_file = args.manifest or MANIFEST_FILE
 
     if not manifest_file.exists():
         logger.error(f"清单文件不存在: {manifest_file}")
         return 1
 
-    # 加载清单
     with open(manifest_file, 'r', encoding='utf-8') as f:
         manifest = yaml.safe_load(f)
 
-    # 初始化 API 和同步器
     max_workers = getattr(args, 'max_workers', 3)
     max_retries = getattr(args, 'max_retries', 3)
     retry_delay = getattr(args, 'retry_delay', 2.0)
@@ -121,25 +95,18 @@ def cmd_sync(args):
         retry_delay=retry_delay
     )
 
-    # 执行同步
     use_concurrency = getattr(args, 'concurrency', True)
     result = sync.sync_from_manifest(manifest, api, use_concurrency=use_concurrency)
 
-    # 输出结果
-    if result['success_count'] > 0:
-        print(f"\n{COLOR_GREEN}✓ 成功同步 {result['success_count']} 个镜像{COLOR_RESET}")
-
     if result['fail_count'] > 0:
-        print(f"{COLOR_RED}✗ {result['fail_count']} 个镜像同步失败{COLOR_RESET}")
+        print(f"\nFailed to sync {result['fail_count']} images")
 
-    # 同步成功后，生成 images.json
     if result['fail_count'] == 0 or args.continue_on_error:
-        print(f"\n{COLOR_CYAN}📝 生成镜像列表 JSON...{COLOR_RESET}")
+        print("\nGenerating images.json...")
         try:
             from scripts.core.generate_images_json import generate_images_json
             
             output_file = args.output or OUTPUT_FILE
-            # 从环境变量获取 GHCR_TOKEN
             token = get_env_variable('GHCR_TOKEN')
             generate_images_json(
                 manifest_file,
@@ -154,7 +121,6 @@ def cmd_sync(args):
             if not args.continue_on_error:
                 return 1
 
-    print()
     return 0 if result['fail_count'] == 0 else 1
 
 
@@ -162,44 +128,26 @@ def cmd_run(args):
     """运行完整流程：更新 + 同步"""
     logger = setup_logger('run', args.debug, LOGS_DIR)
 
-    print(f"\n{COLOR_BLUE}{'='*80}{COLOR_RESET}")
-    print(f"{COLOR_GREEN}🔄 运行完整同步流程{COLOR_RESET}")
-    print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}\n")
-
-    # 步骤 1: 更新清单
-    print(f"{COLOR_CYAN}步骤 1/2: 更新镜像清单{COLOR_RESET}\n")
+    print("Step 1: Updating manifest...")
     ret = cmd_update(args)
     if ret != 0 and not args.continue_on_error:
         return ret
 
-    # 为同步步骤设置不同的参数
     original_max_workers = getattr(args, 'max_workers', None)
-    original_max_retries = getattr(args, 'max_retries', None)
-    original_retry_delay = getattr(args, 'retry_delay', None)
 
     if hasattr(args, 'max_workers_sync'):
         args.max_workers = args.max_workers_sync
 
-    # 如果没有单独设置重试参数，使用默认值
     if not hasattr(args, 'max_retries') or args.max_retries is None:
         args.max_retries = 3
     if not hasattr(args, 'retry_delay') or args.retry_delay is None:
         args.retry_delay = 2.0
 
-    print(f"\n{COLOR_CYAN}步骤 2/2: 同步镜像{COLOR_RESET}\n")
+    print("\nStep 2: Syncing images...")
     ret = cmd_sync(args)
 
-    # 恢复原始参数
     if original_max_workers is not None:
         args.max_workers = original_max_workers
-    if original_max_retries is not None:
-        args.max_retries = original_max_retries
-    if original_retry_delay is not None:
-        args.retry_delay = original_retry_delay
-
-    print(f"\n{COLOR_BLUE}{'='*80}{COLOR_RESET}")
-    print(f"{COLOR_GREEN}✅ 完整流程执行完成{COLOR_RESET}")
-    print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}\n")
 
     return ret
 
@@ -210,14 +158,6 @@ def cmd_cleanup(args):
     
     dry_run = not args.force if hasattr(args, 'force') else args.dry_run
     
-    print(f"\n{COLOR_BLUE}{'='*80}{COLOR_RESET}")
-    print(f"{COLOR_GREEN}🗑️  清理旧镜像{COLOR_RESET}")
-    print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}")
-    print(f"📍 目标仓库所有者: {args.owner}")
-    print(f"📄 清单文件: {args.manifest or MANIFEST_FILE}")
-    print(f"🔄 模式: {'预演 (不会实际删除)' if dry_run else '实际删除'}")
-    print(f"{COLOR_BLUE}{'='*80}{COLOR_RESET}\n")
-    
     manifest_file = args.manifest or MANIFEST_FILE
     
     if not manifest_file.exists():
@@ -227,13 +167,12 @@ def cmd_cleanup(args):
     ghcr_token = get_env_variable('GHCR_TOKEN')
     
     if not ghcr_token:
-        print(f"{COLOR_RED}✗ 未设置 GHCR_TOKEN 环境变量{COLOR_RESET}")
-        print(f"{COLOR_YELLOW}提示: 需要设置具有删除权限的 GitHub Token{COLOR_RESET}")
+        logger.error("未设置 GHCR_TOKEN 环境变量")
         return 1
     
     if args.debug:
         masked_token = ghcr_token[:4] + '*' * (len(ghcr_token) - 8) + ghcr_token[-4:] if len(ghcr_token) > 8 else '****'
-        print(f"{COLOR_CYAN}[DEBUG] GHCR_TOKEN: {masked_token}{COLOR_RESET}")
+        print(f"[DEBUG] GHCR_TOKEN: {masked_token}")
     
     cleanup = ImageCleanup(
         args.owner,
@@ -245,7 +184,7 @@ def cmd_cleanup(args):
     result = cleanup.run_cleanup(manifest_file, dry_run=dry_run)
     
     if result['total_failed'] > 0:
-        print(f"\n{COLOR_RED}有 {result['total_failed']} 个删除操作失败{COLOR_RESET}")
+        print(f"Failed to delete {result['total_failed']} images")
         return 1
     
     return 0
