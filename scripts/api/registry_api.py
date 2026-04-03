@@ -322,7 +322,7 @@ class RegistryAPI:
         registry, repository, registry_url = self.extract_repository(image)
         
         if self.logger:
-            self.logger.debug(f"获取 {registry} 镜像 {repository} 的标签列表")
+            self.logger.info(f"获取 {registry} 镜像 {repository} 的标签列表")
         
         if registry == 'quay':
             matching_tags = self._get_quay_tags(repository, tag_pattern, exclude_pattern, max_pages)
@@ -346,7 +346,7 @@ class RegistryAPI:
         matching_tags.sort(key=self.version_key)
         
         if self.logger:
-            self.logger.debug(f"找到 {len(matching_tags)} 个匹配标签")
+            self.logger.info(f"找到 {len(matching_tags)} 个匹配标签")
         
         return matching_tags
     

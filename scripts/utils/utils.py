@@ -190,7 +190,7 @@ def setup_logger(name: str, debug: bool = False, log_dir: Path = None) -> loggin
     logger = logging.getLogger(name)
     logger.handlers.clear()
     
-    level = logging.DEBUG if debug else logging.WARNING
+    level = logging.DEBUG if debug else logging.INFO
     logger.setLevel(level)
     
     formatter = logging.Formatter('%(levelname)s: %(message)s')

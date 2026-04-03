@@ -56,17 +56,10 @@ class MirrorSync:
             
             if result.returncode == 0:
                 digest = result.stdout.strip()
-                if self.logger:
-                    self.logger.debug(f"镜像 {image} 的 digest: {digest}")
                 return digest
             else:
-                # 镜像不存在
-                if self.logger:
-                    self.logger.debug(f"镜像 {image} 不存在或无法获取 digest")
                 return None
         except Exception as e:
-            if self.logger:
-                self.logger.debug(f"获取镜像 digest 失败 {image}: {str(e)}")
             return None
     
     def _is_ghcr_source(self, source: str) -> bool:
@@ -100,19 +93,14 @@ class MirrorSync:
         # 获取目标镜像的 digest
         target_digest = self._get_image_digest(target)
         if not target_digest:
-            # 目标镜像不存在，需要同步
-            if self.logger:
-                self.logger.debug(f"目标镜像 {target} 不存在，需要同步")
             return True
         
         # 比较 digest
         if source_digest == target_digest:
             if self.logger:
-                self.logger.info(f"镜像 {source} 与目标 {target} 的 digest 相同，跳过同步")
+                self.logger.info(f"镜像 {source} 已存在且 digest 相同，跳过同步")
             return False
         else:
-            if self.logger:
-                self.logger.debug(f"镜像 {source} 与目标 {target} 的 digest 不同，需要同步")
             return True
 
     def mirror_image(self, source: str, target: str) -> bool:
