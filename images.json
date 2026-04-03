@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-04-03T07:57:33.616131+00:00",
+  "updated_at": "2026-04-03T08:18:23.801583+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
-  "total_images": 12,
-  "total_versions": 38,
+  "total_images": 11,
+  "total_versions": 37,
   "total_failed": 1,
   "images": [
     {
@@ -571,7 +571,7 @@
       "version": "1.29.7-alpine",
       "description": "High-performance HTTP server and reverse proxy",
       "sync_status": "failed",
-      "failed_at": "2026-04-03T07:57:33.616124+00:00"
+      "failed_at": "2026-04-03T08:18:23.801576+00:00"
     }
   ]
 }
