@@ -105,17 +105,15 @@ class MirrorSync:
 
     def mirror_image(self, source: str, target: str) -> bool:
         """镜像同步（带重试机制）"""
-        # 先检查是否需要同步
         if not self.needs_sync(source, target):
-            return True  # 跳过同步，视为成功
+            return True
         
         last_error = None
         for attempt in range(self.max_retries):
             try:
-                # 添加随机延迟，避免同时发送请求
                 if attempt > 0:
-                    # 指数退避策略：2^attempt * base_delay + random jitter
-                    delay = self.retry_delay * (2 ** attempt) + random.uniform(0, 2)
+                    # 线性增长策略，最大不超过10秒
+                    delay = min(self.retry_delay * attempt + random.uniform(0, 1), 10)
                     if self.logger:
                         self.logger.info(f"第 {attempt + 1} 次重试，等待 {delay:.2f} 秒...")
                     time.sleep(delay)
@@ -127,7 +125,6 @@ class MirrorSync:
                     source, target
                 ]
 
-                # 增加超时时间到 600 秒（10 分钟）以支持大镜像
                 result = subprocess.run(
                     cmd,
                     capture_output=True,
@@ -141,18 +138,22 @@ class MirrorSync:
                     last_error = result.stderr
                     error_lower = result.stderr.lower()
                     
-                    # 检查错误类型
-                    is_rate_limit = 'rate limit' in error_lower or 'toomanyrequests' in error_lower
+                    is_rate_limit = 'rate limit' in error_lower or 'toomanyrequests' in error_lower or '429' in error_lower
                     is_network_error = 'network' in error_lower or 'connection' in error_lower or 'timeout' in error_lower
-                    is_temporary = 'temporary' in error_lower or 'unavailable' in error_lower
                     
-                    # 所有错误都重试，除非是最后一次尝试
+                    # Rate limit错误直接失败，不重试（6小时窗口限制，等待无效）
+                    if is_rate_limit:
+                        if self.logger:
+                            self.logger.error(f"遇到 Docker Hub rate limit 限制，无法继续同步")
+                            self.logger.error(f"错误详情: {result.stderr}")
+                        return False
+                    
+                    # 其他错误重试，但限制延迟时间
                     if attempt < self.max_retries - 1:
                         if self.logger:
                             self.logger.warning(f"同步失败，重试中... ({attempt + 1}/{self.max_retries})")
                         continue
                     else:
-                        # 最后一次尝试失败，显示详细错误
                         if self.logger:
                             self.logger.error(f"同步失败（已重试 {self.max_retries} 次）")
                             self.logger.error(f"错误详情: {result.stderr}")
