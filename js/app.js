@@ -145,6 +145,7 @@ function processData(data) {
   const errorEl = document.getElementById('errorState');
   if (errorEl) errorEl.classList.add('hidden');
 
+  generateNotifications(data);
   render();
 }
 
@@ -1018,84 +1019,144 @@ function sampleData() {
   ];
 }
 
-// ── Hot Reload ─────────────────────────────────
+// ── Notifications ─────────────────────────────────
 let lastUpdateTime = null;
-let hotReloadInterval = 30000; // 30 seconds
-let hotReloadTimer = null;
-let isHotReloadActive = true;
+let notifications = [];
+let notificationPanelOpen = false;
 
-function updateHotReloadUI() {
-  const btn = document.getElementById('hotReloadBtn');
-  const dot = document.getElementById('hotReloadDot');
-  const icon = document.getElementById('hotReloadIcon');
+function formatTimeAgo(dateStr) {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffMs = now - date;
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
   
-  if (!btn) return;
-  
-  if (isHotReloadActive) {
-    btn.classList.remove('hot-reload-paused');
-    btn.title = 'Hot Reload Active (30s)';
-    if (icon) icon.style.opacity = '1';
-  } else {
-    btn.classList.add('hot-reload-paused');
-    btn.title = 'Hot Reload Paused';
-    if (icon) icon.style.opacity = '0.5';
-  }
+  if (diffMins < 1) return 'Just now';
+  if (diffMins < 60) return `${diffMins} min ago`;
+  if (diffHours < 24) return `${diffHours} hours ago`;
+  if (diffDays < 7) return `${diffDays} days ago`;
+  return date.toLocaleDateString();
 }
 
-async function checkForUpdates() {
-  const btn = document.getElementById('hotReloadBtn');
-  if (btn) btn.classList.add('hot-reload-checking');
+function generateNotifications(data) {
+  notifications = [];
+  const failedImages = data.failed_images || [];
   
-  try {
-    const res = await fetch('/images.json', { cache: 'no-store' });
-    if (!res.ok) return;
-    
-    const data = await res.json();
-    const newUpdateTime = data.updated_at;
-    
-    if (lastUpdateTime && newUpdateTime && newUpdateTime !== lastUpdateTime) {
-      console.log('[Hot Reload] Detected update:', newUpdateTime);
-      showToast('镜像列表已更新', 'blue');
-      processData(data);
+  if (failedImages.length > 0) {
+    failedImages.forEach(img => {
+      notifications.push({
+        type: 'error',
+        icon: 'fa-exclamation-circle',
+        color: 'text-red-400',
+        title: `Sync Failed: ${img.name}`,
+        message: `Version ${img.version} failed to sync`,
+        time: img.failed_at || data.updated_at,
+        details: img.source
+      });
+    });
+  }
+  
+  const records = Array.isArray(data) ? data : (data.images || Object.values(data));
+  const recentUpdates = records
+    .filter(img => {
+      const updated = new Date(img.updated);
+      const weekAgo = new Date(Date.now() - 7 * 86400000);
+      return updated > weekAgo;
+    })
+    .sort((a, b) => new Date(b.updated) - new Date(a.updated))
+    .slice(0, 5);
+  
+  recentUpdates.forEach(img => {
+    notifications.push({
+      type: 'success',
+      icon: 'fa-check-circle',
+      color: 'text-green-400',
+      title: `Synced: ${img.name}`,
+      message: `Version ${img.latest_version || 'latest'} synced successfully`,
+      time: img.updated,
+      details: img.total_versions > 1 ? `${img.total_versions} versions available` : ''
+    });
+  });
+  
+  notifications.push({
+    type: 'info',
+    icon: 'fa-info-circle',
+    color: 'text-blue-400',
+    title: 'Sync Summary',
+    message: `${data.total_images || records.length} images, ${data.total_versions || 0} versions`,
+    time: data.updated_at,
+    details: failedImages.length > 0 ? `${failedImages.length} failed` : 'All synced'
+  });
+  
+  updateNotificationUI();
+}
+
+function updateNotificationUI() {
+  const badge = document.getElementById('notificationBadge');
+  const list = document.getElementById('notificationList');
+  
+  const failedCount = notifications.filter(n => n.type === 'error').length;
+  
+  if (badge) {
+    if (failedCount > 0) {
+      badge.textContent = failedCount;
+      badge.classList.remove('hidden');
+      badge.classList.add('animate-pulse');
+    } else {
+      badge.classList.add('hidden');
+      badge.classList.remove('animate-pulse');
     }
-    
-    lastUpdateTime = newUpdateTime;
-  } catch (e) {
-    console.error('[Hot Reload] Check failed:', e);
-  } finally {
-    if (btn) btn.classList.remove('hot-reload-checking');
+  }
+  
+  if (list) {
+    if (notifications.length === 0) {
+      list.innerHTML = '<div class="p-4 text-center text-secondary">No notifications</div>';
+    } else {
+      list.innerHTML = notifications.map(n => `
+        <div class="p-3 hover:bg-emphasis/50 transition-colors cursor-pointer">
+          <div class="flex items-start gap-3">
+            <i class="fas ${n.icon} ${n.color} mt-1"></i>
+            <div class="flex-1 min-w-0">
+              <div class="font-medium text-primary text-sm truncate">${n.title}</div>
+              <div class="text-xs text-secondary mt-0.5">${n.message}</div>
+              ${n.details ? `<div class="text-xs text-tertiary mt-0.5 truncate">${n.details}</div>` : ''}
+              <div class="text-xs text-tertiary mt-1">${formatTimeAgo(n.time)}</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
   }
 }
 
-function startHotReload() {
-  if (hotReloadTimer) clearInterval(hotReloadTimer);
-  hotReloadTimer = setInterval(checkForUpdates, hotReloadInterval);
-  isHotReloadActive = true;
-  updateHotReloadUI();
-  console.log('[Hot Reload] Started, interval:', hotReloadInterval / 1000, 's');
-}
-
-function stopHotReload() {
-  if (hotReloadTimer) {
-    clearInterval(hotReloadTimer);
-    hotReloadTimer = null;
-  }
-  isHotReloadActive = false;
-  updateHotReloadUI();
-  console.log('[Hot Reload] Stopped');
-}
-
-function toggleHotReload() {
-  if (isHotReloadActive) {
-    stopHotReload();
-    showToast('热更新已暂停', 'gray');
-  } else {
-    startHotReload();
-    showToast('热更新已启动', 'green');
+function toggleNotifications() {
+  const panel = document.getElementById('notificationPanel');
+  if (panel) {
+    notificationPanelOpen = !notificationPanelOpen;
+    panel.classList.toggle('hidden', !notificationPanelOpen);
   }
 }
+
+function clearNotifications() {
+  notifications = [];
+  updateNotificationUI();
+  const panel = document.getElementById('notificationPanel');
+  if (panel) {
+    panel.classList.add('hidden');
+    notificationPanelOpen = false;
+  }
+}
+
+document.addEventListener('click', (e) => {
+  const btn = document.getElementById('notificationBtn');
+  const panel = document.getElementById('notificationPanel');
+  if (btn && panel && !btn.contains(e.target) && !panel.contains(e.target)) {
+    panel.classList.add('hidden');
+    notificationPanelOpen = false;
+  }
+});
 
 // ── Boot ──────────────────────────────────────
 initTheme();
 loadImages();
-startHotReload();
