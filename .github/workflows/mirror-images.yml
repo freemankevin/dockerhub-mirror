@@ -67,9 +67,7 @@ jobs:
           cache: 'pip'
 
       - name: Install Python dependencies
-        run: |
-          pip install --upgrade pip
-          pip install -r scripts/requirements.txt
+        run: pip install -q -r scripts/requirements.txt
 
       - name: Install regclient
         uses: iarekylew00t/regctl-installer@v4
@@ -85,7 +83,7 @@ jobs:
         with:
           registry: ${{ env.GHCR_REGISTRY }}
           username: ${{ env.GITHUB_OWNER }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.PAT_TOKEN }}
 
       - name: Login to quay.io (optional)
         uses: docker/login-action@v3
@@ -101,16 +99,17 @@ jobs:
       - name: Update manifest versions
         id: update
         env:
-          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          echo "🔄 检查并更新镜像版本..."
-          python3 scripts/main.py update --max-workers 3
-
-          # 检查清单是否有更新
+          echo "::group::📄 Update image versions"
+          python3 scripts/main.py update --max-workers 3 2>&1 | grep -E "^(✓|✗|⚠|🔄|📋|Error|Traceback)" || true
+          echo "::endgroup::"
+          
           if git diff --quiet images-manifest.yml; then
             echo "has_updates=false" >> $GITHUB_OUTPUT
           else
             echo "has_updates=true" >> $GITHUB_OUTPUT
+            echo "📝 Manifest updated"
           fi
 
       - name: Commit manifest changes
@@ -118,17 +117,16 @@ jobs:
         run: |
           git add images-manifest.yml
           git commit -m "chore: update image versions [skip ci]"
-          echo "✅ Manifest changes committed"
 
       - name: Sync mirrors
         id: sync
         env:
-          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          echo "🚀 开始同步镜像..."
+          echo "::group::🚀 Sync images to GHCR"
           python3 scripts/main.py -D sync --owner ${{ env.GITHUB_OWNER }} --registry ${{ env.GHCR_REGISTRY }} --max-workers 3 --max-retries 5 --retry-delay 5 --continue-on-error
-
-          # 提取同步统计
+          echo "::endgroup::"
+          
           if [ -f images.json ]; then
             success=$(jq -r '.success_count // 0' images.json)
             failed=$(jq -r '.fail_count // 0' images.json)
@@ -139,18 +137,20 @@ jobs:
       - name: Cleanup old images (optional)
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.cleanup == 'true' }}
         env:
-          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          echo "🗑️  清理旧镜像..."
+          echo "::group::🗑️ Cleanup old images"
           python3 scripts/main.py -D cleanup --owner ${{ env.GITHUB_OWNER }} --force
+          echo "::endgroup::"
       
       - name: Cleanup preview (scheduled)
         if: ${{ github.event_name == 'schedule' }}
         env:
-          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          echo "🗑️  预览需要清理的旧镜像（不实际删除）..."
+          echo "::group::🗑️ Preview old images to cleanup"
           python3 scripts/main.py -D cleanup --owner ${{ env.GITHUB_OWNER }}
+          echo "::endgroup::"
 
       - name: Commit sync results
         if: success()
@@ -159,16 +159,9 @@ jobs:
           
           if ! git diff --staged --quiet; then
             git commit -m "chore: update sync results [skip ci]"
-            git push
-            echo "✅ Changes pushed"
-          else
-            # 如果只有清单更新，推送它
-            if [ -n "$(git log @{u}.. --oneline)" ]; then
-              git push
-              echo "✅ Manifest changes pushed"
-            else
-              echo "📝 No changes to push"
-            fi
+            git push -q
+          elif [ -n "$(git log @{u}.. --oneline)" ]; then
+            git push -q
           fi
 
       - name: Summary
