@@ -113,57 +113,14 @@ DOCKER_HUB_TOKEN     Docker Hub Token (可选)
 
 def main():
     """主入口函数"""
-    parser = argparse.ArgumentParser(
-        description='Docker 镜像同步工具',
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        add_help=False
-    )
-    
-    parser.add_argument('command', nargs='?', default='help',
-                        help='可用命令: sync, update, run, generate, help')
-    parser.add_argument('-h', '--help', action='store_true',
-                        help='显示帮助信息')
-    parser.add_argument('-D', '--debug', action='store_true',
-                        help='启用调试模式')
-    
-    try:
-        args, remaining = parser.parse_known_args()
-    except SystemExit:
-        return 1
-    
-    if args.help or args.command == 'help':
+    # 检查是否是 help 命令
+    if len(sys.argv) == 1 or (len(sys.argv) > 1 and sys.argv[1] in ['help', '-h', '--help']):
         show_help()
         return 0
     
-    command_map = {
-        'sync': 'scripts.cli.cli:cmd_sync',
-        'update': 'scripts.cli.cli:cmd_update',
-        'run': 'scripts.cli.cli:cmd_run',
-        'generate': 'scripts.core.generate_images_json:main',
-        'cleanup': 'scripts.cli.cli:cmd_cleanup',
-    }
-    
-    if args.command not in command_map:
-        print(f"❌ 未知命令: {args.command}")
-        print("💡 使用 'python scripts/main.py help' 查看可用命令")
-        return 1
-    
-    module_path, func_name = command_map[args.command].split(':')
-    import importlib
-    module = importlib.import_module(module_path)
-    func = getattr(module, func_name)
-    
-    new_args = argparse.Namespace(command=args.command, debug=args.debug)
-    for arg in remaining:
-        if arg.startswith('--'):
-            key = arg.lstrip('-').replace('-', '_')
-            if '=' in arg:
-                key, value = key.split('=')
-            else:
-                value = True
-            setattr(new_args, key, value)
-    
-    return func(new_args)
+    # 直接调用 cli.py 中的 main 函数
+    from scripts.cli.cli import main as cli_main
+    return cli_main()
 
 
 if __name__ == "__main__":
