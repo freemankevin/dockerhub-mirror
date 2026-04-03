@@ -189,6 +189,31 @@ class MirrorSync:
         """同步单个版本"""
         source_image = f"{image_name}:{version}"
         
+        # 检查源镜像是否来自 GHCR
+        if self._is_ghcr_source(source_image):
+            # GHCR 源镜像保持原样，不需要转换路径
+            target_image = source_image
+            repo_name = image_name.replace('ghcr.io/', '').replace('/', '__')
+            
+            print(f"\n🔄 Processing {source_image}...")
+            print(f"📦 Source: {source_image}")
+            print(f"🎯 Target: {target_image}")
+            print(f"ℹ️  源镜像来自 GHCR，跳过同步步骤")
+            
+            # 直接添加到镜像列表，不执行同步
+            with self._lock:
+                self.mirrored_images.append({
+                    'name': image_name,
+                    'source': source_image,
+                    'target': target_image,  # GHCR 镜像本身就是目标
+                    'version': version,
+                    'description': description,
+                    'repository': repo_name,
+                    'synced_at': datetime.now(timezone.utc).isoformat()
+                })
+                self.success_count += 1
+            return True
+        
         # 使用新的命名规则生成目标镜像名称（移除域名前缀）
         # 示例: docker.io/library/elasticsearch:9.3.1 -> library/elasticsearch
         ghcr_path = convert_to_ghcr_path(image_name)
@@ -198,23 +223,6 @@ class MirrorSync:
         print(f"\n🔄 Processing {source_image}...")
         print(f"📦 Source: {source_image}")
         print(f"🎯 Target: {target_image}")
-        
-        # 检查源镜像是否来自 GHCR
-        if self._is_ghcr_source(source_image):
-            print(f"ℹ️  源镜像来自 GHCR，跳过同步步骤")
-            # 直接添加到镜像列表，不执行同步
-            with self._lock:
-                self.mirrored_images.append({
-                    'name': image_name,
-                    'source': source_image,
-                    'target': source_image,  # GHCR 镜像本身就是目标
-                    'version': version,
-                    'description': description,
-                    'repository': repo_name,
-                    'synced_at': datetime.now(timezone.utc).isoformat()
-                })
-                self.success_count += 1
-            return True
         
         if self.mirror_image(source_image, target_image):
             print(f"✅ Successfully mirrored {source_image}")
