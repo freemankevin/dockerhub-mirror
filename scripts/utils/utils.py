@@ -77,33 +77,29 @@ def convert_to_ghcr_path(image: str) -> str:
     """将源镜像名称转换为 GHCR 路径格式
     
     新的命名规则：
-    - 将源仓库的主机名中的 '.' 替换为 '-' (docker.io -> docker-io, gcr.io -> gcr-io)
+    - 移除源仓库的主机名部分，只保留命名空间和镜像名
     - 保持命名空间结构，使用 '/' 分隔
-    - 这样既能区分来源仓库，又能保持简洁的命名结构
+    - 使镜像名称更简洁直观
     
     Args:
         image: 源镜像地址，如 'docker.io/library/elasticsearch:9.3.1'
     
     Returns:
-        GHCR 路径部分，如 'docker-io/library/elasticsearch'
+        GHCR 路径部分，如 'library/elasticsearch'
     
     示例：
-        - docker.io/library/elasticsearch:9.3.1 -> docker-io/library/elasticsearch
-        - gcr.io/kubeflow-images-public/katib/v1beta1/katib-controller:v0.9.0 
-          -> gcr-io/kubeflow-images-public/katib/v1beta1/katib-controller
-        - quay.io/prometheus/prometheus:v3.10.0 -> quay-io/prometheus/prometheus
-        - registry.k8s.io/pause:3.9 -> registry-k8s-io/pause
+        - docker.io/library/elasticsearch:9.3.1 -> library/elasticsearch
+        - gcr.io/google-containers/etcd:3.4.9 -> google-containers/etcd
+        - quay.io/minio/aistor/minio:RELEASE.2026-03-26T21-24-40Z -> minio/aistor/minio
+        - registry.k8s.io/pause:3.9 -> pause
     """
     registry, namespace, name = parse_image_name(image)
     
-    # 将主机名中的 '.' 替换为 '-'
-    registry_normalized = registry.replace('.', '-')
-    
-    # 构建 GHCR 路径
+    # 构建 GHCR 路径（移除 registry 主机名部分）
     if namespace:
-        return f"{registry_normalized}/{namespace}/{name}"
+        return f"{namespace}/{name}"
     else:
-        return f"{registry_normalized}/{name}"
+        return name
 
 
 def get_ghcr_image_name(source_image: str, owner: str, tag: str = None) -> str:
@@ -115,7 +111,7 @@ def get_ghcr_image_name(source_image: str, owner: str, tag: str = None) -> str:
         tag: 标签（可选，如果不提供则使用源镜像的标签）
     
     Returns:
-        完整的 GHCR 镜像名称，如 'ghcr.io/freemankevin/docker-io/library/elasticsearch:9.3.1'
+        完整的 GHCR 镜像名称，如 'ghcr.io/freemankevin/library/elasticsearch:9.3.1'
     """
     # 提取标签
     if tag is None:

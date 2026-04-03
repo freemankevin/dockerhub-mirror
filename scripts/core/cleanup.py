@@ -73,7 +73,7 @@ class ImageCleanup:
         
         Args:
             all_packages: 所有 package 列表
-            expected_packages: 预期保留的 package 集合
+            expected_packages: 预期保留的 package 集合（新格式，不包含域名前缀）
             
         Returns:
             (需要删除的 package 列表, 需要保留的 package 列表)
@@ -82,22 +82,53 @@ class ImageCleanup:
         to_keep = []
         
         for pkg in all_packages:
+            # 新格式：直接匹配
             if pkg in expected_packages:
                 to_keep.append(pkg)
+            # 新格式：双下划线格式
             elif pkg.replace('__', '/') in expected_packages:
                 to_keep.append(pkg)
-            elif pkg.replace('/', '__') in expected_packages:
+            # 旧格式：包含域名前缀的 package（需要删除）
+            # 例如：docker-io/library/elasticsearch 应该被删除
+            # 因为新格式是 library/elasticsearch
+            elif self._is_old_format(pkg, expected_packages):
                 to_delete.append(pkg)
             else:
                 to_delete.append(pkg)
         
         return to_delete, to_keep
     
+    def _is_old_format(self, pkg: str, expected_packages: Set[str]) -> bool:
+        """检查 package 是否是旧格式（包含域名前缀）
+        
+        Args:
+            pkg: package 名称
+            expected_packages: 预期保留的 package 集合
+            
+        Returns:
+            True 如果是旧格式，False 否则
+        """
+        # 旧的域名前缀列表
+        old_prefixes = [
+            'docker-io/', 'gcr-io/', 'quay-io/', 'registry-k8s-io/',
+            'docker-io__', 'gcr-io__', 'quay-io__', 'registry-k8s-io__'
+        ]
+        
+        # 检查是否以旧的域名前缀开头
+        for prefix in old_prefixes:
+            if pkg.startswith(prefix):
+                # 移除前缀后检查是否在预期集合中
+                new_pkg = pkg[len(prefix):]
+                if new_pkg in expected_packages or new_pkg.replace('__', '/') in expected_packages:
+                    return True
+        
+        return False
+    
     def get_old_format_packages(self, expected_packages: Set[str]) -> List[str]:
         """获取使用旧命名格式的 package（需要迁移/删除）
         
         Args:
-            expected_packages: 预期保留的 package 集合
+            expected_packages: 预期保留的 package 集合（新格式）
             
         Returns:
             使用旧格式的 package 列表
@@ -106,8 +137,8 @@ class ImageCleanup:
         old_format = []
         
         for pkg in all_packages:
-            new_format = pkg.replace('__', '/')
-            if new_format in expected_packages and '__' in pkg:
+            # 检查是否是旧格式
+            if self._is_old_format(pkg, expected_packages):
                 old_format.append(pkg)
         
         return old_format

@@ -18,7 +18,7 @@ def encode_package_name(name: str) -> str:
     """对包名进行 URL 编码
     
     GitHub API 要求包名中的斜杠进行 URL 编码
-    例如: docker-io/library/elasticsearch -> docker-io%2Flibrary%2Felasticsearch
+    例如: library/elasticsearch -> library%2Felasticsearch
     
     Args:
         name: 包名

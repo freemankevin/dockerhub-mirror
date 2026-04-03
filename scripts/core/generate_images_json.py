@@ -295,8 +295,8 @@ def generate_images_json(
                 logger.warning(f"GHCR 源镜像格式不正确: {source}")
         else:
             # 对于非 GHCR 源镜像，从目标仓库获取标签信息
-            # 使用新的命名规则转换为 GHCR 路径
-            # 示例: docker.io/library/elasticsearch -> docker-io/library/elasticsearch
+            # 使用新的命名规则转换为 GHCR 路径（移除域名前缀）
+            # 示例: docker.io/library/elasticsearch -> library/elasticsearch
             ghcr_path = convert_to_ghcr_path(image_name)
             
             # 获取 GHCR 中的所有标签信息

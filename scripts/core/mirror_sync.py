@@ -189,8 +189,8 @@ class MirrorSync:
         """同步单个版本"""
         source_image = f"{image_name}:{version}"
         
-        # 使用新的命名规则生成目标镜像名称
-        # 示例: docker.io/library/elasticsearch:9.3.1 -> docker-io/library/elasticsearch
+        # 使用新的命名规则生成目标镜像名称（移除域名前缀）
+        # 示例: docker.io/library/elasticsearch:9.3.1 -> library/elasticsearch
         ghcr_path = convert_to_ghcr_path(image_name)
         repo_name = ghcr_path.replace('/', '__')  # 用于存储的 repository 名称
         target_image = f"{self.registry}/{self.owner}/{ghcr_path}:{version}"
