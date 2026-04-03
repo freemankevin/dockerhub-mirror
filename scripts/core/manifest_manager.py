@@ -192,7 +192,7 @@ class ManifestManager:
                         
                         if tags:
                             # 过滤和排序标签
-                            from scripts.generate_images_json import filter_tags_by_pattern, sort_tags_by_version
+                            from scripts.core.generate_images_json import filter_tags_by_pattern, sort_tags_by_version
                             
                             filtered_tags = filter_tags_by_pattern(
                                 tags,

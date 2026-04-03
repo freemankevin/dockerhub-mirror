@@ -16,13 +16,13 @@ on:
     paths:
       - 'images-manifest.yml'
       - '.github/workflows/mirror-images.yml'
-      - 'main.py'
+      - 'scripts/main.py'
       - 'scripts/**'
   pull_request:
     paths:
       - 'images-manifest.yml'
       - '.github/workflows/mirror-images.yml'
-      - 'main.py'
+      - 'scripts/main.py'
       - 'scripts/**'
   workflow_dispatch:
 
@@ -63,7 +63,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r scripts/requirements.txt
 
       - name: Install regclient
         uses: iarekylew00t/regctl-installer@v4
@@ -98,7 +98,7 @@ jobs:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "🔄 检查并更新镜像版本..."
-          python3 main.py update --max-workers 3
+          python3 scripts/main.py update --max-workers 3
 
           # 检查清单是否有更新
           if git diff --quiet images-manifest.yml; then
@@ -120,7 +120,7 @@ jobs:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "🚀 开始同步镜像..."
-          python3 main.py --debug sync --owner ${{ env.GITHUB_OWNER }} --registry ${{ env.GHCR_REGISTRY }} --max-workers 2 --max-retries 5 --retry-delay 3 --continue-on-error
+          python3 scripts/main.py --debug sync --owner ${{ env.GITHUB_OWNER }} --registry ${{ env.GHCR_REGISTRY }} --max-workers 2 --max-retries 5 --retry-delay 3 --continue-on-error
 
           # 提取同步统计
           if [ -f images.json ]; then

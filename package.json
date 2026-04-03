@@ -1,13 +1,13 @@
 {
-  "name": "dockerhub-mirror-web",
+  "name": "dockerhub-mirror",
   "version": "1.0.0",
-  "description": "Docker Hub 镜像同步服务 - Web 界面",
+  "description": "Docker Hub 镜像同步服务 - 纯前端展示",
   "private": true,
   "scripts": {
-    "sync": "node sync-data.js",
-    "dev": "node sync-data.js && npx serve . -p 7886",
     "build": "echo 'No build step needed - static HTML/CSS/JS'",
-    "preview": "node sync-data.js && npx serve . -p 7886"
+    "dev": "npx serve . -p 7886",
+    "start": "npm run build && npm run dev",
+    "preview": "npx serve . -p 7886"
   },
   "keywords": [
     "docker",

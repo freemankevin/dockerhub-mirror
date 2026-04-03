@@ -7,16 +7,8 @@
       "destination": "/images.json"
     },
     {
-      "source": "/css/(.*)",
-      "destination": "/web/css/$1"
-    },
-    {
-      "source": "/js/(.*)",
-      "destination": "/web/js/$1"
-    },
-    {
       "source": "/(.*)",
-      "destination": "/web/index.html"
+      "destination": "/index.html"
     }
   ],
   "headers": [

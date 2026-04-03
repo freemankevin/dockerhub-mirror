@@ -9,21 +9,17 @@ import yaml
 import os
 from pathlib import Path
 
-from .registry_api import RegistryAPI
-from .ghcr_api import GHCRRegistryAPI
-from .manifest_manager import ManifestManager
-from .mirror_sync import MirrorSync
-from .utils import setup_logger, load_env_files, get_env_variable, COLOR_GREEN, COLOR_YELLOW, COLOR_BLUE, COLOR_RED, COLOR_CYAN, COLOR_RESET
+from scripts.api.registry_api import RegistryAPI
+from scripts.api.ghcr_api import GHCRRegistryAPI
+from scripts.core.manifest_manager import ManifestManager
+from scripts.core.mirror_sync import MirrorSync
+from scripts.utils import setup_logger, load_env_files, get_env_variable, COLOR_GREEN, COLOR_YELLOW, COLOR_BLUE, COLOR_RED, COLOR_CYAN, COLOR_RESET
 
-# 确保环境变量已加载（如果之前没有加载）
-PROJECT_ROOT = Path(__file__).parent.parent
+PROJECT_ROOT = Path(__file__).parent.parent.parent
 load_env_files(PROJECT_ROOT)
 
-# ==================== 配置 ====================
-
-PROJECT_ROOT = Path(__file__).parent.parent
 MANIFEST_FILE = PROJECT_ROOT / "images-manifest.yml"
-OUTPUT_FILE = PROJECT_ROOT / "images.json"  # ✅ 修改：移到根目录
+OUTPUT_FILE = PROJECT_ROOT / "images.json"
 LOGS_DIR = PROJECT_ROOT / "logs"
 
 
@@ -139,7 +135,7 @@ def cmd_sync(args):
     if result['fail_count'] == 0 or args.continue_on_error:
         print(f"\n{COLOR_CYAN}📝 生成镜像列表 JSON...{COLOR_RESET}")
         try:
-            from scripts.generate_images_json import generate_images_json
+            from scripts.core.generate_images_json import generate_images_json
             
             output_file = args.output or OUTPUT_FILE
             # 从环境变量获取 GHCR_TOKEN
