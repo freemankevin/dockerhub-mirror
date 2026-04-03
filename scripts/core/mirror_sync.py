@@ -121,11 +121,13 @@ class MirrorSync:
         if not self.needs_sync(source, target):
             return True  # 跳过同步，视为成功
         
+        last_error = None
         for attempt in range(self.max_retries):
             try:
                 # 添加随机延迟，避免同时发送请求
                 if attempt > 0:
-                    delay = self.retry_delay * (2 ** (attempt - 1)) + random.uniform(0, 1)
+                    # 指数退避策略：2^attempt * base_delay + random jitter
+                    delay = self.retry_delay * (2 ** attempt) + random.uniform(0, 2)
                     if self.logger:
                         self.logger.info(f"第 {attempt + 1} 次重试，等待 {delay:.2f} 秒...")
                     time.sleep(delay)
@@ -140,42 +142,65 @@ class MirrorSync:
                 if self.logger:
                     self.logger.debug(f"执行命令: {' '.join(cmd)}")
 
+                # 增加超时时间到 600 秒（10 分钟）以支持大镜像
                 result = subprocess.run(
                     cmd,
                     capture_output=True,
                     text=True,
-                    timeout=300
+                    timeout=600
                 )
 
                 if result.returncode == 0:
                     return True
                 else:
-                    # 检查是否是速率限制错误
-                    if 'rate limit exceeded' in result.stderr.lower() or 'TOOMANYREQUESTS' in result.stderr:
-                        if attempt < self.max_retries - 1:
+                    last_error = result.stderr
+                    error_lower = result.stderr.lower()
+                    
+                    # 检查错误类型
+                    is_rate_limit = 'rate limit' in error_lower or 'toomanyrequests' in error_lower
+                    is_network_error = 'network' in error_lower or 'connection' in error_lower or 'timeout' in error_lower
+                    is_temporary = 'temporary' in error_lower or 'unavailable' in error_lower
+                    
+                    # 所有错误都重试，除非是最后一次尝试
+                    if attempt < self.max_retries - 1:
+                        if is_rate_limit:
                             if self.logger:
                                 self.logger.warning(f"遇到速率限制，将重试... ({attempt + 1}/{self.max_retries})")
-                            continue
+                        elif is_network_error:
+                            if self.logger:
+                                self.logger.warning(f"网络错误，将重试... ({attempt + 1}/{self.max_retries})")
+                        elif is_temporary:
+                            if self.logger:
+                                self.logger.warning(f"临时错误，将重试... ({attempt + 1}/{self.max_retries})")
                         else:
                             if self.logger:
-                                self.logger.error(f"同步失败（速率限制）: {result.stderr}")
-                            return False
+                                self.logger.warning(f"同步失败，将重试... ({attempt + 1}/{self.max_retries})")
+                                self.logger.debug(f"错误详情: {result.stderr}")
+                        continue
                     else:
+                        # 最后一次尝试失败
                         if self.logger:
-                            self.logger.error(f"同步失败: {result.stderr}")
+                            self.logger.error(f"同步失败（已重试 {self.max_retries} 次）: {result.stderr}")
                         return False
 
             except subprocess.TimeoutExpired:
+                last_error = f"同步超时（600秒）"
                 if self.logger:
-                    self.logger.error(f"同步超时: {source}")
+                    self.logger.warning(f"同步超时: {source} ({attempt + 1}/{self.max_retries})")
                 if attempt < self.max_retries - 1:
                     continue
+                if self.logger:
+                    self.logger.error(f"同步超时（已重试 {self.max_retries} 次）: {source}")
                 return False
+                
             except Exception as e:
+                last_error = str(e)
                 if self.logger:
-                    self.logger.error(f"镜像同步异常: {str(e)}")
+                    self.logger.warning(f"镜像同步异常: {str(e)} ({attempt + 1}/{self.max_retries})")
                 if attempt < self.max_retries - 1:
                     continue
+                if self.logger:
+                    self.logger.error(f"镜像同步异常（已重试 {self.max_retries} 次）: {str(e)}")
                 return False
 
         return False
