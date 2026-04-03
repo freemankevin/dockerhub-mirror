@@ -1094,6 +1094,7 @@ function generateNotifications(data) {
 
 function updateNotificationUI() {
   const badge = document.getElementById('notificationBadge');
+  const dot = document.getElementById('notificationDot');
   const list = document.getElementById('notificationList');
   
   const failedCount = notifications.filter(n => n.type === 'error').length;
@@ -1102,10 +1103,16 @@ function updateNotificationUI() {
     if (failedCount > 0) {
       badge.textContent = failedCount;
       badge.classList.remove('hidden');
-      badge.classList.add('animate-pulse');
     } else {
       badge.classList.add('hidden');
-      badge.classList.remove('animate-pulse');
+    }
+  }
+  
+  if (dot) {
+    if (failedCount > 0) {
+      dot.classList.remove('hidden');
+    } else {
+      dot.classList.add('hidden');
     }
   }
   
