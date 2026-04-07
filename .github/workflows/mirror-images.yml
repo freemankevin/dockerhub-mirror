@@ -160,12 +160,22 @@ jobs:
           if ! git diff --staged --quiet; then
             git commit -m "chore: update sync results [skip ci]"
             # Pull remote changes with rebase before push
-            git pull --rebase origin main || true
-            git push -q
+            if git pull --rebase origin main; then
+              git push -q
+            else
+              echo "Rebase failed, aborting..."
+              git rebase --abort 2>/dev/null || true
+              git reset --hard HEAD
+            fi
           elif [ -n "$(git log @{u}.. --oneline)" ]; then
             # Pull remote changes with rebase before push
-            git pull --rebase origin main || true
-            git push -q
+            if git pull --rebase origin main; then
+              git push -q
+            else
+              echo "Rebase failed, aborting..."
+              git rebase --abort 2>/dev/null || true
+              git reset --hard HEAD
+            fi
           fi
 
       - name: Summary
