@@ -10,7 +10,7 @@ images:
   tag_pattern: ^v[0-9]+\.[0-9]+\.[0-9]+$
   exclude_pattern: .*BETA.*|.*RC.*|.*SNAPSHOT.*
   sync_all_matching: false
-- source: library/nginx:1.29.7-alpine
+- source: library/nginx:1.29.8-alpine
   enabled: true
   description: High-performance HTTP server and reverse proxy
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+-alpine$
@@ -74,4 +74,4 @@ config:
   retention:
     max_versions: 3
     cleanup_old_versions: false
-  last_checked: '2026-04-04T04:00:33.884963+00:00'
+  last_checked: '2026-04-08T04:20:12.987088+00:00'
