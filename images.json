@@ -1,18 +1,18 @@
 {
-  "updated_at": "2026-04-08T04:20:50.822332+00:00",
+  "updated_at": "2026-04-09T04:17:08.312348+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 11,
-  "total_versions": 39,
+  "total_versions": 41,
   "total_failed": 0,
   "images": [
     {
       "name": "library/elasticsearch",
       "description": "Distributed, RESTful search and analytics engine",
       "repository": "library/elasticsearch",
-      "total_versions": 1,
-      "latest_version": "9.3.2",
-      "updated": "2026-04-03T04:51:02+00:00",
+      "total_versions": 2,
+      "latest_version": "9.3.3",
+      "updated": "2026-04-09T04:16:39+00:00",
       "size": "1.2 GB",
       "layers": 12,
       "stars": 0,
@@ -21,6 +21,16 @@
         "ARM64"
       ],
       "versions": [
+        {
+          "version": "9.3.3",
+          "digest": "sha256:afbc1f1435483cd8bd201329a7250bb779f587ba199d34aec167088309cebfca",
+          "created_at": "2026-04-09T04:16:39+00:00",
+          "synced_at": "2026-04-09T04:16:39+00:00",
+          "target": "ghcr.io/freemankevin/library/elasticsearch:9.3.3",
+          "source": "docker.io/library/elasticsearch:9.3.3",
+          "size": "1.2 GB",
+          "layers": 12
+        },
         {
           "version": "9.3.2",
           "digest": "sha256:56282e41f1d9c8dc437e4c99d132cf9f154def73b6ea8a25ac969a28c2f529c6",
@@ -516,17 +526,28 @@
       "name": "ghcr.io/freemankevin/network-tools",
       "description": "Network diagnostic tools for containerized environments including curl, wget, ping, nslookup, dig, telnet, nc, tcpdump",
       "repository": "network-tools",
-      "total_versions": 0,
-      "latest_version": null,
-      "updated": "",
-      "size": "",
-      "layers": 0,
+      "total_versions": 1,
+      "latest_version": "latest",
+      "updated": "2026-04-09T01:36:57+00:00",
+      "size": "45 MB",
+      "layers": 4,
       "stars": 0,
       "platforms": [
         "AMD64",
         "ARM64"
       ],
-      "versions": []
+      "versions": [
+        {
+          "version": "latest",
+          "digest": "sha256:c8c437adc579be2f92b4176d088b32d8b0aa3d622d4037995051bbd05b7fbba6",
+          "created_at": "2026-04-09T01:36:57+00:00",
+          "synced_at": "2026-04-09T01:36:57+00:00",
+          "target": "ghcr.io/freemankevin/network-tools:latest",
+          "source": "ghcr.io/freemankevin/network-tools:latest",
+          "size": "45 MB",
+          "layers": 4
+        }
+      ]
     },
     {
       "name": "gcr.io/google-containers/etcd",
