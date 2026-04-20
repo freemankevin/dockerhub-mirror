@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-04-19T04:37:33.563534+00:00",
+  "updated_at": "2026-04-20T04:44:23.040595+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
-  "total_images": 11,
-  "total_versions": 44,
+  "total_images": 10,
+  "total_versions": 43,
   "total_failed": 0,
   "images": [
     {
@@ -529,33 +529,6 @@
           "source": "docker.io/freelabspace/postgresql-backup:latest",
           "size": "45 MB",
           "layers": 5
-        }
-      ]
-    },
-    {
-      "name": "ghcr.io/freemankevin/network-tools",
-      "description": "Network diagnostic tools for containerized environments including curl, wget, ping, nslookup, dig, telnet, nc, tcpdump",
-      "repository": "network-tools",
-      "total_versions": 1,
-      "latest_version": "latest",
-      "updated": "2026-04-09T01:36:57+00:00",
-      "size": "45 MB",
-      "layers": 4,
-      "stars": 0,
-      "platforms": [
-        "AMD64",
-        "ARM64"
-      ],
-      "versions": [
-        {
-          "version": "latest",
-          "digest": "sha256:c8c437adc579be2f92b4176d088b32d8b0aa3d622d4037995051bbd05b7fbba6",
-          "created_at": "2026-04-09T01:36:57+00:00",
-          "synced_at": "2026-04-09T01:36:57+00:00",
-          "target": "ghcr.io/freemankevin/network-tools:latest",
-          "source": "ghcr.io/freemankevin/network-tools:latest",
-          "size": "45 MB",
-          "layers": 4
         }
       ]
     },
