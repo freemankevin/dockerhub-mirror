@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-04-20T04:44:23.040595+00:00",
+  "updated_at": "2026-04-20T04:53:27.551638+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
-  "total_images": 10,
-  "total_versions": 43,
+  "total_images": 11,
+  "total_versions": 44,
   "total_failed": 0,
   "images": [
     {
@@ -536,17 +536,28 @@
       "name": "ghcr.io/freemankevin/netkit",
       "description": "Network diagnostic tools for containerized environments including curl, wget, ping, nslookup, dig, telnet, nc, tcpdump",
       "repository": "netkit",
-      "total_versions": 0,
-      "latest_version": null,
-      "updated": "",
-      "size": "",
-      "layers": 0,
+      "total_versions": 1,
+      "latest_version": "latest",
+      "updated": "2026-04-20T04:33:07+00:00",
+      "size": "45 MB",
+      "layers": 4,
       "stars": 0,
       "platforms": [
         "AMD64",
         "ARM64"
       ],
-      "versions": []
+      "versions": [
+        {
+          "version": "latest",
+          "digest": "sha256:fa38af73590baf00bb2d6111d22baffea8399053fa22bee5d9f3a30d44e80c9c",
+          "created_at": "2026-04-20T04:33:07+00:00",
+          "synced_at": "2026-04-20T04:33:07+00:00",
+          "target": "ghcr.io/freemankevin/netkit:latest",
+          "source": "ghcr.io/freemankevin/netkit:latest",
+          "size": "45 MB",
+          "layers": 4
+        }
+      ]
     },
     {
       "name": "gcr.io/google-containers/etcd",
