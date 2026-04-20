@@ -503,9 +503,9 @@
       ]
     },
     {
-      "name": "ghcr.io/freemankevin/network-tools",
+      "name": "ghcr.io/freemankevin/netkit",
       "description": "Network diagnostic tools for containerized environments including curl, wget, ping, nslookup, dig, telnet, nc, tcpdump",
-      "repository": "network-tools",
+      "repository": "netkit",
       "total_versions": 0,
       "latest_version": null,
       "updated": "",

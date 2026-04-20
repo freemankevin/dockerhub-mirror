@@ -1,7 +1,7 @@
 {
-  "name": "dockerhub-mirror",
+  "name": "registry-sync",
   "version": "1.0.0",
-  "description": "Docker Hub 镜像同步服务 - 纯前端展示",
+  "description": "多镜像仓库同步服务 - 纯前端展示",
   "private": true,
   "scripts": {
     "build": "echo 'No build step needed - static HTML/CSS/JS'",

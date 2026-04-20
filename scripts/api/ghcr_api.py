@@ -88,7 +88,7 @@ class GHCRRegistryAPI:
             'geoserver': '1.8 GB',
             'postgresql-postgis': '856 MB',
             'postgresql-backup': '45 MB',
-            'network-tools': '45 MB'
+            'netkit': '45 MB'
         }
         
         # 查找匹配的仓库
@@ -120,7 +120,7 @@ class GHCRRegistryAPI:
             'geoserver': 15,
             'postgresql-postgis': 15,
             'postgresql-backup': 5,
-            'network-tools': 4
+            'netkit': 4
         }
         
         # 查找匹配的仓库

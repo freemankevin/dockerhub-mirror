@@ -1,4 +1,4 @@
-# Docker Hub Mirror
+# Registry Sync
 
 Docker 镜像同步工具，支持将多源镜像同步到 GitHub Container Registry (GHCR)。
 

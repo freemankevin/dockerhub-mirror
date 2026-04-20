@@ -49,7 +49,7 @@ images:
   tag_pattern: ^latest$|^[0-9]+\.[0-9]+$
   exclude_pattern: ^buildcache-.*
   sync_all_matching: false
-- source: ghcr.io/freemankevin/network-tools:latest
+- source: ghcr.io/freemankevin/netkit:latest
   enabled: true
   description: Network diagnostic tools for containerized environments including curl,
     wget, ping, nslookup, dig, telnet, nc, tcpdump

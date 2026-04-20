@@ -37,10 +37,10 @@ def normalize_source_image(image_name: str) -> str:
     """规范化镜像名称，添加完整的仓库地址前缀
     
     Args:
-        image_name: 镜像名称，如 'nginx', 'kartoza/geoserver', 'library/nginx', 'ghcr.io/freemankevin/network-tools'
+        image_name: 镜像名称，如 'nginx', 'kartoza/geoserver', 'library/nginx', 'ghcr.io/freemankevin/netkit'
         
     Returns:
-        规范化后的镜像名称，如 'docker.io/library/nginx', 'docker.io/kartoza/geoserver', 'ghcr.io/freemankevin/network-tools'
+        规范化后的镜像名称，如 'docker.io/library/nginx', 'docker.io/kartoza/geoserver', 'ghcr.io/freemankevin/netkit'
     """
     if not image_name:
         return ''

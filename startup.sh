@@ -1,11 +1,11 @@
 #!/bin/bash
-# Docker Hub Mirror 一键启动脚本
+# Registry Sync 一键启动脚本
 # 自动构建并启动开发服务器
 
 set -e
 
 echo "=========================================="
-echo "  Docker Hub Mirror - 开发环境启动"
+echo "  Registry Sync - 开发环境启动"
 echo "=========================================="
 
 # 检查是否安装了 Node.js
