@@ -1,39 +1,11 @@
 images:
 - source: public.ecr.aws/amazoncorretto/amazoncorretto:8-al2023
   enabled: true
-  description: Amazon Corretto 8 JDK (Amazon Linux 2023)
-  tag_pattern: ^8-al2023$
+  description: Amazon Corretto JDK (Amazon Linux 2023)
+  tag_pattern: ^(8|11|17|21|25)-al2023$
   sync_all_matching: false
   retention:
-    max_versions: 3
-- source: public.ecr.aws/amazoncorretto/amazoncorretto:11-al2023
-  enabled: true
-  description: Amazon Corretto 11 JDK (Amazon Linux 2023)
-  tag_pattern: ^11-al2023$
-  sync_all_matching: false
-  retention:
-    max_versions: 3
-- source: public.ecr.aws/amazoncorretto/amazoncorretto:17-al2023
-  enabled: true
-  description: Amazon Corretto 17 JDK (Amazon Linux 2023)
-  tag_pattern: ^17-al2023$
-  sync_all_matching: false
-  retention:
-    max_versions: 3
-- source: public.ecr.aws/amazoncorretto/amazoncorretto:21-al2023
-  enabled: true
-  description: Amazon Corretto 21 JDK (Amazon Linux 2023)
-  tag_pattern: ^21-al2023$
-  sync_all_matching: false
-  retention:
-    max_versions: 3
-- source: public.ecr.aws/amazoncorretto/amazoncorretto:25-al2023
-  enabled: true
-  description: Amazon Corretto 25 JDK (Amazon Linux 2023)
-  tag_pattern: ^25-al2023$
-  sync_all_matching: false
-  retention:
-    max_versions: 3
+    max_versions: 5
 - source: library/elasticsearch:9.3.3
   enabled: true
   description: Distributed, RESTful search and analytics engine

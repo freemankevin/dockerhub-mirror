@@ -397,13 +397,16 @@ function setText(id, val) {
       ? img.versions.map(v => v.version || v.tag || v)
       : [ver];
     
+    // Sanitize ID by replacing special characters that break CSS selectors
+    const safeId = img.name.replace(/[^a-zA-Z0-9_-]/g, '__');
+    
     const optionsHtml = versions.map(v => {
       const isSelected = v === ver;
       return `<div class="custom-select-option ${isSelected ? 'selected' : ''}" data-value="${v}" onclick="selectVersion('${img.name}', '${v}')">${v}</div>`;
     }).join('');
     
     return `
-      <div class="custom-select" id="version-select-${img.name}">
+      <div class="custom-select" id="version-select-${safeId}">
         <div class="custom-select-trigger" onclick="toggleVersionSelect('${img.name}')">
           <span class="mono">${ver}</span>
           <i class="fas fa-chevron-down custom-select-arrow"></i>
@@ -614,14 +617,16 @@ function buildFailedCard(img, index) {
 
 // ── Custom Version Select ─────────────────────
 function toggleVersionSelect(name) {
-  const selectEl = document.getElementById(`version-select-${name}`);
+  // Sanitize ID the same way as in buildVersionSelect
+  const safeId = name.replace(/[^a-zA-Z0-9_-]/g, '__');
+  const selectEl = document.getElementById(`version-select-${safeId}`);
   if (!selectEl) return;
   
   const isOpen = selectEl.classList.contains('open');
   
   // Close all other selects
   document.querySelectorAll('.custom-select.open').forEach(el => {
-    if (el.id !== `version-select-${name}`) {
+    if (el.id !== `version-select-${safeId}`) {
       el.classList.remove('open');
     }
   });
@@ -646,8 +651,9 @@ function selectVersion(name, tag) {
     if (vObj && vObj.source) flat.source = vObj.source;
   }
   
-  // Close dropdown
-  const selectEl = document.getElementById(`version-select-${name}`);
+  // Close dropdown (use sanitized ID)
+  const safeId = name.replace(/[^a-zA-Z0-9_-]/g, '__');
+  const selectEl = document.getElementById(`version-select-${safeId}`);
   if (selectEl) selectEl.classList.remove('open');
   
   // Re-render to update display

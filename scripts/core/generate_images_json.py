@@ -198,8 +198,8 @@ def generate_images_json(
     # 初始化 GHCR API 客户端
     ghcr_api = GHCRRegistryAPI(logger, token)
     
-    # 收集所有镜像信息
-    images = []
+    # 收集所有镜像信息（按 image_name 分组，合并相同镜像的不同版本）
+    image_groups = {}  # image_name -> {description, tags_set, tag_patterns[]}
     total_versions = 0
     
     for img in manifest.get('images', []):
@@ -218,6 +218,25 @@ def generate_images_json(
             image_name = source
             version = 'latest'
         
+        # 按 image_name 分组，收集所有 tag_patterns
+        if image_name not in image_groups:
+            image_groups[image_name] = {
+                'description': description,
+                'source': source,
+                'tag_patterns': [],
+                'exclude_pattern': exclude_pattern,
+            }
+        if tag_pattern:
+            image_groups[image_name]['tag_patterns'].append(tag_pattern)
+    
+    # 处理每个镜像组
+    images = []
+    for image_name, group_info in image_groups.items():
+        description = group_info['description']
+        source = group_info['source']
+        tag_patterns = group_info['tag_patterns']
+        exclude_pattern = group_info['exclude_pattern']
+        
         # 检查源镜像是否来自 GHCR
         is_ghcr_source = source.startswith('ghcr.io/')
         
@@ -235,20 +254,32 @@ def generate_images_json(
                 
                 print(f"\n🔍 获取 GHCR 源镜像 {source_owner}/{source_repo_name} 的所有标签...")
                 logger.debug(f"原始源: {source}")
-                logger.debug(f"标签匹配模式: {tag_pattern}")
+                logger.debug(f"标签匹配模式: {tag_patterns}")
                 logger.debug(f"排除模式: {exclude_pattern}")
                 tags = ghcr_api.get_repository_tags(source_owner, source_repo_name)
                 
                 if tags:
                     logger.debug(f"找到 {len(tags)} 个标签")
                     
-                    # 根据 tag_pattern 和 exclude_pattern 过滤标签
-                    filtered_tags = filter_tags_by_pattern(
-                        tags,
-                        tag_pattern=tag_pattern,
-                        exclude_pattern=exclude_pattern,
-                        logger=logger
-                    )
+                    # 根据多个 tag_patterns 和 exclude_pattern 过滤标签
+                    # 合并多个 pattern 的结果（OR 逻辑）
+                    filtered_tags = []
+                    seen_tags = set()
+                    for pattern in tag_patterns:
+                        batch = filter_tags_by_pattern(
+                            tags,
+                            tag_pattern=pattern,
+                            exclude_pattern=exclude_pattern,
+                            logger=logger
+                        )
+                        for tag in batch:
+                            if tag['name'] not in seen_tags:
+                                seen_tags.add(tag['name'])
+                                filtered_tags.append(tag)
+                    
+                    # 如果没有指定 tag_patterns，保留所有标签
+                    if not tag_patterns:
+                        filtered_tags = tags
                     
                     logger.debug(f"过滤后剩余 {len(filtered_tags)} 个标签")
                     
@@ -307,20 +338,32 @@ def generate_images_json(
             print(f"\n🔍 获取 {owner}/{ghcr_path} 的所有标签...")
             logger.debug(f"完整镜像路径: {registry}/{owner}/{ghcr_path}")
             logger.debug(f"原始源: {source}")
-            logger.debug(f"标签匹配模式: {tag_pattern}")
+            logger.debug(f"标签匹配模式: {tag_patterns}")
             logger.debug(f"排除模式: {exclude_pattern}")
             tags = ghcr_api.get_repository_tags(owner, ghcr_path)
             
             if tags:
                 logger.debug(f"找到 {len(tags)} 个标签")
                 
-                # 根据 tag_pattern 和 exclude_pattern 过滤标签
-                filtered_tags = filter_tags_by_pattern(
-                    tags,
-                    tag_pattern=tag_pattern,
-                    exclude_pattern=exclude_pattern,
-                    logger=logger
-                )
+                # 根据多个 tag_patterns 和 exclude_pattern 过滤标签
+                # 合并多个 pattern 的结果（OR 逻辑）
+                filtered_tags = []
+                seen_tags = set()
+                for pattern in tag_patterns:
+                    batch = filter_tags_by_pattern(
+                        tags,
+                        tag_pattern=pattern,
+                        exclude_pattern=exclude_pattern,
+                        logger=logger
+                    )
+                    for tag in batch:
+                        if tag['name'] not in seen_tags:
+                            seen_tags.add(tag['name'])
+                            filtered_tags.append(tag)
+                
+                # 如果没有指定 tag_patterns，保留所有标签
+                if not tag_patterns:
+                    filtered_tags = tags
                 
                 logger.debug(f"过滤后剩余 {len(filtered_tags)} 个标签")
                 
