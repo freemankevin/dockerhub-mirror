@@ -1320,15 +1320,18 @@ input:focus-visible {
         }
         
         /* When dropdown is open in a card, ensure the card doesn't clip it */
-        .surface:has(.custom-select.open),
+        /* Use higher specificity to override html.dark .surface and html.light .surface */
+        html.dark .surface:has(.custom-select.open),
+        html.light .surface:has(.custom-select.open),
+        html:not(.dark) .surface:has(.custom-select.open),
         article:has(.custom-select.open) {
-            overflow: visible;
+            overflow: visible !important;
             z-index: 100;
         }
         
-        /* Fallback for browsers without :has support */
-        .custom-select.open {
-            position: static;
+        /* Ensure dropdown options are always on top */
+        .custom-select.open .custom-select-options {
+            z-index: 9999;
         }
         
         /* Reduced motion */
