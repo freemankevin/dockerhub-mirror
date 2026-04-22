@@ -27,7 +27,7 @@ const translations = {
       aws: 'AWS ECR'
     },
     search: {
-      placeholder: 'Search by image name, source repository, or version tag',
+      placeholder: 'Search ...',
       ariaLabel: 'Search container images'
     },
     loading: {
