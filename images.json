@@ -1,26 +1,37 @@
 {
-  "updated_at": "2026-04-22T04:54:18.518224+00:00",
+  "updated_at": "2026-04-22T05:07:52.034382+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 16,
-  "total_versions": 44,
-  "total_failed": 1,
+  "total_versions": 45,
+  "total_failed": 0,
   "images": [
     {
       "name": "public.ecr.aws/amazoncorretto/amazoncorretto",
       "description": "Amazon Corretto 8 JDK - headless minimal runtime (Amazon Linux 2023)",
       "repository": "public.ecr.aws/amazoncorretto/amazoncorretto",
-      "total_versions": 0,
-      "latest_version": null,
-      "updated": "",
-      "size": "",
-      "layers": 0,
+      "total_versions": 1,
+      "latest_version": "8u482-al2023",
+      "updated": "2026-04-22T05:07:11+00:00",
+      "size": "256 MB",
+      "layers": 8,
       "stars": 0,
       "platforms": [
         "AMD64",
         "ARM64"
       ],
-      "versions": []
+      "versions": [
+        {
+          "version": "8u482-al2023",
+          "digest": "sha256:b5457bb0245ea9e1b63a246c0eb889bfb11ff32f2c949f9e4dfdb54effa189d1",
+          "created_at": "2026-04-22T05:07:11+00:00",
+          "synced_at": "2026-04-22T05:07:11+00:00",
+          "target": "ghcr.io/freemankevin/public.ecr.aws/amazoncorretto/amazoncorretto:8u482-al2023",
+          "source": "public.ecr.aws/amazoncorretto/amazoncorretto:8u482-al2023",
+          "size": "256 MB",
+          "layers": 8
+        }
+      ]
     },
     {
       "name": "public.ecr.aws/amazoncorretto/amazoncorretto",
@@ -714,15 +725,5 @@
       ]
     }
   ],
-  "failed_images": [
-    {
-      "name": "public.ecr.aws/amazoncorretto/amazoncorretto",
-      "source": "public.ecr.aws/amazoncorretto/amazoncorretto:8-al2023-headless",
-      "target": "ghcr.io/freemankevin/public.ecr.aws/amazoncorretto/amazoncorretto:8-al2023-headless",
-      "version": "8-al2023-headless",
-      "description": "Amazon Corretto 8 JDK - headless minimal runtime (Amazon Linux 2023)",
-      "sync_status": "failed",
-      "failed_at": "2026-04-22T04:54:18.518215+00:00"
-    }
-  ]
+  "failed_images": []
 }
