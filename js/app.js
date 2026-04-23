@@ -78,11 +78,13 @@ function processData(data) {
   const records = Array.isArray(data) ? data : (data.images || Object.values(data));
   const failedRecords = data.failed_images || [];
 
-  // Helper to get description (removed Chinese-to-English conversion)
-  function getEnglishDescription(desc, name) {
-    if (!desc) return '';
-    // Use original description directly
-    return desc;
+  // Helper to get description based on current language
+  function getLocalizedDescription(img) {
+    const lang = window.i18n ? window.i18n.currentLang : 'en';
+    if (lang === 'zh' && img.description_zh) {
+      return img.description_zh;
+    }
+    return img.description || '';
   }
 
   records.forEach(img => {
@@ -103,7 +105,7 @@ function processData(data) {
     const record = {
       name,
       displayName: getDisplayName(name),
-      description: getEnglishDescription(img.description || '', name),
+      description: getLocalizedDescription(img),
       stars,
       layers,
       updated:     img.updated || img.last_updated || img.synced_at || '',
@@ -131,7 +133,7 @@ function processData(data) {
     const record = {
       name,
       displayName: getDisplayName(name),
-      description: img.description || 'Sync failed - image not available',
+      description: img.description_zh || img.description || '同步失败 - 镜像不可用',
       source: img.source || '',
       sourceType: sourceType,
       version: img.version || '',
@@ -458,19 +460,17 @@ function buildCard(img, index) {
     const size = formatSize(img.size);
     const isDark = document.documentElement.classList.contains('dark');
 
-    // Icon rendering based on source type - using local SVG files
     let iconHtml;
-    const iconSize = 'w-8 h-8';
     if (img.sourceType === 'dockerhub') {
-      iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-docker border flex items-center justify-center flex-shrink-0"><img src="/public/docker.svg" class="${iconSize}" alt="Docker"></div>`;
+      iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-docker border flex items-center justify-center flex-shrink-0"><i class="fa-brands fa-docker w-8 h-8 flex items-center justify-center" style="color: #2496ED; font-size: 28px;"></i></div>`;
     } else if (img.sourceType === 'google') {
-      iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-google border flex items-center justify-center flex-shrink-0"><img src="/public/google.svg" class="${iconSize}" alt="Google"></div>`;
+      iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-google border flex items-center justify-center flex-shrink-0"><img src="/public/google.svg" class="w-8 h-8" alt="Google"></div>`;
     } else if (img.sourceType === 'redhat') {
-      iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-redhat border flex items-center justify-center flex-shrink-0"><img src="/public/redhat.svg" class="${iconSize}" alt="Red Hat"></div>`;
+      iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-redhat border flex items-center justify-center flex-shrink-0"><img src="/public/redhat.svg" class="w-8 h-8" alt="Red Hat"></div>`;
     } else if (img.sourceType === 'aws') {
-      iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-aws border flex items-center justify-center flex-shrink-0"><img src="/public/aws.svg" class="${iconSize}" alt="AWS"></div>`;
+      iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-aws border flex items-center justify-center flex-shrink-0"><i class="fa-brands fa-aws w-8 h-8 flex items-center justify-center" style="color: #FF9900; font-size: 28px;"></i></div>`;
     } else {
-      iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-github border flex items-center justify-center flex-shrink-0"><img src="/public/github.svg" class="${iconSize}" alt="GitHub"></div>`;
+      iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-github border flex items-center justify-center flex-shrink-0"><i class="fa-brands fa-github w-8 h-8 flex items-center justify-center" style="font-size: 28px;"></i></div>`;
     }
 
     const versionEl = buildVersionSelect(img, ver);
@@ -552,19 +552,17 @@ function buildFailedCard(img, index) {
   const sourceLabel = getSourceLabel(img.sourceType);
   const ago = formatAgo(img.failedAt);
 
-  // Icon rendering based on source type - using local SVG files
   let iconHtml;
-  const iconSize = 'w-8 h-8';
   if (img.sourceType === 'dockerhub') {
-    iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-docker border flex items-center justify-center flex-shrink-0 opacity-50"><img src="/public/docker.svg" class="${iconSize} grayscale" alt="Docker"></div>`;
+    iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-docker border flex items-center justify-center flex-shrink-0 opacity-50"><i class="fa-brands fa-docker w-8 h-8 flex items-center justify-center grayscale" style="color: #2496ED; font-size: 28px;"></i></div>`;
   } else if (img.sourceType === 'google') {
-    iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-google border flex items-center justify-center flex-shrink-0 opacity-50"><img src="/public/google.svg" class="${iconSize} grayscale" alt="Google"></div>`;
+    iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-google border flex items-center justify-center flex-shrink-0 opacity-50"><img src="/public/google.svg" class="w-8 h-8 grayscale" alt="Google"></div>`;
   } else if (img.sourceType === 'redhat') {
-    iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-redhat border flex items-center justify-center flex-shrink-0 opacity-50"><img src="/public/redhat.svg" class="${iconSize} grayscale" alt="Red Hat"></div>`;
+    iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-redhat border flex items-center justify-center flex-shrink-0 opacity-50"><img src="/public/redhat.svg" class="w-8 h-8 grayscale" alt="Red Hat"></div>`;
   } else if (img.sourceType === 'aws') {
-    iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-aws border flex items-center justify-center flex-shrink-0 opacity-50"><img src="/public/aws.svg" class="${iconSize} grayscale" alt="AWS"></div>`;
+    iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-aws border flex items-center justify-center flex-shrink-0 opacity-50"><i class="fa-brands fa-aws w-8 h-8 flex items-center justify-center grayscale" style="color: #FF9900; font-size: 28px;"></i></div>`;
   } else {
-    iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-github border flex items-center justify-center flex-shrink-0 opacity-50"><img src="/public/github.svg" class="${iconSize} grayscale" alt="GitHub"></div>`;
+    iconHtml = `<div class="w-12 h-12 rounded-xl source-icon-github border flex items-center justify-center flex-shrink-0 opacity-50"><i class="fa-brands fa-github w-8 h-8 flex items-center justify-center grayscale" style="font-size: 28px;"></i></div>`;
   }
 
   const failedText = lang === 'zh' ? t('time.failed') : t('time.failed');

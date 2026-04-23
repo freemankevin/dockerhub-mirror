@@ -78,8 +78,6 @@ const translations = {
       github: 'View on GitHub'
     },
     footer: {
-      madeWith: 'Made with',
-      by: 'by',
       copyright: 'Registry Sync'
     },
     aria: {
@@ -103,7 +101,7 @@ const translations = {
   },
   zh: {
     title: 'Registry Sync',
-    subtitle: '快速容器镜像镜像服务',
+    subtitle: '快速容器镜像同步服务',
     stats: {
       totalMirrors: '镜像总数',
       storageSpace: '存储空间',
@@ -121,13 +119,13 @@ const translations = {
     filters: {
       all: '全部',
       dockerHub: 'Docker Hub',
-      github: 'GitHub 容器',
-      google: 'Google 容器',
+      github: 'GitHub Container',
+      google: 'Google Container',
       redhat: 'Red Hat Quay',
       aws: 'AWS ECR'
     },
     search: {
-      placeholder: '搜索镜像名称、源仓库或版本标签',
+      placeholder: '搜索...',
       ariaLabel: '搜索容器镜像'
     },
     loading: {
@@ -178,8 +176,6 @@ const translations = {
       github: '在 GitHub 上查看'
     },
     footer: {
-      madeWith: '由',
-      by: '制作',
       copyright: 'Registry Sync'
     },
     aria: {

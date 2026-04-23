@@ -31,6 +31,7 @@ sys.path.insert(0, str(project_root))
 
 from scripts.api.ghcr_api import GHCRRegistryAPI
 from scripts.utils import setup_logger, convert_to_ghcr_path, parse_image_name
+from scripts.utils.translations import add_chinese_description
 
 
 def normalize_source_image(image_name: str) -> str:
@@ -305,19 +306,22 @@ def generate_images_json(
                     total_versions += len(versions)
                     
                     # 添加镜像信息（包含所有版本）
-                    images.append({
+                    image_info = {
                         'name': image_name,
                         'description': description,
                         'repository': source_repo_name,
                         'total_versions': len(versions),
                         'latest_version': versions[0]['version'] if versions else None,
-                        'updated': versions[0]['created_at'] if versions else '',  # 更新时间
-                        'size': versions[0]['size'] if versions else '',  # 最新版本大小
-                        'layers': versions[0]['layers'] if versions else 0,  # 层数
-                        'stars': 0,  # 星标数（暂不支持）
-                        'platforms': ['AMD64', 'ARM64'],  # 支持的平台
+                        'updated': versions[0]['created_at'] if versions else '',
+                        'size': versions[0]['size'] if versions else '',
+                        'layers': versions[0]['layers'] if versions else 0,
+                        'stars': 0,
+                        'platforms': ['AMD64', 'ARM64'],
                         'versions': versions
-                    })
+                    }
+                    # 添加中文描述
+                    image_info = add_chinese_description(image_info)
+                    images.append(image_info)
                     
                     print(f"   ✅ 找到 {len(versions)} 个版本")
                     print(f"   📌 最新版本: {versions[0]['version'] if versions else 'N/A'}")
@@ -391,19 +395,22 @@ def generate_images_json(
                 total_versions += len(versions)
                 
                 # 添加镜像信息（包含所有版本）
-                images.append({
+                image_info = {
                     'name': image_name,
                     'description': description,
-                    'repository': ghcr_path,  # 使用新的命名格式（带斜杠）
+                    'repository': ghcr_path,
                     'total_versions': len(versions),
                     'latest_version': versions[0]['version'] if versions else None,
-                    'updated': versions[0]['created_at'] if versions else '',  # 更新时间
-                    'size': versions[0]['size'] if versions else '',  # 最新版本大小
-                    'layers': versions[0]['layers'] if versions else 0,  # 层数
-                    'stars': 0,  # 星标数（暂不支持）
-                    'platforms': ['AMD64', 'ARM64'],  # 支持的平台
+                    'updated': versions[0]['created_at'] if versions else '',
+                    'size': versions[0]['size'] if versions else '',
+                    'layers': versions[0]['layers'] if versions else 0,
+                    'stars': 0,
+                    'platforms': ['AMD64', 'ARM64'],
                     'versions': versions
-                })
+                }
+                # 添加中文描述
+                image_info = add_chinese_description(image_info)
+                images.append(image_info)
                 
                 print(f"   ✅ 找到 {len(versions)} 个版本")
                 print(f"   📌 最新版本: {versions[0]['version'] if versions else 'N/A'}")
@@ -413,7 +420,7 @@ def generate_images_json(
     
     failed_images_data = []
     for failed in failed_images:
-        failed_images_data.append({
+        failed_info = {
             'name': failed.get('name', ''),
             'source': failed.get('source', ''),
             'target': failed.get('target', ''),
@@ -421,7 +428,10 @@ def generate_images_json(
             'description': failed.get('description', ''),
             'sync_status': 'failed',
             'failed_at': datetime.now(timezone.utc).isoformat()
-        })
+        }
+        # 添加中文描述
+        failed_info = add_chinese_description(failed_info)
+        failed_images_data.append(failed_info)
     
     output_data = {
         'updated_at': datetime.now(timezone.utc).isoformat(),
