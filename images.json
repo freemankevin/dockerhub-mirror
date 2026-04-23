@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-04-23T01:37:58.272031+00:00",
+  "updated_at": "2026-04-23T04:37:05.009148+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 12,
@@ -63,9 +63,9 @@
         },
         {
           "version": "8-al2023",
-          "digest": "sha256:b5457bb0245ea9e1b63a246c0eb889bfb11ff32f2c949f9e4dfdb54effa189d1",
-          "created_at": "2026-04-22T06:32:10+00:00",
-          "synced_at": "2026-04-22T06:32:10+00:00",
+          "digest": "sha256:b3175a5fc49ad602677e47bc6baa6cd9a7423c386f0fb1d7629b6c088abecbb4",
+          "created_at": "2026-04-23T04:36:31+00:00",
+          "synced_at": "2026-04-23T04:36:31+00:00",
           "target": "ghcr.io/freemankevin/amazoncorretto/amazoncorretto:8-al2023",
           "source": "public.ecr.aws/amazoncorretto/amazoncorretto:8-al2023",
           "size": "256 MB",
