@@ -35,7 +35,9 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     
     <!-- Stylesheets -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Apple Style Fonts: SF Pro Display, PingFang SC, and elegant serif -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:wght@400&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/css/style.css">
@@ -50,7 +52,7 @@
                     <i class="fa-brands fa-docker text-xl group-hover:rotate-6 transition-transform" style="color: #3b82f6;"></i>
                 </div>
                 <div>
-                    <h1 class="text-2xl text-primary tracking-tight group-hover:text-accent-blue transition-colors" style="font-family: 'Great Vibes', cursive;" data-i18n="title">Registry Sync</h1>
+                    <h1 class="text-2xl luxury-title tracking-tight group-hover:text-accent-blue transition-colors" data-i18n="title">Registry Sync</h1>
                     <p class="text-xs text-secondary hidden md:block" data-i18n="subtitle">Fast container image mirror service</p>
                 </div>
             </div>
@@ -123,11 +125,11 @@
                 <span data-i18n="filters.all">All</span> <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-all">0</span>
             </button>
             <button onclick="setFilter('dockerhub')" class="filter-tab text-secondary" data-filter="dockerhub" aria-pressed="false">
-                <img src="/public/docker.svg" class="mr-1.5 inline align-middle" width="16" height="16" alt="Docker">
+                <i class="fa-brands fa-docker mr-1.5" style="color: #2496ED;"></i>
                 <span data-i18n="filters.dockerHub">Docker Hub</span> <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-dockerhub">0</span>
             </button>
             <button onclick="setFilter('github')" class="filter-tab text-secondary" data-filter="github" aria-pressed="false">
-                <img src="/public/github.svg" class="mr-1.5 inline align-middle" width="16" height="16" alt="GitHub">
+                <i class="fa-brands fa-github mr-1.5"></i>
                 <span data-i18n="filters.github">GitHub Container</span> <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-github">0</span>
             </button>
             <button onclick="setFilter('google')" class="filter-tab text-secondary" data-filter="google" aria-pressed="false">
@@ -139,7 +141,7 @@
                 <span data-i18n="filters.redhat">Red Hat Quay</span> <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-redhat">0</span>
             </button>
             <button onclick="setFilter('aws')" class="filter-tab text-secondary" data-filter="aws" aria-pressed="false">
-                <img src="/public/aws.svg" class="mr-1.5 inline align-middle" width="16" height="16" alt="AWS">
+                <i class="fa-brands fa-aws mr-1.5" style="color: #FF9900;"></i>
                 <span data-i18n="filters.aws">AWS ECR</span> <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-emphasis text-secondary" id="cnt-aws">0</span>
             </button>
         </nav>
@@ -270,11 +272,11 @@
     <!-- Footer -->
     <footer class="border-t border-muted mt-auto">
         <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <div class="text-sm text-secondary">
-                <span data-i18n="footer.madeWith">Made with</span> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block mx-0.5" style="vertical-align: middle;"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg> <span data-i18n="footer.by">by</span> Freeman
+            <div class="text-sm text-secondary tracking-wide">
+                Made with <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block mx-0.5" style="vertical-align: middle;"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg> by Freeman
             </div>
-            <div class="text-sm text-secondary">
-                © 2026 <span data-i18n="footer.copyright">Registry Sync</span>
+            <div class="text-sm text-secondary tracking-wide">
+                © 2026 Registry Sync
             </div>
         </div>
     </footer>

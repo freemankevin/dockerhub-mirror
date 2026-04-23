@@ -1,11 +1,92 @@
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+        /* ============================================
+   Apple-Style Luxury Typography System
+   Inspired by Apple's clean, elegant design
+   and luxury brand aesthetic
+   ============================================ */
         
         * {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'DM Sans', 'Plus Jakarta Sans', sans-serif;
+            font-weight: 400;
+            font-size: 15px;
+            letter-spacing: -0.01em;
+            font-feature-settings: 'kern' 1, 'liga' 1;
+            text-rendering: optimizeLegibility;
         }
         
         .mono {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'SF Mono', 'JetBrains Mono', 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', 'Source Code Pro', Menlo, Consolas, 'Courier New', ui-monospace, SFMono-Regular, monospace;
+            letter-spacing: -0.02em;
+        }
+        
+        .luxury-title {
+            font-family: 'DM Serif Display', 'PingFang SC', 'Songti SC', 'STSong', 'Noto Serif SC', 'Source Han Serif SC', serif;
+            font-weight: 400;
+            letter-spacing: -0.03em;
+        }
+        
+        .luxury-subtitle {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'DM Sans', sans-serif;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+        }
+        
+        /* 奢侈品风格的大标题 - 使用优雅衬线 */
+        h1 {
+            font-family: 'DM Serif Display', 'PingFang SC', 'Songti SC', serif;
+            font-weight: 400;
+            letter-spacing: -0.04em;
+        }
+        
+        .text-primary {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+        
+        .text-secondary {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            font-weight: 300;
+            letter-spacing: 0.01em;
+        }
+        
+        p, .prose {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            line-height: 1.6;
+        }
+        
+        button, .btn, input, select, .interactive {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+        
+        .stat-value {
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-family: 'SF Mono', 'JetBrains Mono', Monaco, 'SF Mono', Inconsolata, 'Roboto Mono', 'Source Code Pro', Menlo, Consolas, 'Courier New', ui-monospace, SFMono-Regular, monospace;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+        }
+        
+        .mono, .stat-value.mono {
+            font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', 'Source Code Pro', Menlo, Consolas, 'Courier New', ui-monospace, SFMono-Regular, monospace;
+            letter-spacing: 0;
+        }
+        
+        .code-block {
+            font-family: 'SF Mono', 'JetBrains Mono', 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', 'Source Code Pro', Menlo, Consolas, 'Courier New', ui-monospace, SFMono-Regular, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            letter-spacing: -0.02em;
+            font-feature-settings: 'liga' 0, 'calt' 0;
         }
         
         /* ============================================
@@ -18,9 +99,14 @@
                 radial-gradient(ellipse 50% 30% at 0% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
                 linear-gradient(180deg, #0c0c14 0%, #0f1018 25%, #10121a 50%, #0d0e16 75%, #0a0b12 100%);
             color: #e8eaed;
-            letter-spacing: 0.3px;
+            letter-spacing: -0.01em;
             min-height: 100vh;
             position: relative;
+            font-feature-settings: 'kern' 1, 'liga' 1, 'case' 1;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-synthesis: none;
         }
         
         html.dark body::before {
@@ -127,9 +213,14 @@
                 radial-gradient(ellipse 50% 30% at 0% 50%, rgba(16, 185, 129, 0.06) 0%, transparent 50%),
                 linear-gradient(180deg, #ffffff 0%, #f8fafc 30%, #f1f5f9 70%, #e2e8f0 100%);
             color: #0f172a;
-            letter-spacing: 0.3px;
+            letter-spacing: -0.01em;
             min-height: 100vh;
             position: relative;
+            font-feature-settings: 'kern' 1, 'liga' 1, 'case' 1;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-synthesis: none;
         }
         
         html.light body::before,
@@ -263,12 +354,6 @@
         /* ============================================
            Common Components
            ============================================ */
-        .code-block {
-            font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-        
         html.dark .code-window {
             background: linear-gradient(135deg, rgba(20, 25, 38, 0.8) 0%, rgba(25, 30, 45, 0.8) 100%);
             border: 1px solid rgba(99, 102, 241, 0.12);
@@ -308,11 +393,13 @@
             position: relative;
             padding: 10px 18px;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 400;
             border-radius: 14px;
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             cursor: pointer;
             border: 1px solid transparent;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            letter-spacing: -0.01em;
         }
         
         html.dark .filter-tab {
@@ -338,7 +425,7 @@
         }
         
         .filter-tab.active {
-            font-weight: 600;
+            font-weight: 500;
         }
         
         html.dark .filter-tab.active {
@@ -380,11 +467,12 @@
             align-items: center;
             padding: 4px 12px;
             font-size: 11px;
-            font-weight: 700;
+            font-weight: 500;
             border-radius: 20px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.06em;
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
         }
         
 
@@ -420,13 +508,15 @@
         /* Tag */
         .tag {
             padding: 4px 12px;
-            font-size: 11px;
+            font-size: 12px;
             border-radius: 16px;
-            font-weight: 500;
+            font-weight: 400;
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             display: inline-flex;
             align-items: center;
             border: 1px solid;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            letter-spacing: -0.01em;
         }
         
         html.dark .tag {
@@ -500,10 +590,12 @@
             cursor: pointer;
             white-space: nowrap;
             font-size: 0.875rem;
-            font-weight: 500;
+            font-weight: 400;
             min-width: max-content;
             max-width: 100%;
             flex-shrink: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            letter-spacing: -0.01em;
         }
         
         html.dark select {
@@ -555,8 +647,10 @@
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             pointer-events: none;
             z-index: 100;
-            font-weight: 500;
+            font-weight: 400;
             backdrop-filter: blur(16px);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            letter-spacing: -0.01em;
         }
         
         html.dark .toast {
@@ -643,6 +737,8 @@
             font-size: 14px;
             color: #6b7280;
             font-weight: 400;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            letter-spacing: -0.01em;
         }
         
         html.dark .pag-info {
@@ -668,12 +764,14 @@
             padding: 0 10px;
             border-radius: 8px;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 400;
             cursor: pointer;
             transition: all 0.2s ease;
             border: 1px solid #e5e7eb;
             background: #fff;
             color: #374151;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            letter-spacing: -0.01em;
         }
         
         html.dark .pag-size-trigger {
@@ -732,6 +830,8 @@
             font-size: 14px;
             cursor: pointer;
             transition: all 0.15s ease;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            letter-spacing: -0.01em;
         }
         
         html.light .pag-size-option,
@@ -769,7 +869,7 @@
             padding: 0;
             border-radius: 50%;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 400;
             border: none;
             cursor: pointer;
             transition: all 0.15s ease;
@@ -778,6 +878,8 @@
             justify-content: center;
             background: transparent;
             color: #6b7280;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            letter-spacing: -0.01em;
         }
         
         html.dark .pag-btn {
@@ -816,7 +918,7 @@
         .pag-btn.active {
             background: #6366f1;
             color: white;
-            font-weight: 600;
+            font-weight: 500;
         }
         
         html.dark .pag-btn.active {
@@ -874,6 +976,7 @@
         .stat-value {
             display: inline-block;
             transition: all 0.3s ease;
+            font-family: 'SF Mono', 'JetBrains Mono', Monaco, Menlo, Consolas, ui-monospace, SFMono-Regular, monospace;
         }
         
         .stat-value.changed {
@@ -978,7 +1081,7 @@
             padding: 6px 12px;
             border-radius: 8px;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 400;
             white-space: nowrap;
             opacity: 0;
             visibility: hidden;
@@ -986,6 +1089,8 @@
             pointer-events: none;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
             z-index: 10;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            letter-spacing: -0.01em;
         }
         
         html.dark .copy-btn::after {
@@ -1042,7 +1147,8 @@ header a:hover {
 
 /* Language toggle button */
 .lang-btn {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'SF Mono', 'JetBrains Mono', Monaco, Menlo, Consolas, ui-monospace, SFMono-Regular, monospace;
+    letter-spacing: -0.02em;
 }
 
 html.dark .lang-btn:hover span {
@@ -1217,14 +1323,15 @@ input:focus-visible {
             align-items: center;
             gap: 8px;
             padding: 6px 12px;
-            font-size: 13px;
-            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-family: 'SF Mono', 'JetBrains Mono', Monaco, Menlo, Consolas, ui-monospace, SFMono-Regular, monospace;
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            letter-spacing: -0.02em;
         }
 
         html.light .custom-select-trigger,
@@ -1309,12 +1416,13 @@ input:focus-visible {
 
         .custom-select-option {
             padding: 10px 14px;
-            font-size: 13px;
-            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-family: 'SF Mono', 'JetBrains Mono', Monaco, Menlo, Consolas, ui-monospace, SFMono-Regular, monospace;
             cursor: pointer;
             transition: all 0.15s ease;
             white-space: nowrap;
             border-bottom: 1px solid transparent;
+            letter-spacing: -0.02em;
         }
 
         html.light .custom-select-option,
@@ -1405,6 +1513,8 @@ input:focus-visible {
             gap: 8px;
             backdrop-filter: blur(8px);
             min-height: 48px;
+            font-family: 'SF Mono', 'JetBrains Mono', Monaco, Menlo, Consolas, ui-monospace, SFMono-Regular, monospace;
+            letter-spacing: -0.02em;
         }
 
         html.dark .terminal-window {
@@ -1529,7 +1639,54 @@ html.light .back-to-top:hover,
 }
 
 .back-to-top:hover i {
-    transform: translateY(-2px);
-}
+            transform: translateY(-2px);
+        }
+        
+        /* ============================================
+           Luxury Enhancement Typography
+           ============================================ */
+        
+        /* 精致的数字显示 - 使用等宽字体 */
+        .stat-value, .mono-num {
+            font-family: 'SF Mono', 'JetBrains Mono', Monaco, Menlo, Consolas, ui-monospace, SFMono-Regular, monospace;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            font-feature-settings: 'tnum' 1, 'lnum' 1;
+        }
+        
+        /* 标题使用更优雅的字体粗细 */
+        .text-2xl, .text-xl, .text-lg {
+            font-weight: 500;
+            letter-spacing: -0.02em;
+        }
+        
+        /* 小标签使用更精致的样式 */
+        .badge, .tag {
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        
+        /* 描述文字使用更轻盈的粗细 */
+        .text-secondary, .text-xs {
+            font-weight: 300;
+            letter-spacing: 0.01em;
+        }
+        
+        /* 按钮和交互元素 */
+        button, .btn, input, select, .interactive {
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+        
+        /* 精确的文本渲染 */
+        body {
+            text-rendering: geometricPrecision;
+        }
+        
+        /* 防止字体合成 */
+        * {
+            font-synthesis: none;
+        }
         
 
