@@ -32,6 +32,7 @@ sys.path.insert(0, str(project_root))
 from scripts.api.ghcr_api import GHCRRegistryAPI
 from scripts.utils import setup_logger, convert_to_ghcr_path, parse_image_name
 from scripts.utils.translations import add_chinese_description
+from scripts.core.mirror_sync import apply_retention_strategy
 
 
 def normalize_source_image(image_name: str) -> str:
@@ -196,11 +197,14 @@ def generate_images_json(
     with open(manifest_file, 'r', encoding='utf-8') as f:
         manifest = yaml.safe_load(f)
     
-    # 初始化 GHCR API 客户端
+    global_retention = manifest.get('config', {}).get('retention', {})
+    default_strategy = global_retention.get('strategy', 'max_versions')
+    default_max_versions = global_retention.get('max_versions', 3)
+    
     ghcr_api = GHCRRegistryAPI(logger, token)
     
     # 收集所有镜像信息（按 image_name 分组，合并相同镜像的不同版本）
-    image_groups = {}  # image_name -> {description, tags_set, tag_patterns[]}
+    image_groups = {}
     total_versions = 0
     
     for img in manifest.get('images', []):
@@ -211,21 +215,21 @@ def generate_images_json(
         description = img.get('description', '')
         tag_pattern = img.get('tag_pattern')
         exclude_pattern = img.get('exclude_pattern')
+        retention = img.get('retention', {})
         
-        # 提取镜像名和版本
         if ':' in source:
             image_name, version = source.rsplit(':', 1)
         else:
             image_name = source
             version = 'latest'
         
-        # 按 image_name 分组，收集所有 tag_patterns
         if image_name not in image_groups:
             image_groups[image_name] = {
                 'description': description,
                 'source': source,
                 'tag_patterns': [],
                 'exclude_pattern': exclude_pattern,
+                'retention': retention,
             }
         if tag_pattern:
             image_groups[image_name]['tag_patterns'].append(tag_pattern)
@@ -237,6 +241,12 @@ def generate_images_json(
         source = group_info['source']
         tag_patterns = group_info['tag_patterns']
         exclude_pattern = group_info['exclude_pattern']
+        retention = group_info['retention']
+        
+        strategy = retention.get('strategy', default_strategy)
+        max_versions = retention.get('max_versions', default_max_versions)
+        major_versions = retention.get('major_versions', [])
+        keep_minor_versions = retention.get('keep_minor_versions', [])
         
         # 检查源镜像是否来自 GHCR
         is_ghcr_source = source.startswith('ghcr.io/')
@@ -299,9 +309,23 @@ def generate_images_json(
                             'synced_at': tag.get('created_at'),
                             'target': full_source,  # GHCR 源镜像本身就是目标
                             'source': full_source,
-                            'size': tag.get('size', ''),  # 镜像大小
-                            'layers': tag.get('layers', 0)  # 层数
+                            'size': tag.get('size', ''),
+                            'layers': tag.get('layers', 0)
                         })
+                    
+                    version_names = [v['version'] for v in versions]
+                    retained_names = apply_retention_strategy(
+                        version_names,
+                        strategy,
+                        max_versions,
+                        major_versions,
+                        keep_minor_versions
+                    )
+                    
+                    versions = [v for v in versions if v['version'] in retained_names]
+                    
+                    if versions:
+                        versions.sort(key=lambda x: retained_names.index(x['version']) if x['version'] in retained_names else len(retained_names))
                     
                     total_versions += len(versions)
                     
@@ -385,12 +409,26 @@ def generate_images_json(
                         'version': tag['name'],
                         'digest': tag.get('digest', ''),
                         'created_at': tag.get('created_at'),
-                        'synced_at': tag.get('created_at'),  # 使用创建时间作为同步时间
+                        'synced_at': tag.get('created_at'),
                         'target': target_image,
                         'source': full_source,
-                        'size': tag.get('size', ''),  # 镜像大小
-                        'layers': tag.get('layers', 0)  # 层数
+                        'size': tag.get('size', ''),
+                        'layers': tag.get('layers', 0)
                     })
+                
+                version_names = [v['version'] for v in versions]
+                retained_names = apply_retention_strategy(
+                    version_names,
+                    strategy,
+                    max_versions,
+                    major_versions,
+                    keep_minor_versions
+                )
+                
+                versions = [v for v in versions if v['version'] in retained_names]
+                
+                if versions:
+                    versions.sort(key=lambda x: retained_names.index(x['version']) if x['version'] in retained_names else len(retained_names))
                 
                 total_versions += len(versions)
                 
