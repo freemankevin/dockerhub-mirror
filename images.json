@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-04-24T04:43:41.480064+00:00",
+  "updated_at": "2026-04-24T04:48:53.401271+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 17,
-  "total_versions": 35,
+  "total_versions": 33,
   "total_failed": 0,
   "images": [
     {
@@ -268,38 +268,17 @@
       "name": "kartoza/geoserver",
       "description": "Open-source geospatial data server",
       "repository": "kartoza/geoserver",
-      "total_versions": 2,
-      "latest_version": "2.28.3",
-      "updated": "2026-04-23T01:37:53+00:00",
-      "size": "1.8 GB",
-      "layers": 15,
+      "total_versions": 0,
+      "latest_version": null,
+      "updated": "",
+      "size": "",
+      "layers": 0,
       "stars": 0,
       "platforms": [
         "AMD64",
         "ARM64"
       ],
-      "versions": [
-        {
-          "version": "2.28.3",
-          "digest": "sha256:023476b4c153f9c94d0f8596ac28ad5eea1aac81fc76d7985002d58c0d48c3b3",
-          "created_at": "2026-04-23T01:37:53+00:00",
-          "synced_at": "2026-04-23T01:37:53+00:00",
-          "target": "ghcr.io/freemankevin/kartoza/geoserver:2.28.3",
-          "source": "docker.io/kartoza/geoserver:2.28.3",
-          "size": "1.8 GB",
-          "layers": 15
-        },
-        {
-          "version": "2.28.2",
-          "digest": "sha256:f617a97fa67f0e43bd7abaa0e20802540e3985d97c178a0b93cb1a7033dfa8e6",
-          "created_at": "2026-04-03T04:57:08+00:00",
-          "synced_at": "2026-04-03T04:57:08+00:00",
-          "target": "ghcr.io/freemankevin/kartoza/geoserver:2.28.2",
-          "source": "docker.io/kartoza/geoserver:2.28.2",
-          "size": "1.8 GB",
-          "layers": 15
-        }
-      ],
+      "versions": [],
       "description_zh": "开源地理信息系统服务器"
     },
     {
