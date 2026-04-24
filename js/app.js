@@ -597,8 +597,7 @@ return `
     <div class="terminal-window rounded-xl flex items-center gap-3 group">
       <code class="code-block text-primary truncate flex-1">
         <span class="text-purple-500 select-none" style="font-size: 13px;">$</span>
-        <span class="text-secondary" style="font-size: 13px;">${t('card.dockerPull')}</span>
-        <span class="text-blue-500" style="font-size: 13px;">${escHtml(path)}</span>:<span class="text-amber-500" style="font-size: 13px;">${escHtml(ver)}</span>
+        <span class="text-blue-500" style="font-size: 13px;">${t('card.dockerPull')} ${escHtml(path)}:${escHtml(ver)}</span>
       </code>
       <button onclick="copyCmd('${img.name}')"
               class="copy-btn flex items-center justify-center"
