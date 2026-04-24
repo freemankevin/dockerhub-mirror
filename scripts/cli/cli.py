@@ -359,7 +359,7 @@ def main():
     parser_run.add_argument('--no-concurrency',
                            action='store_true',
                            help='禁用并发处理')
-parser_run.set_defaults(func=cmd_run)
+    parser_run.set_defaults(func=cmd_run)
     
     parser_generate = subparsers.add_parser('generate', help='生成 images.json')
     parser_generate.add_argument('--owner',
