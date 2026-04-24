@@ -31,6 +31,10 @@ def parse_version_tag(tag: str):
     if match:
         return (int(match.group(1)), int(match.group(2)), 0)
     
+    match = re.match(r'^(\d+)-(al2023|alpine|ubuntu|debian|slim|latest|.*)$', tag)
+    if match:
+        return (int(match.group(1)), 0, 0)
+    
     return None
 
 
