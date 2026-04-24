@@ -80,16 +80,6 @@ images:
   description: Python development environment with PyTorch
   tag_pattern: ^[0-9]+\.[0-9]+(-amd64|-arm64)?$
   sync_all_matching: false
-- source: ghcr.io/freemankevin/loadstrike:latest
-  enabled: true
-  description: Load testing tool with web interface
-  tag_pattern: ^latest$
-  sync_all_matching: false
-- source: ghcr.io/freemankevin/dao-de-jing:latest
-  enabled: true
-  description: Dao De Jing (道德经) web application
-  tag_pattern: ^latest$
-  sync_all_matching: false
 - source: ghcr.io/freemankevin/netkit:latest
   enabled: true
   description: Network diagnostic tools for containerized environments including curl,

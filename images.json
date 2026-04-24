@@ -2,8 +2,8 @@
   "updated_at": "2026-04-23T09:51:41.230032+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
-  "total_images": 19,
-  "total_versions": 53,
+  "total_images": 17,
+  "total_versions": 51,
   "total_failed": 0,
   "images": [
     {
@@ -750,56 +750,6 @@
         }
       ],
       "description_zh": "Python 开发环境容器（含 PyTorch）"
-    },
-    {
-      "name": "ghcr.io/freemankevin/loadstrike",
-      "description": "Load testing tool with web interface",
-      "repository": "loadstrike",
-      "total_versions": 1,
-      "latest_version": "latest",
-      "updated": "2026-04-24T00:00:00+00:00",
-      "size": "N/A",
-      "layers": 0,
-      "stars": 0,
-      "platforms": ["AMD64", "ARM64"],
-      "versions": [
-        {
-          "version": "latest",
-          "digest": "sha256:placeholder",
-          "created_at": "2026-04-24T00:00:00+00:00",
-          "synced_at": "2026-04-24T00:00:00+00:00",
-          "target": "ghcr.io/freemankevin/loadstrike:latest",
-          "source": "ghcr.io/freemankevin/loadstrike:latest",
-          "size": "N/A",
-          "layers": 0
-        }
-      ],
-      "description_zh": "负载测试工具（带 Web 界面）"
-    },
-    {
-      "name": "ghcr.io/freemankevin/dao-de-jing",
-      "description": "Dao De Jing (道德经) web application",
-      "repository": "dao-de-jing",
-      "total_versions": 1,
-      "latest_version": "latest",
-      "updated": "2026-04-24T00:00:00+00:00",
-      "size": "N/A",
-      "layers": 0,
-      "stars": 0,
-      "platforms": ["AMD64", "ARM64"],
-      "versions": [
-        {
-          "version": "latest",
-          "digest": "sha256:placeholder",
-          "created_at": "2026-04-24T00:00:00+00:00",
-          "synced_at": "2026-04-24T00:00:00+00:00",
-          "target": "ghcr.io/freemankevin/dao-de-jing:latest",
-          "source": "ghcr.io/freemankevin/dao-de-jing:latest",
-          "size": "N/A",
-          "layers": 0
-        }
-      ],
-      "description_zh": "道德经 Web 应用"
     },
     {
       "name": "gcr.io/google-containers/etcd",
