@@ -173,7 +173,8 @@ def generate_images_json(
     owner: str = "",
     token: str = None,
     logger=None,
-    failed_images: List[Dict] = None
+    failed_images: List[Dict] = None,
+    synced_images: List[Dict] = None
 ) -> Dict:
     """从 GHCR 生成镜像列表 JSON（包含所有版本）
     
@@ -185,6 +186,7 @@ def generate_images_json(
         token: GitHub Personal Access Token (可选)
         logger: 日志记录器
         failed_images: 同步失败的镜像列表
+        synced_images: 同步成功的镜像列表（包含源镜像 digest）
         
     Returns:
         生成的镜像数据
@@ -193,6 +195,14 @@ def generate_images_json(
         logger = setup_logger('generate', False, project_root / 'logs')
     
     failed_images = failed_images or []
+    synced_images = synced_images or []
+    
+    synced_digest_map = {}
+    for img in synced_images:
+        source = img.get('source', '')
+        digest = img.get('digest', '')
+        if source and digest:
+            synced_digest_map[source] = digest
     
     with open(manifest_file, 'r', encoding='utf-8') as f:
         manifest = yaml.safe_load(f)
@@ -305,11 +315,11 @@ def generate_images_json(
                     # 收集所有版本信息
                     versions = []
                     for tag in tags_sorted:
-                        # 对于 GHCR 源镜像，源和目标都是 GHCR 地址
                         full_source = f"{normalize_source_image(image_name)}:{tag['name']}"
+                        digest = synced_digest_map.get(full_source, tag.get('digest', ''))
                         versions.append({
                             'version': tag['name'],
-                            'digest': tag.get('digest', ''),
+                            'digest': digest,
                             'created_at': tag.get('created_at'),
                             'synced_at': tag.get('created_at'),
                             'target': full_source,
@@ -409,13 +419,12 @@ def generate_images_json(
                 # 收集所有版本信息
                 versions = []
                 for tag in tags_sorted:
-                    # 生成完整的源镜像地址
                     full_source = f"{normalize_source_image(image_name)}:{tag['name']}"
-                    # 使用新的命名规则生成目标镜像地址（带斜杠格式，更友好）
                     target_image = f"{registry}/{owner}/{ghcr_path}:{tag['name']}"
+                    digest = synced_digest_map.get(full_source, tag.get('digest', ''))
                     versions.append({
                         'version': tag['name'],
-                        'digest': tag.get('digest', ''),
+                        'digest': digest,
                         'created_at': tag.get('created_at'),
                         'synced_at': tag.get('created_at'),
                         'target': target_image,
@@ -475,10 +484,10 @@ def generate_images_json(
             'target': failed.get('target', ''),
             'version': failed.get('version', ''),
             'description': failed.get('description', ''),
+            'digest': failed.get('digest', ''),
             'sync_status': 'failed',
             'failed_at': datetime.now(timezone.utc).isoformat()
         }
-        # 添加中文描述
         failed_info = add_chinese_description(failed_info)
         failed_images_data.append(failed_info)
     

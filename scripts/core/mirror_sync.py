@@ -118,7 +118,7 @@ class MirrorSync:
     """镜像同步管理器"""
 
     def __init__(self, registry: str, owner: str, logger=None, max_workers: int = 3,
-                 max_retries: int = 3, retry_delay: float = 2.0):
+                 max_retries: int = 3, retry_delay: float = 2.0, existing_images: Dict = None):
         self.registry = registry
         self.owner = owner
         self.logger = logger
@@ -126,10 +126,22 @@ class MirrorSync:
         self.max_retries = max_retries
         self.retry_delay = retry_delay
         self.mirrored_images = []
-        self.failed_images = []  # 记录失败的镜像
+        self.failed_images = []
         self.success_count = 0
         self.fail_count = 0
         self._lock = threading.Lock()
+        self.existing_images = existing_images or {}
+        self._build_digest_cache()
+    
+    def _build_digest_cache(self):
+        """从 existing_images 构建源镜像 digest 缓存"""
+        self.source_digest_cache = {}
+        for img in self.existing_images.get('images', []):
+            for version_info in img.get('versions', []):
+                source = version_info.get('source', '')
+                digest = version_info.get('digest', '')
+                if source and digest:
+                    self.source_digest_cache[source] = digest
     
     def _get_image_digest(self, image: str) -> Optional[str]:
         """获取镜像的 digest
@@ -178,19 +190,27 @@ class MirrorSync:
         Returns:
             True 表示需要同步，False 表示可以跳过
         """
-        # 获取源镜像的 digest
         source_digest = self._get_image_digest(source)
         if not source_digest:
             if self.logger:
                 self.logger.warning(f"无法获取源镜像 {source} 的 digest，将强制同步")
             return True
         
-        # 获取目标镜像的 digest
+        cached_digest = self.source_digest_cache.get(source)
+        if cached_digest:
+            if source_digest != cached_digest:
+                if self.logger:
+                    self.logger.info(f"镜像 {source} digest 已更新 (缓存: {cached_digest[:20]}... -> 当前: {source_digest[:20]}...)，需要同步")
+                return True
+            else:
+                if self.logger:
+                    self.logger.info(f"镜像 {source} digest 未变化 ({source_digest[:20]}...)，跳过同步")
+                return False
+        
         target_digest = self._get_image_digest(target)
         if not target_digest:
             return True
         
-        # 比较 digest
         if source_digest == target_digest:
             if self.logger:
                 self.logger.info(f"镜像 {source} 已存在且 digest 相同，跳过同步")
@@ -284,10 +304,9 @@ class MirrorSync:
     ) -> bool:
         """同步单个版本"""
         source_image = f"{image_name}:{version}"
+        source_digest = self._get_image_digest(source_image)
         
-        # 检查源镜像是否来自 GHCR
         if self._is_ghcr_source(source_image):
-            # GHCR 源镜像保持原样，不需要转换路径
             target_image = source_image
             repo_name = image_name.replace('ghcr.io/', '').replace('/', '__')
             
@@ -301,6 +320,7 @@ class MirrorSync:
                     'version': version,
                     'description': description,
                     'repository': repo_name,
+                    'digest': source_digest,
                     'synced_at': datetime.now(timezone.utc).isoformat()
                 })
                 self.success_count += 1
@@ -313,6 +333,9 @@ class MirrorSync:
         if self.mirror_image(source_image, target_image):
             print(f"✓ {source_image} -> {ghcr_path}:{version}")
             
+            if not source_digest:
+                source_digest = self._get_image_digest(source_image)
+            
             with self._lock:
                 self.mirrored_images.append({
                     'name': image_name,
@@ -321,6 +344,7 @@ class MirrorSync:
                     'version': version,
                     'description': description,
                     'repository': repo_name,
+                    'digest': source_digest,
                     'synced_at': datetime.now(timezone.utc).isoformat()
                 })
                 self.success_count += 1
@@ -335,7 +359,8 @@ class MirrorSync:
                     'source': source_image,
                     'target': target_image,
                     'version': version,
-                    'description': description
+                    'description': description,
+                    'digest': source_digest
                 })
             return False
     

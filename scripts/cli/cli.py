@@ -7,6 +7,7 @@
 import argparse
 import yaml
 import os
+import json
 from pathlib import Path
 
 from scripts.api.registry_api import RegistryAPI
@@ -73,6 +74,7 @@ def cmd_sync(args):
     logger = setup_logger('sync', args.debug, LOGS_DIR)
 
     manifest_file = args.manifest or MANIFEST_FILE
+    output_file = args.output or OUTPUT_FILE
 
     if not manifest_file.exists():
         logger.error(f"清单文件不存在: {manifest_file}")
@@ -80,6 +82,15 @@ def cmd_sync(args):
 
     with open(manifest_file, 'r', encoding='utf-8') as f:
         manifest = yaml.safe_load(f)
+
+    existing_images = {}
+    if output_file.exists():
+        try:
+            with open(output_file, 'r', encoding='utf-8') as f:
+                existing_images = json.load(f)
+            logger.info(f"已加载历史镜像数据，包含 {len(existing_images.get('images', []))} 个镜像")
+        except Exception as e:
+            logger.warning(f"加载历史镜像数据失败: {e}")
 
     max_workers = getattr(args, 'max_workers', 3)
     max_retries = getattr(args, 'max_retries', 3)
@@ -92,7 +103,8 @@ def cmd_sync(args):
         logger,
         max_workers=max_workers,
         max_retries=max_retries,
-        retry_delay=retry_delay
+        retry_delay=retry_delay,
+        existing_images=existing_images
     )
 
     use_concurrency = getattr(args, 'concurrency', True)
@@ -105,7 +117,6 @@ def cmd_sync(args):
     try:
         from scripts.core.generate_images_json import generate_images_json
         
-        output_file = args.output or OUTPUT_FILE
         token = get_env_variable('GHCR_TOKEN')
         generate_images_json(
             manifest_file,
@@ -114,7 +125,8 @@ def cmd_sync(args):
             args.owner,
             token=token,
             logger=logger,
-            failed_images=result.get('failed_images', [])
+            failed_images=result.get('failed_images', []),
+            synced_images=sync.mirrored_images
         )
     except Exception as e:
         logger.error(f"生成镜像列表失败: {str(e)}")
