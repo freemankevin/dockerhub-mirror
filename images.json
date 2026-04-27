@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-04-27T03:14:30.118285+00:00",
+  "updated_at": "2026-04-27T03:19:51.770648+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
-  "total_images": 17,
-  "total_versions": 25,
+  "total_images": 15,
+  "total_versions": 19,
   "total_failed": 0,
   "images": [
     {
@@ -243,102 +243,6 @@
       "description_zh": "开源地理信息系统服务器"
     },
     {
-      "name": "freelabspace/postgresql-postgis",
-      "description": "PostgreSQL database with PostGIS spatial extension",
-      "repository": "freelabspace/postgresql-postgis",
-      "total_versions": 5,
-      "latest_version": "18.3",
-      "updated": "2026-04-03T04:54:19+00:00",
-      "size": "856 MB",
-      "layers": 15,
-      "stars": 0,
-      "platforms": [
-        "AMD64",
-        "ARM64"
-      ],
-      "versions": [
-        {
-          "version": "18.3",
-          "digest": "sha256:51a6c52e88cadc09a234b89c22acaf5301434c5ab9367cbd76bda9d2cafc5312",
-          "created_at": "2026-04-03T04:54:19+00:00",
-          "synced_at": "2026-04-03T04:54:19+00:00",
-          "target": "ghcr.io/freemankevin/freelabspace/postgresql-postgis:18.3",
-          "source": "docker.io/freelabspace/postgresql-postgis:18.3",
-          "size": "856 MB",
-          "layers": 15
-        },
-        {
-          "version": "17.9",
-          "digest": "sha256:4a09ff7160183ef5dc72e5bb4c2be51dd082feb2e8defa1cfd0d8b3d72ebe4af",
-          "created_at": "2026-04-03T04:54:06+00:00",
-          "synced_at": "2026-04-03T04:54:06+00:00",
-          "target": "ghcr.io/freemankevin/freelabspace/postgresql-postgis:17.9",
-          "source": "docker.io/freelabspace/postgresql-postgis:17.9",
-          "size": "856 MB",
-          "layers": 15
-        },
-        {
-          "version": "16.13",
-          "digest": "sha256:6bf0169d85e3c298a832a8428e776a5b80457709db6b25c777809008d1077a9e",
-          "created_at": "2026-04-03T04:53:43+00:00",
-          "synced_at": "2026-04-03T04:53:43+00:00",
-          "target": "ghcr.io/freemankevin/freelabspace/postgresql-postgis:16.13",
-          "source": "docker.io/freelabspace/postgresql-postgis:16.13",
-          "size": "856 MB",
-          "layers": 15
-        },
-        {
-          "version": "15.17",
-          "digest": "sha256:2c9698da56cf596e92a386d9f577183de5f97ce0f1c192bacc505764d60eb7d2",
-          "created_at": "2026-04-03T04:53:18+00:00",
-          "synced_at": "2026-04-03T04:53:18+00:00",
-          "target": "ghcr.io/freemankevin/freelabspace/postgresql-postgis:15.17",
-          "source": "docker.io/freelabspace/postgresql-postgis:15.17",
-          "size": "856 MB",
-          "layers": 15
-        },
-        {
-          "version": "14.22",
-          "digest": "sha256:1dc42213f09b951634d5d7db70d83d164113eee06844b873f3b2fb2a6733af9d",
-          "created_at": "2026-04-03T04:52:50+00:00",
-          "synced_at": "2026-04-03T04:52:50+00:00",
-          "target": "ghcr.io/freemankevin/freelabspace/postgresql-postgis:14.22",
-          "source": "docker.io/freelabspace/postgresql-postgis:14.22",
-          "size": "856 MB",
-          "layers": 15
-        }
-      ],
-      "description_zh": "PostgreSQL 数据库，包含 PostGIS 空间数据扩展"
-    },
-    {
-      "name": "freelabspace/postgresql-backup",
-      "description": "Backup utility for PostgreSQL databases",
-      "repository": "freelabspace/postgresql-backup",
-      "total_versions": 1,
-      "latest_version": "latest",
-      "updated": "2026-04-03T04:54:24+00:00",
-      "size": "45 MB",
-      "layers": 5,
-      "stars": 0,
-      "platforms": [
-        "AMD64",
-        "ARM64"
-      ],
-      "versions": [
-        {
-          "version": "latest",
-          "digest": "sha256:5566a258036523e9bdbe52df84c354adc955a02a3b1af0cc044f0ceb6447d118",
-          "created_at": "2026-04-03T04:54:24+00:00",
-          "synced_at": "2026-04-03T04:54:24+00:00",
-          "target": "ghcr.io/freemankevin/freelabspace/postgresql-backup:latest",
-          "source": "docker.io/freelabspace/postgresql-backup:latest",
-          "size": "45 MB",
-          "layers": 5
-        }
-      ],
-      "description_zh": "PostgreSQL 数据库备份工具"
-    },
-    {
       "name": "freelabspace/harbor-export",
       "description": "Harbor registry metrics exporter",
       "repository": "freelabspace/harbor-export",
@@ -397,8 +301,8 @@
       "description": "Java development environment with common tools",
       "repository": "freelabspace/java-local",
       "total_versions": 1,
-      "latest_version": "8-arm64",
-      "updated": "2026-04-24T03:26:02+00:00",
+      "latest_version": "8-amd64",
+      "updated": "2026-04-24T03:33:18+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -408,12 +312,12 @@
       ],
       "versions": [
         {
-          "version": "8-arm64",
-          "digest": "sha256:30305a689810b8be5a399819c644f318150d2c99a3367b363a6216244ab8b1d2",
-          "created_at": "2026-04-24T03:26:02+00:00",
-          "synced_at": "2026-04-24T03:26:02+00:00",
-          "target": "ghcr.io/freemankevin/freelabspace/java-local:8-arm64",
-          "source": "docker.io/freelabspace/java-local:8-arm64",
+          "version": "8-amd64",
+          "digest": "sha256:af62350055b82036cd3731ae87d1c83ca30589a98097fecb1d2d25b4659ed553",
+          "created_at": "2026-04-24T03:33:18+00:00",
+          "synced_at": "2026-04-24T03:33:18+00:00",
+          "target": "ghcr.io/freemankevin/freelabspace/java-local:8-amd64",
+          "source": "docker.io/freelabspace/java-local:8-amd64",
           "size": "256 MB",
           "layers": 8
         }
@@ -424,8 +328,8 @@
       "description": "Python development environment with PyTorch",
       "repository": "freelabspace/python-local",
       "total_versions": 1,
-      "latest_version": "3.10-arm64",
-      "updated": "2026-04-24T04:41:16+00:00",
+      "latest_version": "3.10-amd64",
+      "updated": "2026-04-24T03:25:59+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -435,12 +339,12 @@
       ],
       "versions": [
         {
-          "version": "3.10-arm64",
-          "digest": "sha256:4642d80afca30bdafdabf14cad699ba54a8ad8357ee3895ee3cf60637fcae39f",
-          "created_at": "2026-04-24T04:41:16+00:00",
-          "synced_at": "2026-04-24T04:41:16+00:00",
-          "target": "ghcr.io/freemankevin/freelabspace/python-local:3.10-arm64",
-          "source": "docker.io/freelabspace/python-local:3.10-arm64",
+          "version": "3.10-amd64",
+          "digest": "sha256:c5fa1c3a9a1becde25fca5c003f8151226ed9d903d948731475c7598c2c5aa52",
+          "created_at": "2026-04-24T03:25:59+00:00",
+          "synced_at": "2026-04-24T03:25:59+00:00",
+          "target": "ghcr.io/freemankevin/freelabspace/python-local:3.10-amd64",
+          "source": "docker.io/freelabspace/python-local:3.10-amd64",
           "size": "256 MB",
           "layers": 8
         }
