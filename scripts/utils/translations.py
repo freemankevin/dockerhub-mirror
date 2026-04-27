@@ -6,7 +6,6 @@
 
 # 常见镜像的预定义中文描述映射（高质量人工翻译）
 IMAGE_DESCRIPTION_ZH = {
-    # Docker Hub Official Images
     'nginx': '官方构建的高性能 HTTP 和反向代理服务器',
     'elasticsearch': '分布式、RESTful 搜索和分析引擎',
     'redis': '高性能内存数据结构存储，用作数据库、缓存和消息代理',
@@ -80,8 +79,11 @@ IMAGE_DESCRIPTION_ZH = {
     'imagemagick': '创建、编辑、合成或转换数字图像的软件套件',
     'blender': '专业的开源 3D 创作套件',
     'netkit': '容器化环境的网络诊断工具集（curl、wget、ping、nslookup、dig、telnet、nc、tcpdump）',
-    
-    # Google Container Registry
+    'harbor-export': 'Harbor 镜像仓库指标导出器',
+    'harbor-export-ui': 'Harbor 镜像仓库指标导出器 UI',
+    'java-local': 'Java 开发环境，包含常用工具',
+    'python-local': 'Python 开发环境，包含 PyTorch',
+    'freemankevin': '个人 GitHub Pages 站点容器',
     'pause': 'Kubernetes 基础设施容器，用于保持 Pod 网络配置',
     'kube-apiserver': 'Kubernetes API 服务器',
     'kube-controller-manager': 'Kubernetes 控制器管理器',
@@ -89,14 +91,8 @@ IMAGE_DESCRIPTION_ZH = {
     'kube-proxy': 'Kubernetes 网络代理',
     'coredns': '快速灵活的 DNS 服务器',
     'etcd-manager': 'etcd 集群管理工具',
-    
-    # Red Hat Quay
     'ubi': 'Red Hat Universal Base Image',
-    
-    # AWS ECR
     'amazoncorretto': 'Amazon Corretto JDK（Amazon Linux 2023）',
-    
-    # 其他常见镜像
     'geoserver': '开源地理信息系统服务器',
     'postgis': 'PostgreSQL 的空间数据库扩展',
     'qgis': '开源地理信息系统',
