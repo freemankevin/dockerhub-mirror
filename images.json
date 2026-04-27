@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-04-26T04:45:48.389143+00:00",
+  "updated_at": "2026-04-27T03:14:30.118285+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 17,
@@ -164,7 +164,7 @@
       "repository": "library/rabbitmq",
       "total_versions": 1,
       "latest_version": "4.3.0-management-alpine",
-      "updated": "2026-04-24T03:25:09+00:00",
+      "updated": "2026-04-27T03:14:10+00:00",
       "size": "215 MB",
       "layers": 9,
       "stars": 0,
@@ -175,9 +175,9 @@
       "versions": [
         {
           "version": "4.3.0-management-alpine",
-          "digest": "sha256:88ff5eb6cabf021386205f979d86e21166a73836083d9239eeee9deb587f44be",
-          "created_at": "2026-04-24T03:25:09+00:00",
-          "synced_at": "2026-04-24T03:25:09+00:00",
+          "digest": "sha256:8724c6573b43d315bcec914f16a509d0b5faf5f3b281a832b484ece0bbcbe914",
+          "created_at": "2026-04-27T03:14:10+00:00",
+          "synced_at": "2026-04-27T03:14:10+00:00",
           "target": "ghcr.io/freemankevin/library/rabbitmq:4.3.0-management-alpine",
           "source": "docker.io/library/rabbitmq:4.3.0-management-alpine",
           "size": "215 MB",
@@ -424,8 +424,8 @@
       "description": "Python development environment with PyTorch",
       "repository": "freelabspace/python-local",
       "total_versions": 1,
-      "latest_version": "3.10-amd64",
-      "updated": "2026-04-24T03:25:59+00:00",
+      "latest_version": "3.10-arm64",
+      "updated": "2026-04-24T04:41:16+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -435,12 +435,12 @@
       ],
       "versions": [
         {
-          "version": "3.10-amd64",
-          "digest": "sha256:c5fa1c3a9a1becde25fca5c003f8151226ed9d903d948731475c7598c2c5aa52",
-          "created_at": "2026-04-24T03:25:59+00:00",
-          "synced_at": "2026-04-24T03:25:59+00:00",
-          "target": "ghcr.io/freemankevin/freelabspace/python-local:3.10-amd64",
-          "source": "docker.io/freelabspace/python-local:3.10-amd64",
+          "version": "3.10-arm64",
+          "digest": "sha256:4642d80afca30bdafdabf14cad699ba54a8ad8357ee3895ee3cf60637fcae39f",
+          "created_at": "2026-04-24T04:41:16+00:00",
+          "synced_at": "2026-04-24T04:41:16+00:00",
+          "target": "ghcr.io/freemankevin/freelabspace/python-local:3.10-arm64",
+          "source": "docker.io/freelabspace/python-local:3.10-arm64",
           "size": "256 MB",
           "layers": 8
         }
