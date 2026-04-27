@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-04-27T03:40:16.624210+00:00",
+  "updated_at": "2026-04-27T03:45:21.665159+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 17,
@@ -316,7 +316,7 @@
       "repository": "postgresql-backup",
       "total_versions": 1,
       "latest_version": "latest",
-      "updated": "2026-04-27T03:36:57+00:00",
+      "updated": "2026-04-27T03:44:07+00:00",
       "size": "45 MB",
       "layers": 5,
       "stars": 0,
@@ -327,9 +327,9 @@
       "versions": [
         {
           "version": "latest",
-          "digest": "sha256:dd6135e6c6179d61ae9cdd080d79fae305136d09a2f3d715f2a6d11925f84093",
-          "created_at": "2026-04-27T03:36:57+00:00",
-          "synced_at": "2026-04-27T03:36:57+00:00",
+          "digest": "sha256:d9972f0654cc3908113d72dba9173ded8c0d154f2cc271439b3f2bc475adeeb4",
+          "created_at": "2026-04-27T03:44:07+00:00",
+          "synced_at": "2026-04-27T03:44:07+00:00",
           "target": "ghcr.io/freemankevin/postgresql-backup:latest",
           "source": "ghcr.io/freemankevin/postgresql-backup:latest",
           "size": "45 MB",
@@ -363,7 +363,8 @@
           "size": "256 MB",
           "layers": 8
         }
-      ]
+      ],
+      "description_zh": "Harbor 镜像仓库指标导出器"
     },
     {
       "name": "freelabspace/harbor-export-ui",
@@ -390,15 +391,16 @@
           "size": "256 MB",
           "layers": 8
         }
-      ]
+      ],
+      "description_zh": "Harbor 镜像仓库指标导出器 UI"
     },
     {
       "name": "freelabspace/java-local",
       "description": "Java development environment with common tools",
       "repository": "freelabspace/java-local",
       "total_versions": 1,
-      "latest_version": "8-amd64",
-      "updated": "2026-04-24T03:33:18+00:00",
+      "latest_version": "8-arm64",
+      "updated": "2026-04-24T03:26:02+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -408,16 +410,17 @@
       ],
       "versions": [
         {
-          "version": "8-amd64",
-          "digest": "sha256:af62350055b82036cd3731ae87d1c83ca30589a98097fecb1d2d25b4659ed553",
-          "created_at": "2026-04-24T03:33:18+00:00",
-          "synced_at": "2026-04-24T03:33:18+00:00",
-          "target": "ghcr.io/freemankevin/freelabspace/java-local:8-amd64",
-          "source": "docker.io/freelabspace/java-local:8-amd64",
+          "version": "8-arm64",
+          "digest": "sha256:30305a689810b8be5a399819c644f318150d2c99a3367b363a6216244ab8b1d2",
+          "created_at": "2026-04-24T03:26:02+00:00",
+          "synced_at": "2026-04-24T03:26:02+00:00",
+          "target": "ghcr.io/freemankevin/freelabspace/java-local:8-arm64",
+          "source": "docker.io/freelabspace/java-local:8-arm64",
           "size": "256 MB",
           "layers": 8
         }
-      ]
+      ],
+      "description_zh": "Java 开发环境，包含常用工具"
     },
     {
       "name": "freelabspace/python-local",
@@ -444,7 +447,8 @@
           "size": "256 MB",
           "layers": 8
         }
-      ]
+      ],
+      "description_zh": "Python 开发环境，包含 PyTorch"
     },
     {
       "name": "ghcr.io/freemankevin/netkit",
@@ -499,7 +503,8 @@
           "size": "256 MB",
           "layers": 8
         }
-      ]
+      ],
+      "description_zh": "个人 GitHub Pages 站点容器"
     },
     {
       "name": "gcr.io/google-containers/etcd",
