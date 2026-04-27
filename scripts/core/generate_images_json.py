@@ -267,22 +267,16 @@ def generate_images_json(
         is_ghcr_source = source.startswith('ghcr.io/')
         
         if is_ghcr_source:
-            # 对于 GHCR 源镜像，直接从源镜像获取标签信息
-            # 提取 GHCR 仓库的所有者和仓库名
-            # 格式: ghcr.io/{owner}/{repo}:{tag}
             parts = source.replace('ghcr.io/', '').split('/')
             if len(parts) >= 2:
                 source_owner = parts[0]
-                # 剩余部分是仓库名（可能包含斜杠）
                 source_repo = '/'.join(parts[1:]).split(':')[0]
-                # GHCR 源镜像保持原有格式（ghcr.io 已经是友好格式）
-                source_repo_name = source_repo.replace('/', '__')  # API 调用需要双下划线格式
                 
-                print(f"\n🔍 获取 GHCR 源镜像 {source_owner}/{source_repo_name} 的所有标签...")
+                print(f"\n🔍 获取 GHCR 源镜像 {source_owner}/{source_repo} 的所有标签...")
                 logger.debug(f"原始源: {source}")
                 logger.debug(f"标签匹配模式: {tag_patterns}")
                 logger.debug(f"排除模式: {exclude_pattern}")
-                tags = ghcr_api.get_repository_tags(source_owner, source_repo_name)
+                tags = ghcr_api.get_repository_tags(source_owner, source_repo)
                 
                 if tags:
                     logger.debug(f"找到 {len(tags)} 个标签")
@@ -351,7 +345,7 @@ def generate_images_json(
                     image_info = {
                         'name': image_name,
                         'description': description,
-                        'repository': source_repo_name,
+                        'repository': source_repo,
                         'total_versions': len(versions),
                         'latest_version': versions[0]['version'] if versions else None,
                         'updated': versions[0]['created_at'] if versions else '',
@@ -361,7 +355,6 @@ def generate_images_json(
                         'platforms': ['AMD64', 'ARM64'],
                         'versions': versions
                     }
-                    # 添加中文描述
                     image_info = add_chinese_description(image_info)
                     images.append(image_info)
                     
@@ -369,7 +362,7 @@ def generate_images_json(
                     print(f"   📌 最新版本: {versions[0]['version'] if versions else 'N/A'}")
                 else:
                     print(f"   ⚠️  未找到任何标签")
-                    logger.warning(f"GHCR 仓库 {source_owner}/{source_repo_name} 可能不存在或需要认证")
+                    logger.warning(f"GHCR 仓库 {source_owner}/{source_repo} 可能不存在或需要认证")
             else:
                 print(f"   ⚠️  无法解析 GHCR 源镜像: {source}")
                 logger.warning(f"GHCR 源镜像格式不正确: {source}")

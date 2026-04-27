@@ -255,9 +255,6 @@ class ImageCleanup:
                     ghcr_path = repo
                 else:
                     continue
-                print(f"\n📦 检查 {ghcr_path}...")
-                print(f"   {COLOR_GREEN}GHCR 源镜像，跳过清理{COLOR_RESET}")
-                continue
             else:
                 ghcr_path = convert_to_ghcr_path(image_name)
             
@@ -265,7 +262,6 @@ class ImageCleanup:
             print(f"   策略: {strategy}")
             print(f"   max_versions: {max_versions}")
             print(f"   major_versions: {major_versions}")
-            print(f"   条件判断: strategy='latest_per_major'={strategy == 'latest_per_major'}, major_versions非空={bool(major_versions)}")
             
             versions = self.ghcr_api.get_package_versions(self.owner, ghcr_path)
             
