@@ -4,6 +4,39 @@
    Chinese: Noto Sans SC
    ============================================ */
 
+/* Local Fonts */
+@font-face {
+    font-family: 'Hanken Grotesk';
+    src: url('/public/fonts/HankenGrotesk-VariableFont_wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('/public/fonts/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Noto Sans SC';
+    src: url('/public/fonts/NotoSansSC-VariableFont_wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('/public/fonts/JetBrainsMono-VariableFont_wght.ttf') format('truetype');
+    font-weight: 100 800;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* Full Page Background */
         .page-bg {
             position: fixed;
