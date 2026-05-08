@@ -84,7 +84,7 @@ images:
   description: Harbor registry metrics exporter UI
   tag_pattern: ^latest$
   sync_all_matching: false
-- source: freelabspace/java-local:8-arm64
+- source: freelabspace/java-local:8-amd64
   enabled: true
   description: Java development environment with common tools
   tag_pattern: ^[0-9]+(-amd64|-arm64)?$
@@ -125,4 +125,4 @@ config:
     strategy: max_versions
     max_versions: 3
     cleanup_old_versions: true
-  last_checked: '2026-05-07T05:00:48.991435+00:00'
+  last_checked: '2026-05-08T04:40:43.706565+00:00'
