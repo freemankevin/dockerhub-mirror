@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-07T05:01:30.260231+00:00",
+  "updated_at": "2026-05-08T04:41:15.028011+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 17,
@@ -192,7 +192,7 @@
       "repository": "library/redis",
       "total_versions": 1,
       "latest_version": "8.6.3",
-      "updated": "2026-05-06T04:58:43+00:00",
+      "updated": "2026-05-08T04:41:04+00:00",
       "size": "138 MB",
       "layers": 6,
       "stars": 0,
@@ -203,9 +203,9 @@
       "versions": [
         {
           "version": "8.6.3",
-          "digest": "sha256:25dbb04fc4d6d190eda327dab551631500b0f9ac8f9808e8e63b7fda1ddff196",
-          "created_at": "2026-05-06T04:58:43+00:00",
-          "synced_at": "2026-05-06T04:58:43+00:00",
+          "digest": "sha256:7ead790779268b02e27bf6897003c1b9bc60a6bf2a97a40aa2029755465e7b6a",
+          "created_at": "2026-05-08T04:41:04+00:00",
+          "synced_at": "2026-05-08T04:41:04+00:00",
           "target": "ghcr.io/freemankevin/library/redis:8.6.3",
           "source": "docker.io/library/redis:8.6.3",
           "size": "138 MB",
@@ -399,8 +399,8 @@
       "description": "Java development environment with common tools",
       "repository": "freelabspace/java-local",
       "total_versions": 1,
-      "latest_version": "8-arm64",
-      "updated": "2026-04-24T03:26:02+00:00",
+      "latest_version": "8-amd64",
+      "updated": "2026-04-24T03:33:18+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -410,12 +410,12 @@
       ],
       "versions": [
         {
-          "version": "8-arm64",
-          "digest": "sha256:30305a689810b8be5a399819c644f318150d2c99a3367b363a6216244ab8b1d2",
-          "created_at": "2026-04-24T03:26:02+00:00",
-          "synced_at": "2026-04-24T03:26:02+00:00",
-          "target": "ghcr.io/freemankevin/freelabspace/java-local:8-arm64",
-          "source": "docker.io/freelabspace/java-local:8-arm64",
+          "version": "8-amd64",
+          "digest": "sha256:af62350055b82036cd3731ae87d1c83ca30589a98097fecb1d2d25b4659ed553",
+          "created_at": "2026-04-24T03:33:18+00:00",
+          "synced_at": "2026-04-24T03:33:18+00:00",
+          "target": "ghcr.io/freemankevin/freelabspace/java-local:8-amd64",
+          "source": "docker.io/freelabspace/java-local:8-amd64",
           "size": "256 MB",
           "layers": 8
         }
