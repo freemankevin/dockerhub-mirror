@@ -1209,7 +1209,8 @@ html.dark header.surface {
     background: rgba(13, 13, 13, 0.8);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border: none;
+    box-shadow: none;
 }
 
 html.light header.surface,
@@ -1217,7 +1218,8 @@ html:not(.dark) header.surface {
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid #e5e5e5;
+    border: none;
+    box-shadow: none;
 }
 
 /* Language toggle button */
@@ -1247,27 +1249,27 @@ html:not(.dark) .lang-btn:hover {
 }
 
 /* Theme toggle button */
-button[onclick="toggleTheme()"] {
+#themeBtn {
     background: transparent;
     border: none;
     transition: all 0.2s ease;
 }
 
-html.dark button[onclick="toggleTheme()"] {
+html.dark #themeBtn {
     color: #a1a1a1;
 }
 
-html.dark button[onclick="toggleTheme()"]:hover {
+html.dark #themeBtn:hover {
     color: #fafafa;
 }
 
-html.light button[onclick="toggleTheme()"],
-html:not(.dark) button[onclick="toggleTheme()"] {
+html.light #themeBtn,
+html:not(.dark) #themeBtn {
     color: #525252;
 }
 
-html.light button[onclick="toggleTheme()"]:hover,
-html:not(.dark) button[onclick="toggleTheme()"]:hover {
+html.light #themeBtn:hover,
+html:not(.dark) #themeBtn:hover {
     color: #171717;
 }
 

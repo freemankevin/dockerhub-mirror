@@ -4,9 +4,11 @@
   "description": "多镜像仓库同步服务 - 纯前端展示",
   "private": true,
   "scripts": {
-    "build": "echo 'No build step needed - static HTML/CSS/JS'",
-    "dev": "npx serve . -p 7886",
-    "start": "npm run build && npm run dev",
+    "build:css": "tailwindcss -i ./css/tailwind.src.css -o ./css/tailwind.css --minify",
+    "watch:css": "tailwindcss -i ./css/tailwind.src.css -o ./css/tailwind.css --watch",
+    "build": "npm run build:css",
+    "dev": "npm run build:css && npx serve . -p 7886",
+    "start": "npm run dev",
     "preview": "npx serve . -p 7886"
   },
   "keywords": [
@@ -18,6 +20,7 @@
   "author": "freemankevin",
   "license": "MIT",
   "devDependencies": {
-    "serve": "^14.2.0"
+    "serve": "^14.2.0",
+    "tailwindcss": "^3.4.19"
   }
 }
