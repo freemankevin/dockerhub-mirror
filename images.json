@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-08T04:41:15.028011+00:00",
+  "updated_at": "2026-05-09T04:53:33.135922+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 17,
@@ -80,7 +80,7 @@
       "repository": "library/elasticsearch",
       "total_versions": 1,
       "latest_version": "9.4.0",
-      "updated": "2026-05-06T04:58:44+00:00",
+      "updated": "2026-05-09T04:53:05+00:00",
       "size": "1.2 GB",
       "layers": 12,
       "stars": 0,
@@ -91,9 +91,9 @@
       "versions": [
         {
           "version": "9.4.0",
-          "digest": "sha256:64e9e6284652bbb345f12e3fc0e967c4c731a5161f36474be75194ea80260bfe",
-          "created_at": "2026-05-06T04:58:44+00:00",
-          "synced_at": "2026-05-06T04:58:44+00:00",
+          "digest": "sha256:814d6ffd6a71ed580df2c7d5a62354bbd627146f992b8042fc9bffe46b259a82",
+          "created_at": "2026-05-09T04:53:05+00:00",
+          "synced_at": "2026-05-09T04:53:05+00:00",
           "target": "ghcr.io/freemankevin/library/elasticsearch:9.4.0",
           "source": "docker.io/library/elasticsearch:9.4.0",
           "size": "1.2 GB",
@@ -192,7 +192,7 @@
       "repository": "library/redis",
       "total_versions": 1,
       "latest_version": "8.6.3",
-      "updated": "2026-05-08T04:41:04+00:00",
+      "updated": "2026-05-09T04:53:15+00:00",
       "size": "138 MB",
       "layers": 6,
       "stars": 0,
@@ -203,9 +203,9 @@
       "versions": [
         {
           "version": "8.6.3",
-          "digest": "sha256:7ead790779268b02e27bf6897003c1b9bc60a6bf2a97a40aa2029755465e7b6a",
-          "created_at": "2026-05-08T04:41:04+00:00",
-          "synced_at": "2026-05-08T04:41:04+00:00",
+          "digest": "sha256:9ec28b9626938ae5dd565f3371fafd78d432cc049da5865726cd411dfb196c8d",
+          "created_at": "2026-05-09T04:53:15+00:00",
+          "synced_at": "2026-05-09T04:53:15+00:00",
           "target": "ghcr.io/freemankevin/library/redis:8.6.3",
           "source": "docker.io/library/redis:8.6.3",
           "size": "138 MB",
@@ -399,8 +399,8 @@
       "description": "Java development environment with common tools",
       "repository": "freelabspace/java-local",
       "total_versions": 1,
-      "latest_version": "8-amd64",
-      "updated": "2026-04-24T03:33:18+00:00",
+      "latest_version": "8-arm64",
+      "updated": "2026-04-24T03:26:02+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -410,12 +410,12 @@
       ],
       "versions": [
         {
-          "version": "8-amd64",
-          "digest": "sha256:af62350055b82036cd3731ae87d1c83ca30589a98097fecb1d2d25b4659ed553",
-          "created_at": "2026-04-24T03:33:18+00:00",
-          "synced_at": "2026-04-24T03:33:18+00:00",
-          "target": "ghcr.io/freemankevin/freelabspace/java-local:8-amd64",
-          "source": "docker.io/freelabspace/java-local:8-amd64",
+          "version": "8-arm64",
+          "digest": "sha256:30305a689810b8be5a399819c644f318150d2c99a3367b363a6216244ab8b1d2",
+          "created_at": "2026-04-24T03:26:02+00:00",
+          "synced_at": "2026-04-24T03:26:02+00:00",
+          "target": "ghcr.io/freemankevin/freelabspace/java-local:8-arm64",
+          "source": "docker.io/freelabspace/java-local:8-arm64",
           "size": "256 MB",
           "layers": 8
         }
@@ -427,8 +427,8 @@
       "description": "Python development environment with PyTorch",
       "repository": "freelabspace/python-local",
       "total_versions": 1,
-      "latest_version": "3.10-arm64",
-      "updated": "2026-04-24T04:41:16+00:00",
+      "latest_version": "3.10-amd64",
+      "updated": "2026-04-24T03:25:59+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -438,12 +438,12 @@
       ],
       "versions": [
         {
-          "version": "3.10-arm64",
-          "digest": "sha256:4642d80afca30bdafdabf14cad699ba54a8ad8357ee3895ee3cf60637fcae39f",
-          "created_at": "2026-04-24T04:41:16+00:00",
-          "synced_at": "2026-04-24T04:41:16+00:00",
-          "target": "ghcr.io/freemankevin/freelabspace/python-local:3.10-arm64",
-          "source": "docker.io/freelabspace/python-local:3.10-arm64",
+          "version": "3.10-amd64",
+          "digest": "sha256:c5fa1c3a9a1becde25fca5c003f8151226ed9d903d948731475c7598c2c5aa52",
+          "created_at": "2026-04-24T03:25:59+00:00",
+          "synced_at": "2026-04-24T03:25:59+00:00",
+          "target": "ghcr.io/freemankevin/freelabspace/python-local:3.10-amd64",
+          "source": "docker.io/freelabspace/python-local:3.10-amd64",
           "size": "256 MB",
           "layers": 8
         }
