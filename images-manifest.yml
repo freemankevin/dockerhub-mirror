@@ -23,7 +23,7 @@ images:
   tag_pattern: ^v[0-9]+\.[0-9]+\.[0-9]+$
   exclude_pattern: .*BETA.*|.*RC.*|.*SNAPSHOT.*
   sync_all_matching: false
-- source: library/nginx:1.30.0-alpine
+- source: library/nginx:1.31.0-alpine
   enabled: true
   description: High-performance HTTP server and reverse proxy
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+-alpine$
@@ -84,12 +84,12 @@ images:
   description: Harbor registry metrics exporter UI
   tag_pattern: ^latest$
   sync_all_matching: false
-- source: freelabspace/java-local:8-amd64
+- source: freelabspace/java-local:8-arm64
   enabled: true
   description: Java development environment with common tools
   tag_pattern: ^[0-9]+(-amd64|-arm64)?$
   sync_all_matching: false
-- source: freelabspace/python-local:3.10-arm64
+- source: freelabspace/python-local:3.10-amd64
   enabled: true
   description: Python development environment with PyTorch
   tag_pattern: ^[0-9]+\.[0-9]+(-amd64|-arm64)?$
@@ -125,4 +125,4 @@ config:
     strategy: max_versions
     max_versions: 3
     cleanup_old_versions: true
-  last_checked: '2026-05-13T05:28:36.071958+00:00'
+  last_checked: '2026-05-14T05:11:25.971324+00:00'
