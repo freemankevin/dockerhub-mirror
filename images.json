@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-13T05:29:02.488300+00:00",
+  "updated_at": "2026-05-14T05:11:53.570001+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 17,
@@ -135,8 +135,8 @@
       "description": "High-performance HTTP server and reverse proxy",
       "repository": "library/nginx",
       "total_versions": 1,
-      "latest_version": "1.30.0-alpine",
-      "updated": "2026-04-18T04:15:56+00:00",
+      "latest_version": "1.31.0-alpine",
+      "updated": "2026-05-14T05:11:41+00:00",
       "size": "67 MB",
       "layers": 7,
       "stars": 0,
@@ -146,12 +146,12 @@
       ],
       "versions": [
         {
-          "version": "1.30.0-alpine",
-          "digest": "sha256:0272e4604ed93c1792f03695a033a6e8546840f86e0de20a884bb17d2c924883",
-          "created_at": "2026-04-18T04:15:56+00:00",
-          "synced_at": "2026-04-18T04:15:56+00:00",
-          "target": "ghcr.io/freemankevin/library/nginx:1.30.0-alpine",
-          "source": "docker.io/library/nginx:1.30.0-alpine",
+          "version": "1.31.0-alpine",
+          "digest": "sha256:f105e3f12187c58ddc3acd09bbe4b9e4a9ab1df855d3d0e511b641077b5e988e",
+          "created_at": "2026-05-14T05:11:41+00:00",
+          "synced_at": "2026-05-14T05:11:41+00:00",
+          "target": "ghcr.io/freemankevin/library/nginx:1.31.0-alpine",
+          "source": "docker.io/library/nginx:1.31.0-alpine",
           "size": "67 MB",
           "layers": 7
         }
@@ -399,8 +399,8 @@
       "description": "Java development environment with common tools",
       "repository": "freelabspace/java-local",
       "total_versions": 1,
-      "latest_version": "8-amd64",
-      "updated": "2026-04-24T03:33:18+00:00",
+      "latest_version": "8-arm64",
+      "updated": "2026-04-24T03:26:02+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -410,12 +410,12 @@
       ],
       "versions": [
         {
-          "version": "8-amd64",
-          "digest": "sha256:af62350055b82036cd3731ae87d1c83ca30589a98097fecb1d2d25b4659ed553",
-          "created_at": "2026-04-24T03:33:18+00:00",
-          "synced_at": "2026-04-24T03:33:18+00:00",
-          "target": "ghcr.io/freemankevin/freelabspace/java-local:8-amd64",
-          "source": "docker.io/freelabspace/java-local:8-amd64",
+          "version": "8-arm64",
+          "digest": "sha256:30305a689810b8be5a399819c644f318150d2c99a3367b363a6216244ab8b1d2",
+          "created_at": "2026-04-24T03:26:02+00:00",
+          "synced_at": "2026-04-24T03:26:02+00:00",
+          "target": "ghcr.io/freemankevin/freelabspace/java-local:8-arm64",
+          "source": "docker.io/freelabspace/java-local:8-arm64",
           "size": "256 MB",
           "layers": 8
         }
@@ -427,8 +427,8 @@
       "description": "Python development environment with PyTorch",
       "repository": "freelabspace/python-local",
       "total_versions": 1,
-      "latest_version": "3.10-arm64",
-      "updated": "2026-04-24T04:41:16+00:00",
+      "latest_version": "3.10-amd64",
+      "updated": "2026-04-24T03:25:59+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -438,12 +438,12 @@
       ],
       "versions": [
         {
-          "version": "3.10-arm64",
-          "digest": "sha256:4642d80afca30bdafdabf14cad699ba54a8ad8357ee3895ee3cf60637fcae39f",
-          "created_at": "2026-04-24T04:41:16+00:00",
-          "synced_at": "2026-04-24T04:41:16+00:00",
-          "target": "ghcr.io/freemankevin/freelabspace/python-local:3.10-arm64",
-          "source": "docker.io/freelabspace/python-local:3.10-arm64",
+          "version": "3.10-amd64",
+          "digest": "sha256:c5fa1c3a9a1becde25fca5c003f8151226ed9d903d948731475c7598c2c5aa52",
+          "created_at": "2026-04-24T03:25:59+00:00",
+          "synced_at": "2026-04-24T03:25:59+00:00",
+          "target": "ghcr.io/freemankevin/freelabspace/python-local:3.10-amd64",
+          "source": "docker.io/freelabspace/python-local:3.10-amd64",
           "size": "256 MB",
           "layers": 8
         }
