@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-05-19T05:43:16.360198+00:00",
+  "updated_at": "2026-05-19T06:51:44.924372+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
-  "total_images": 17,
-  "total_versions": 25,
+  "total_images": 18,
+  "total_versions": 26,
   "total_failed": 0,
   "images": [
     {
@@ -71,8 +71,7 @@
           "size": "256 MB",
           "layers": 8
         }
-      ],
-      "description_zh": "Amazon 官方维护的 OpenJDK 发行版（Amazon Linux 2023）"
+      ]
     },
     {
       "name": "library/elasticsearch",
@@ -99,8 +98,7 @@
           "size": "1.2 GB",
           "layers": 12
         }
-      ],
-      "description_zh": "分布式、RESTful 搜索和分析引擎"
+      ]
     },
     {
       "name": "nacos/nacos-server",
@@ -127,8 +125,7 @@
           "size": "856 MB",
           "layers": 15
         }
-      ],
-      "description_zh": "动态服务发现、配置和服务管理平台"
+      ]
     },
     {
       "name": "library/nginx",
@@ -155,8 +152,7 @@
           "size": "67 MB",
           "layers": 7
         }
-      ],
-      "description_zh": "官方构建的高性能 HTTP 和反向代理服务器"
+      ]
     },
     {
       "name": "library/rabbitmq",
@@ -183,8 +179,7 @@
           "size": "215 MB",
           "layers": 9
         }
-      ],
-      "description_zh": "开源消息代理软件，支持多种消息协议"
+      ]
     },
     {
       "name": "library/redis",
@@ -211,8 +206,7 @@
           "size": "138 MB",
           "layers": 6
         }
-      ],
-      "description_zh": "高性能内存数据结构存储，用作数据库、缓存和消息代理"
+      ]
     },
     {
       "name": "kartoza/geoserver",
@@ -239,8 +233,7 @@
           "size": "1.8 GB",
           "layers": 15
         }
-      ],
-      "description_zh": "开源地理信息系统服务器"
+      ]
     },
     {
       "name": "ghcr.io/freemankevin/postgresql-postgis",
@@ -363,8 +356,7 @@
           "size": "256 MB",
           "layers": 8
         }
-      ],
-      "description_zh": "Harbor 镜像仓库指标导出器"
+      ]
     },
     {
       "name": "freelabspace/harbor-export-ui",
@@ -391,8 +383,7 @@
           "size": "256 MB",
           "layers": 8
         }
-      ],
-      "description_zh": "Harbor 镜像仓库指标导出器 UI"
+      ]
     },
     {
       "name": "freelabspace/java-local",
@@ -419,16 +410,15 @@
           "size": "256 MB",
           "layers": 8
         }
-      ],
-      "description_zh": "Java 开发环境，包含常用工具"
+      ]
     },
     {
       "name": "freelabspace/python-local",
       "description": "Python development environment with PyTorch",
       "repository": "freelabspace/python-local",
       "total_versions": 1,
-      "latest_version": "3.10-amd64",
-      "updated": "2026-04-24T03:25:59+00:00",
+      "latest_version": "3.10-arm64",
+      "updated": "2026-04-24T04:41:16+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -438,17 +428,16 @@
       ],
       "versions": [
         {
-          "version": "3.10-amd64",
-          "digest": "sha256:c5fa1c3a9a1becde25fca5c003f8151226ed9d903d948731475c7598c2c5aa52",
-          "created_at": "2026-04-24T03:25:59+00:00",
-          "synced_at": "2026-04-24T03:25:59+00:00",
-          "target": "ghcr.io/freemankevin/freelabspace/python-local:3.10-amd64",
-          "source": "docker.io/freelabspace/python-local:3.10-amd64",
+          "version": "3.10-arm64",
+          "digest": "sha256:4642d80afca30bdafdabf14cad699ba54a8ad8357ee3895ee3cf60637fcae39f",
+          "created_at": "2026-04-24T04:41:16+00:00",
+          "synced_at": "2026-04-24T04:41:16+00:00",
+          "target": "ghcr.io/freemankevin/freelabspace/python-local:3.10-arm64",
+          "source": "docker.io/freelabspace/python-local:3.10-arm64",
           "size": "256 MB",
           "layers": 8
         }
-      ],
-      "description_zh": "Python 开发环境，包含 PyTorch"
+      ]
     },
     {
       "name": "ghcr.io/freemankevin/netkit",
@@ -531,8 +520,7 @@
           "size": "256 MB",
           "layers": 8
         }
-      ],
-      "description_zh": "分布式键值存储，用于共享配置和服务发现"
+      ]
     },
     {
       "name": "quay.io/minio/aistor/minio",
@@ -559,8 +547,34 @@
           "size": "284 MB",
           "layers": 8
         }
+      ]
+    },
+    {
+      "name": "quay.io/minio/mc",
+      "description": "MinIO Client - Command-line tool for managing MinIO object storage",
+      "repository": "minio/mc",
+      "total_versions": 1,
+      "latest_version": "RELEASE.2025-08-13T08-35-41Z",
+      "updated": "2026-05-19T06:46:31+00:00",
+      "size": "284 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
       ],
-      "description_zh": "高性能对象存储服务器，兼容 Amazon S3 API"
+      "versions": [
+        {
+          "version": "RELEASE.2025-08-13T08-35-41Z",
+          "digest": "sha256:a7fe349ef4bd8521fb8497f55c6042871b2ae640607cf99d9bede5e9bdf11727",
+          "created_at": "2026-05-19T06:46:31+00:00",
+          "synced_at": "2026-05-19T06:46:31+00:00",
+          "target": "ghcr.io/freemankevin/minio/mc:RELEASE.2025-08-13T08-35-41Z",
+          "source": "quay.io/minio/mc:RELEASE.2025-08-13T08-35-41Z",
+          "size": "284 MB",
+          "layers": 8
+        }
+      ]
     }
   ],
   "failed_images": []
