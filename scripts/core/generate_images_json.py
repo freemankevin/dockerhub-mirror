@@ -31,7 +31,6 @@ sys.path.insert(0, str(project_root))
 
 from scripts.api.ghcr_api import GHCRRegistryAPI
 from scripts.utils import setup_logger, convert_to_ghcr_path, parse_image_name
-from scripts.utils.translations import add_chinese_description
 from scripts.core.mirror_sync import apply_retention_strategy
 
 
@@ -426,22 +425,8 @@ def generate_images_json(
                         'layers': tag.get('layers', 0)
                     })
                 
-                if sync_all:
-                    version_names = [v['version'] for v in versions]
-                    retained_names = apply_retention_strategy(
-                        version_names,
-                        strategy,
-                        max_versions,
-                        major_versions,
-                        keep_minor_versions
-                    )
-                    versions = [v for v in versions if v['version'] in retained_names]
-                else:
+                if not sync_all:
                     versions = [v for v in versions if v['version'] == current_version]
-                
-                if versions:
-                    if sync_all:
-                        versions.sort(key=lambda x: retained_names.index(x['version']) if x['version'] in retained_names else len(retained_names))
                 
                 total_versions += len(versions)
                 
@@ -459,8 +444,6 @@ def generate_images_json(
                     'platforms': ['AMD64', 'ARM64'],
                     'versions': versions
                 }
-                # 添加中文描述
-                image_info = add_chinese_description(image_info)
                 images.append(image_info)
                 
                 print(f"   ✅ 找到 {len(versions)} 个版本")

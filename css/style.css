@@ -37,6 +37,14 @@
 }
 
 /* ============================================
+   Base Reset
+   ============================================ */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* ============================================
    Base Typography
    ============================================ */
 * {
@@ -81,6 +89,10 @@ html.dark body {
     background: #0d0d0d;
     color: #e8e8e8;
     min-height: 100vh;
+}
+
+html.dark .bg-body {
+    background: #0d0d0d;
 }
 
 /* Surface cards - Minimal glassmorphism */
@@ -140,6 +152,11 @@ html:not(.dark) body {
     background: #ffffff;
     color: #171717;
     min-height: 100vh;
+}
+
+html.light .bg-body,
+html:not(.dark) .bg-body {
+    background: #ffffff;
 }
 
 /* Surface cards - Clean minimal */
@@ -211,6 +228,22 @@ html:not(.dark) select:focus {
     border-color: #d4d4d4;
     outline: none;
     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================
+   Site Header - Full-width horizontal cut
+   ============================================ */
+.site-header {
+    backdrop-filter: none;
+}
+
+html.dark .site-header {
+    background: #0a0a0c;
+}
+
+html.light .site-header,
+html:not(.dark) .site-header {
+    background: #f8f9fa;
 }
 
 /* ============================================
@@ -2023,3 +2056,721 @@ html:not(.dark) header .fa-github {
     color: #171717 !important;
 }
 
+
+/* ============================================
+   Stats Bar
+   ============================================ */
+.stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 640px) {
+    .stats-bar {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.stat-item {
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid;
+    transition: all 0.2s ease;
+}
+
+html.dark .stat-item {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.06);
+}
+
+html.dark .stat-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.light .stat-item,
+html:not(.dark) .stat-item {
+    background: #ffffff;
+    border-color: #e5e5e5;
+}
+
+html.light .stat-item:hover,
+html:not(.dark) .stat-item:hover {
+    border-color: #d4d4d4;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.stat-item-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+html.dark .stat-item-value {
+    color: #fafafa;
+}
+
+html.light .stat-item-value,
+html:not(.dark) .stat-item-value {
+    color: #171717;
+}
+
+.stat-item-label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+html.dark .stat-item-label {
+    color: #737373;
+}
+
+html.light .stat-item-label,
+html:not(.dark) .stat-item-label {
+    color: #a3a3a3;
+}
+
+/* ============================================
+   Enhanced Cards
+   ============================================ */
+article.surface {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+article.surface:hover {
+    transform: translateY(-2px);
+}
+
+html.dark article.surface:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+html.light article.surface:hover,
+html:not(.dark) article.surface:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    border-color: #d4d4d4;
+}
+
+/* Source color bar */
+.source-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    border-radius: 2px 0 0 2px;
+}
+
+.source-bar--dockerhub { background: linear-gradient(to bottom, #2496ed, #1d7bc8); }
+.source-bar--github { background: linear-gradient(to bottom, #8b949e, #6e7681); }
+.source-bar--google { background: linear-gradient(to bottom, #34a853, #2d8e47); }
+.source-bar--redhat { background: linear-gradient(to bottom, #ee0000, #c00000); }
+.source-bar--aws { background: linear-gradient(to bottom, #ff9900, #e88a00); }
+
+/* Card inner padding offset for source bar */
+.card-inner {
+    padding-left: 16px;
+}
+
+/* Description */
+.card-description {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: 6px;
+    margin-bottom: 2px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+html.dark .card-description {
+    color: #8b8b8b;
+}
+
+html.light .card-description,
+html:not(.dark) .card-description {
+    color: #737373;
+}
+
+/* Platform badges */
+.platform-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+}
+
+html.dark .platform-badge {
+    background: rgba(255, 255, 255, 0.05);
+    color: #a1a1a1;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+html.light .platform-badge,
+html:not(.dark) .platform-badge {
+    background: #f5f5f5;
+    color: #525252;
+    border: 1px solid #e5e5e5;
+}
+
+/* Version count badge */
+.version-count {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+html.dark .version-count {
+    background: rgba(255, 255, 255, 0.05);
+    color: #a1a1a1;
+}
+
+html.light .version-count,
+html:not(.dark) .version-count {
+    background: #f0f0f0;
+    color: #737373;
+}
+
+/* Meta row in cards */
+.card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid;
+}
+
+html.dark .card-meta {
+    border-color: rgba(255, 255, 255, 0.04);
+}
+
+html.light .card-meta,
+html:not(.dark) .card-meta {
+    border-color: #f0f0f0;
+}
+
+.card-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: -0.02em;
+}
+
+html.dark .card-meta-item {
+    color: #737373;
+}
+
+html.light .card-meta-item,
+html:not(.dark) .card-meta-item {
+    color: #a3a3a3;
+}
+
+/* Official badge inline */
+.badge-official-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+html.dark .badge-official-inline {
+    background: rgba(96, 165, 250, 0.1);
+    color: #60a5fa;
+    border: 1px solid rgba(96, 165, 250, 0.15);
+}
+
+html.light .badge-official-inline,
+html:not(.dark) .badge-official-inline {
+    background: rgba(37, 99, 235, 0.06);
+    color: #2563eb;
+    border: 1px solid rgba(37, 99, 235, 0.1);
+}
+
+/* Updated time */
+.update-time {
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+}
+
+html.dark .update-time {
+    color: #737373;
+}
+
+html.light .update-time,
+html:not(.dark) .update-time {
+    color: #a3a3a3;
+}
+
+/* ============================================
+   Redesigned Stats Bar — Inline Minimal
+   ============================================ */
+.stats-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.stat-pill {
+    font-size: 13px;
+    color: #525252;
+    font-family: 'Inter', sans-serif;
+}
+
+html.dark .stat-pill {
+    color: #a1a1a1;
+}
+
+.stat-pill strong {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    color: #171717;
+    font-size: 14px;
+    margin-right: 4px;
+}
+
+html.dark .stat-pill strong {
+    color: #fafafa;
+}
+
+.stat-dot {
+    color: #d4d4d4;
+    font-size: 14px;
+    line-height: 1;
+    user-select: none;
+}
+
+html.dark .stat-dot {
+    color: #525252;
+}
+
+/* ============================================
+   Redesigned Cards — Compact & Focused
+   ============================================ */
+.card-top-bar {
+    height: 3px;
+    width: 100%;
+    border-radius: 2px 2px 0 0;
+}
+
+.card-top-bar--dockerhub { background: linear-gradient(90deg, #2496ed, #1d7bc8); }
+.card-top-bar--github { background: linear-gradient(90deg, #8b949e, #6e7681); }
+.card-top-bar--google { background: linear-gradient(90deg, #34a853, #2d8e47); }
+.card-top-bar--redhat { background: linear-gradient(90deg, #ee0000, #c00000); }
+.card-top-bar--aws { background: linear-gradient(90deg, #ff9900, #e88a00); }
+
+.card-body {
+    padding: 14px 16px 12px;
+}
+
+/* Command block — the visual center */
+.command-block {
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+html.dark .command-block {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+html.light .command-block,
+html:not(.dark) .command-block {
+    background: #f8f8f8;
+    border: 1px solid #eaeaea;
+}
+
+/* Compact copy button */
+.copy-btn-compact {
+    opacity: 0.5;
+    transition: all 0.15s ease;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 4px;
+    position: relative;
+}
+
+html.dark .copy-btn-compact {
+    color: #737373;
+}
+
+html.light .copy-btn-compact,
+html:not(.dark) .copy-btn-compact {
+    color: #a3a3a3;
+}
+
+html.dark .copy-btn-compact:hover {
+    opacity: 1;
+    color: #fafafa;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+html.light .copy-btn-compact:hover,
+html:not(.dark) .copy-btn-compact:hover {
+    opacity: 1;
+    color: #171717;
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.copy-btn-compact.copied {
+    opacity: 1;
+    color: #16a34a;
+}
+
+html.dark .copy-btn-compact.copied {
+    color: #4ade80;
+}
+
+.copy-btn-compact::after {
+    content: 'Copied!';
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.9);
+    background: #171717;
+    color: #ffffff;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    pointer-events: none;
+    z-index: 10;
+    font-family: 'Inter', sans-serif;
+}
+
+html.dark .copy-btn-compact::after {
+    background: #fafafa;
+    color: #0d0d0d;
+}
+
+.copy-btn-compact.copied::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) scale(1);
+}
+
+/* Footer meta */
+.card-footer-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.registry-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-family: 'Inter', sans-serif;
+}
+
+html.dark .registry-tag--dockerhub {
+    background: rgba(36, 150, 237, 0.08);
+    color: #60a5fa;
+}
+html.dark .registry-tag--github {
+    background: rgba(139, 148, 158, 0.08);
+    color: #a1a1a1;
+}
+html.dark .registry-tag--google {
+    background: rgba(52, 168, 83, 0.08);
+    color: #4ade80;
+}
+html.dark .registry-tag--redhat {
+    background: rgba(238, 0, 0, 0.08);
+    color: #f87171;
+}
+html.dark .registry-tag--aws {
+    background: rgba(255, 153, 0, 0.08);
+    color: #fbbf24;
+}
+
+html.light .registry-tag--dockerhub,
+html:not(.dark) .registry-tag--dockerhub {
+    background: rgba(36, 150, 237, 0.06);
+    color: #2563eb;
+}
+html.light .registry-tag--github,
+html:not(.dark) .registry-tag--github {
+    background: rgba(0, 0, 0, 0.04);
+    color: #525252;
+}
+html.light .registry-tag--google,
+html:not(.dark) .registry-tag--google {
+    background: rgba(52, 168, 83, 0.06);
+    color: #16a34a;
+}
+html.light .registry-tag--redhat,
+html:not(.dark) .registry-tag--redhat {
+    background: rgba(220, 38, 38, 0.06);
+    color: #dc2626;
+}
+html.light .registry-tag--aws,
+html:not(.dark) .registry-tag--aws {
+    background: rgba(255, 153, 0, 0.06);
+    color: #d97706;
+}
+
+.meta-text {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: -0.02em;
+}
+
+html.dark .meta-text {
+    color: #737373;
+}
+
+html.light .meta-text,
+html:not(.dark) .meta-text {
+    color: #a3a3a3;
+}
+
+/* Official indicator dot */
+.official-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #16a34a;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+html.dark .official-dot {
+    background: #4ade80;
+}
+
+/* Card hover refinement */
+article.surface {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+article.surface:hover {
+    transform: translateY(-1px);
+}
+
+html.dark article.surface:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.light article.surface:hover,
+html:not(.dark) article.surface:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    border-color: #d4d4d4;
+}
+
+/* ============================================
+   Atmosphere — Background & Depth
+   ============================================ */
+html.light body,
+html:not(.dark) body {
+    background: #f8f9fa;
+    background-image: radial-gradient(ellipse at 50% 0%, rgba(59, 130, 246, 0.03) 0%, transparent 50%);
+    color: #171717;
+}
+
+html.dark body {
+    background: #0a0a0c;
+    background-image: radial-gradient(ellipse at 50% 0%, rgba(96, 165, 250, 0.04) 0%, transparent 50%);
+    color: #e8e8e8;
+}
+
+/* Card depth refinement */
+html.light .surface,
+html:not(.dark) .surface {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+html.light .surface:hover,
+html:not(.dark) .surface:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+html.dark .surface {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+html.dark .surface:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* Top bar glow */
+.card-top-bar--dockerhub { box-shadow: 0 1px 6px rgba(36, 150, 237, 0.25); }
+.card-top-bar--github { box-shadow: 0 1px 6px rgba(139, 148, 158, 0.2); }
+.card-top-bar--google { box-shadow: 0 1px 6px rgba(52, 168, 83, 0.25); }
+.card-top-bar--redhat { box-shadow: 0 1px 6px rgba(238, 0, 0, 0.25); }
+.card-top-bar--aws { box-shadow: 0 1px 6px rgba(255, 153, 0, 0.25); }
+
+/* Command block — dark in both modes for visual punch */
+html.light .command-block,
+html:not(.dark) .command-block {
+    background: #171717;
+    border: 1px solid #2a2a2a;
+}
+
+html.light .command-block .cmd-text,
+html:not(.dark) .command-block .cmd-text {
+    color: #e8e8e8;
+}
+
+html.light .command-block .cmd-prompt,
+html:not(.dark) .command-block .cmd-prompt {
+    color: #737373;
+}
+
+/* ============================================
+   Header Fix — Blend with page background
+   ============================================ */
+html.light header.surface,
+html:not(.dark) header.surface {
+    background: rgba(248, 249, 250, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid #e5e5e5;
+    box-shadow: none;
+}
+
+html.dark header.surface {
+    background: rgba(10, 10, 12, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: none;
+}
+
+/* ============================================
+   Lucide Icon Overrides
+   ============================================ */
+.copy-btn-compact.copied svg {
+    animation: copySuccess 0.3s ease;
+}
+
+/* ============================================
+   Fix: dropdown clipped by card overflow
+   ============================================ */
+article.surface {
+    overflow: visible;
+}
+
+/* ============================================
+   Background Wallpaper — Ultra Subtle
+   ============================================ */
+.bg-wallpaper {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.bg-wallpaper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.bg-wallpaper::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+}
+
+html.light .bg-wallpaper::after,
+html:not(.dark) .bg-wallpaper::after {
+    background: #f8f9fa;
+    background-image: radial-gradient(ellipse at 50% 0%, rgba(59, 130, 246, 0.03) 0%, transparent 50%);
+}
+
+html.dark .bg-wallpaper::after {
+    background: #0a0a0c;
+    background-image: radial-gradient(ellipse at 50% 0%, rgba(96, 165, 250, 0.04) 0%, transparent 50%);
+}
+
+/* ============================================
+   Header — No shadow, ever
+   ============================================ */
+header.surface,
+header.surface:hover {
+    box-shadow: none !important;
+}
+
+/* ============================================
+   Header — Solid bar style
+   ============================================ */
+html.light header.surface,
+html:not(.dark) header.surface {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+html.dark header.surface {
+    background: #141414;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+/* Increase breathing room below header */
+main {
+    padding-top: 40px !important;
+}

@@ -124,7 +124,7 @@ jobs:
           fi
       
       - name: Cleanup old images
-        if: ${{ github.event_name != 'pull_request' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.cleanup == 'true' }}
         env:
           GHCR_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
@@ -133,7 +133,7 @@ jobs:
           echo "::endgroup::"
 
       - name: Regenerate images.json after cleanup
-        if: ${{ github.event_name != 'pull_request' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.cleanup == 'true' }}
         env:
           GHCR_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |

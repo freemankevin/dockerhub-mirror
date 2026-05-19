@@ -23,6 +23,21 @@ const translations = {
       loading: 'loading...',
       failed: 'failed'
     },
+    stats: {
+      totalMirrors: 'Total Mirrors',
+      storageSpace: 'Storage Space',
+      avgImageSize: 'Avg Image Size',
+      latestUpdates: 'Latest Updates',
+      availableVersions: 'Available Versions',
+      lastSync: 'Last Sync',
+      totalSize: 'total size',
+      perImage: 'per image',
+      updatedThisWeek: 'updated this week',
+      thisWeek: 'this week',
+      loading: 'loading...',
+      failed: 'failed',
+      platforms: 'Platforms'
+    },
     filters: {
       all: 'All',
       dockerHub: 'Docker Hub',
@@ -49,6 +64,7 @@ const translations = {
     card: {
       official: 'official',
       layers: 'layers',
+      versions: 'versions',
       source: 'Source',
       imageNotSynced: 'Image not synced',
       syncFailed: 'sync failed',
@@ -127,6 +143,21 @@ const translations = {
       loading: '加载中...',
       failed: '失败'
     },
+    stats: {
+      totalMirrors: '镜像总数',
+      storageSpace: '存储空间',
+      avgImageSize: '平均大小',
+      latestUpdates: '本周更新',
+      availableVersions: '可用版本',
+      lastSync: '最近同步',
+      totalSize: '总大小',
+      perImage: '每个镜像',
+      updatedThisWeek: '本周更新',
+      thisWeek: '本周',
+      loading: '加载中...',
+      failed: '失败',
+      platforms: '支持平台'
+    },
     filters: {
       all: '全部',
       dockerHub: 'Docker Hub',
@@ -153,6 +184,7 @@ const translations = {
     card: {
       official: '官方',
       layers: '层',
+      versions: '版本',
       source: '来源',
       imageNotSynced: '镜像未同步',
       syncFailed: '同步失败',

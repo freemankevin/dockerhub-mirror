@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
-    <!-- Early theme and language detection -->
+    <!-- Early theme detection -->
     <script>
         // Detect browser theme preference before page renders
         const savedTheme = localStorage.getItem('theme');
@@ -15,16 +15,6 @@
         } else {
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             document.documentElement.classList.add(prefersDark ? 'dark' : 'light');
-        }
-        
-        // Detect browser language before page renders
-        const savedLang = localStorage.getItem('lang');
-        if (savedLang && (savedLang === 'en' || savedLang === 'zh')) {
-            document.documentElement.lang = savedLang;
-        } else {
-            const browserLang = navigator.language || navigator.userLanguage || 'en';
-            const isChinese = browserLang.toLowerCase().startsWith('zh');
-            document.documentElement.lang = isChinese ? 'zh' : 'en';
         }
     </script>
     
@@ -59,14 +49,16 @@
     
     <!-- Stylesheets -->
     <!-- Fonts: Using local font files from /public/fonts/ -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <link rel="stylesheet" href="/css/tailwind.css">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="min-h-screen flex flex-col">
+    <!-- Background wallpaper -->
+    <div class="bg-wallpaper" aria-hidden="true"></div>
 
     <!-- Header -->
-    <header class="surface sticky top-0 z-50">
+    <header class="site-header sticky top-0 z-50 border-b border-default">
         <div class="max-w-[1400px] mx-auto px-8 h-16 flex items-center justify-between gap-4">
             <div class="flex items-center gap-4 group shrink-0">
                 <div class="w-11 h-11 flex items-center justify-center transition-all duration-300 group-hover:scale-110">
@@ -81,7 +73,7 @@
             <!-- Centered Search Box -->
             <div class="flex-1 flex justify-center max-w-md mx-4">
                 <div class="relative w-full group">
-                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-tertiary group-focus-within:text-accent-blue transition-colors" style="font-size: 14px;" aria-hidden="true"></i>
+                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-tertiary group-focus-within:text-accent-blue transition-colors" style="width: 14px; height: 14px;" aria-hidden="true"></i>
                     <input
                         type="search"
                         id="searchInput"
@@ -97,20 +89,15 @@
             </div>
 
             <div class="flex items-center gap-1.5 shrink-0">
-                <button class="px-4 h-12 rounded-xl flex items-center gap-2 text-secondary hover:text-primary hover:bg-emphasis transition-all duration-300 hover:scale-105 group lang-btn" id="langBtn" title="Switch to Chinese" aria-label="Toggle language">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-languages h-5 w-5 text-secondary group-hover:text-accent-blue transition-colors"><path d="m5 8 6 6"></path><path d="m4 14 6-6 2-3"></path><path d="M2 5h12"></path><path d="M7 2h1"></path><path d="m22 22-5-10-5 10"></path><path d="M14 18h6"></path></svg>
-                    <span id="langIcon" class="text-sm font-medium text-secondary group-hover:text-accent-blue transition-colors">EN</span>
-                </button>
-
                 <button class="w-12 h-12 rounded-xl flex items-center justify-center text-secondary hover:text-primary hover:bg-emphasis transition-all duration-300 hover:scale-110 group" id="themeBtn" title="Dark Mode" aria-label="Toggle theme">
-                    <i id="themeIcon" class="fas fa-sun text-xl text-secondary group-hover:text-amber-400 transition-colors"></i>
+                    <i id="themeIcon" data-lucide="sun" class="text-secondary group-hover:text-amber-400 transition-colors" style="width: 20px; height: 20px;"></i>
                 </button>
 
                 <a href="https://github.com/freemankevin/registry-sync" target="_blank"
                    rel="noopener noreferrer"
-                   class="w-12 h-12 rounded-xl flex items-center justify-center text-secondary hover:text-primary hover:bg-emphasis transition-all duration-300 hover:scale-110"
+                   class="w-12 h-12 rounded-xl flex items-center justify-center text-secondary hover:text-primary hover:bg-emphasis transition-all duration-300 hover:scale-110 no-underline"
                    aria-label="View on GitHub" title="freemankevin/registry-sync">
-                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.308.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
                 </a>
             </div>
         </div>
@@ -144,6 +131,9 @@
                 <span data-i18n="filters.aws">AWS ECR</span> <span class="ml-1.5 px-2 py-0.5 text-sm rounded-full bg-emphasis text-secondary" id="cnt-aws">0</span>
             </button>
         </nav>
+
+        <!-- Stats Bar -->
+        <div id="statsBar" class="stats-bar"></div>
 
         <!-- Loading State - Compact -->
         <div id="loadingState" class="py-12 text-center" role="status" aria-live="polite">
@@ -213,7 +203,7 @@
         <!-- Error State - Compact -->
         <div id="errorState" class="hidden py-12 text-center">
             <div class="w-10 h-10 rounded-xl bg-emphasis flex items-center justify-center mx-auto mb-2 border border-default">
-                <i class="fas fa-exclamation-triangle text-base text-amber-500"></i>
+                <i data-lucide="alert-triangle" class="text-amber-500" style="width: 16px; height: 16px;"></i>
             </div>
             <h3 class="text-xs font-medium text-secondary" data-i18n="error.title">Failed to load images</h3>
             <p class="text-xs text-tertiary mt-0.5" data-i18n="error.subtitle">Using cached data instead</p>
@@ -223,22 +213,22 @@
         <section id="failedSection" class="hidden mb-6" aria-label="Failed image syncs">
             <div class="flex items-center justify-between mb-3 pb-1.5 border-b border-red-500/30">
                 <div class="flex items-center gap-1.5">
-                    <i class="fas fa-exclamation-triangle text-red-500" style="font-size: 12px;"></i>
+                    <i data-lucide="alert-triangle" class="text-red-500" style="width: 12px; height: 12px;"></i>
                     <h2 class="text-sm font-semibold text-primary" data-i18n="failedSection.title">Failed Syncs</h2>
                     <span class="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-red-500/20 text-red-400 font-medium" id="failedSectionCount">0</span>
                 </div>
                 <p class="text-xs text-secondary" data-i18n="failedSection.description">These images failed to sync and may not be available</p>
             </div>
-            <div id="failedMirrorList" class="space-y-4" role="list" aria-label="Failed container image syncs"></div>
+            <div id="failedMirrorList" class="space-y-3" role="list" aria-label="Failed container image syncs"></div>
         </section>
 
         <!-- Mirror List -->
-        <div id="mirrorList" class="space-y-4" role="list" aria-label="Container image mirrors"></div>
+        <div id="mirrorList" class="space-y-3" role="list" aria-label="Container image mirrors"></div>
 
         <!-- Empty State - Compact -->
         <div id="emptyState" class="hidden py-12 text-center" role="status">
             <div class="w-10 h-10 rounded-xl bg-emphasis flex items-center justify-center mx-auto mb-2 border border-default empty-icon">
-                <i class="fas fa-search text-base text-tertiary"></i>
+                <i data-lucide="search" class="text-tertiary" style="width: 16px; height: 16px;"></i>
             </div>
             <h3 class="text-xs font-medium text-secondary" data-i18n="empty.title">No mirrors found</h3>
             <p class="text-xs text-tertiary mt-0.5" data-i18n="empty.description">Try adjusting your search or filters</p>
@@ -247,17 +237,16 @@
 
     <!-- Back to Top Button -->
     <button id="backToTop" class="back-to-top hidden" aria-label="Back to top" title="Back to top">
-        <i class="fas fa-arrow-up"></i>
+        <i data-lucide="arrow-up" style="width: 16px; height: 16px;"></i>
     </button>
 
     <!-- Scripts -->
-    <script src="/js/i18n.js"></script>
     <script src="/js/app.js"></script>
     <script>
     // Add loading class to body
     document.body.classList.add('loading');
-    // Initialize language
-    if (typeof initLang === 'function') initLang();
+    // Initialize lucide icons
+    if (typeof lucide !== 'undefined') lucide.createIcons();
     </script>
 </body>
 </html>

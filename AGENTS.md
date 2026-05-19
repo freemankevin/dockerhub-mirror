@@ -61,8 +61,7 @@ Registry Sync 是一个**多源 Docker 镜像同步服务**，核心功能是将
 │   │   ├── cleanup.py          # 旧镜像清理工具
 │   │   └── generate_images_json.py  # 生成 images.json 数据文件
 │   ├── utils/
-│   │   ├── utils.py            # 通用工具（镜像名解析、日志、环境变量）
-│   │   └── translations.py     # 描述翻译辅助
+│   │   └── utils.py            # 通用工具（镜像名解析、日志、环境变量）
 │   └── test/                   # 测试/调试脚本（非自动化测试）
 └── .github/workflows/
     └── mirror-images.yml       # GitHub Actions：定时同步工作流
@@ -225,5 +224,4 @@ python scripts/main.py cleanup --owner <owner> --force
 
 - 新增镜像：编辑 `images-manifest.yml`，添加条目后运行 `python scripts/main.py run --owner <owner>` 验证
 - 前端调整：直接修改 `index.html` / `css/style.css` / `js/app.js`，刷新即可生效（无构建步骤）
-- 国际化文本：修改 `js/i18n.js` 中的 `translations` 对象
 - 新增源仓库支持：在 `scripts/api/registry_api.py` 的 `RegistryAPI` 中添加新的 registry 类型检测和标签获取方法
