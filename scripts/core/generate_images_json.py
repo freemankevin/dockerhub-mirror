@@ -31,6 +31,7 @@ sys.path.insert(0, str(project_root))
 
 from scripts.api.ghcr_api import GHCRRegistryAPI
 from scripts.utils import setup_logger, convert_to_ghcr_path, parse_image_name
+from scripts.utils.translations import add_chinese_description
 from scripts.core.mirror_sync import apply_retention_strategy
 
 
