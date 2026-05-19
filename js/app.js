@@ -396,7 +396,6 @@ function buildVersionSelect(img, ver) {
 }
 
 function buildCard(img, index) {
-  const t = (k) => k;
   const { path, ver } = buildPullCmd(img);
   const size = formatSize(img.size);
   const appIcon = getAppIcon(img.name);
@@ -452,7 +451,6 @@ function buildCard(img, index) {
 }
 
 function buildFailedCard(img, index) {
-  const t = (k) => k;
   return `
 <article class="surface rounded-xl p-5 animate-fade-in border-2 border-red-500/30 bg-red-500/5" role="listitem" data-name="${escHtml(img.name)}" style="animation-delay:${index * 0.05}s" aria-label="${escHtml(img.displayName)} - ${t('aria.failedLabel')}">
   <div class="flex flex-col lg:flex-row gap-5">
