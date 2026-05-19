@@ -35,6 +35,55 @@ from scripts.utils.translations import add_chinese_description
 from scripts.core.mirror_sync import apply_retention_strategy
 
 
+def is_official_image(image_name: str) -> bool:
+    """判断镜像是否为官方镜像
+    
+    官方镜像包括：
+    1. Docker Hub library/ 命名空间（如 library/nginx）
+    2. 知名官方组织维护的镜像（如 nacos/nacos-server, minio/minio）
+    
+    Args:
+        image_name: 镜像名称（可含或不含 registry 前缀和 tag）
+        
+    Returns:
+        是否为官方镜像
+    """
+    if not image_name:
+        return False
+    
+    # 移除 tag
+    name = image_name
+    if ':' in name:
+        name = name.rsplit(':', 1)[0]
+    
+    # Docker Hub library 命名空间（顶级官方镜像）
+    if name.startswith('library/') or name.startswith('docker.io/library/'):
+        return True
+    
+    # 移除 registry 前缀，获取命名空间/镜像名
+    normalized = name
+    for prefix in ['docker.io/', 'gcr.io/', 'quay.io/', 'ghcr.io/']:
+        if normalized.startswith(prefix):
+            normalized = normalized[len(prefix):]
+            break
+    
+    # 已知官方镜像列表（官方组织维护）
+    official_patterns = [
+        'nacos/nacos',
+        'kartoza/geoserver',
+        'minio/minio',
+        'minio/mc',
+        'minio/aistor/minio',
+        'google-containers/etcd',
+    ]
+    
+    for pattern in official_patterns:
+        if normalized.startswith(pattern):
+            return True
+    
+    return False
+
+
 def normalize_source_image(image_name: str) -> str:
     """规范化镜像名称，添加完整的仓库地址前缀
     
@@ -332,8 +381,6 @@ def generate_images_json(
                             keep_minor_versions
                         )
                         versions = [v for v in versions if v['version'] in retained_names]
-                    else:
-                        versions = [v for v in versions if v['version'] == current_version]
                     
                     if versions:
                         if sync_all:
@@ -426,9 +473,6 @@ def generate_images_json(
                         'layers': tag.get('layers', 0)
                     })
                 
-                if not sync_all:
-                    versions = [v for v in versions if v['version'] == current_version]
-                
                 total_versions += len(versions)
                 
                 # 添加镜像信息（包含所有版本）
@@ -436,6 +480,7 @@ def generate_images_json(
                     'name': image_name,
                     'description': description,
                     'repository': ghcr_path,
+                    'official': is_official_image(image_name),
                     'total_versions': len(versions),
                     'latest_version': versions[0]['version'] if versions else None,
                     'updated': versions[0]['created_at'] if versions else '',
@@ -510,7 +555,7 @@ if __name__ == "__main__":
                        help='清单文件路径')
     parser.add_argument('--output',
                        type=Path,
-                       default=project_root / 'images.json',
+                       default=project_root / 'public' / 'images.json',
                        help='输出文件路径')
     parser.add_argument('--token',
                        type=str,

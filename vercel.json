@@ -1,7 +1,7 @@
 {
   "version": 2,
   "public": true,
-  "outputDirectory": ".",
+  "outputDirectory": "dist",
   "rewrites": [
     {
       "source": "/images.json",
@@ -23,32 +23,6 @@
         {
           "key": "Content-Type",
           "value": "application/json"
-        }
-      ]
-    },
-    {
-      "source": "/js/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, s-maxage=0, stale-while-revalidate=0, must-revalidate"
-        },
-        {
-          "key": "Content-Type",
-          "value": "application/javascript"
-        }
-      ]
-    },
-    {
-      "source": "/css/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=3600, s-maxage=3600"
-        },
-        {
-          "key": "Content-Type",
-          "value": "text/css"
         }
       ]
     }

@@ -105,6 +105,11 @@ images:
   description: Personal GitHub Pages site container
   tag_pattern: ^latest$
   sync_all_matching: false
+- source: ghcr.io/freemankevin/nexus-cleanup:latest
+  enabled: true
+  description: Nexus cleanup tool for container registry maintenance
+  tag_pattern: ^latest$
+  sync_all_matching: false
 - source: gcr.io/google-containers/etcd:3.4.9
   enabled: true
   description: Distributed reliable key-value store

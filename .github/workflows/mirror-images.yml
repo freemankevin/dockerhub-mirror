@@ -116,9 +116,9 @@ jobs:
           python3 scripts/main.py sync --owner ${{ env.GITHUB_OWNER }} --registry ${{ env.GHCR_REGISTRY }} --max-workers 3 --max-retries 5 --retry-delay 5 --continue-on-error
           echo "::endgroup::"
           
-          if [ -f images.json ]; then
-            success=$(jq -r '.success_count // 0' images.json)
-            failed=$(jq -r '.fail_count // 0' images.json)
+          if [ -f public/images.json ]; then
+            success=$(jq -r '.success_count // 0' public/images.json)
+            failed=$(jq -r '.fail_count // 0' public/images.json)
             echo "success_count=$success" >> $GITHUB_OUTPUT
             echo "fail_count=$failed" >> $GITHUB_OUTPUT
           fi
@@ -144,7 +144,7 @@ jobs:
       - name: Commit sync results
         if: always()
         run: |
-          git add images.json || true
+          git add public/images.json || true
           
           if ! git diff --staged --quiet; then
             git commit -m "chore: update sync results [skip ci]"

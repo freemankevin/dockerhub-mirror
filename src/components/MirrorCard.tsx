@@ -1,0 +1,214 @@
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { Copy, Check, ChevronDown } from 'lucide-react';
+import { cn, getAppIcon, formatSize, REGISTRY_MAP, REGISTRY_COLORS, buildPullCmd, formatRelativeTime } from '@/lib/utils';
+import type { ImageRecord } from '@/types';
+
+interface MirrorCardProps {
+  image: ImageRecord;
+  index: number;
+}
+
+export function MirrorCard({ image, index }: MirrorCardProps) {
+  const [currentVer, setCurrentVer] = useState(image.currentVersion);
+  const [copied, setCopied] = useState(false);
+  const [showVersions, setShowVersions] = useState(false);
+  const [dropdownPos, setDropdownPos] = useState<{ top: number; right: number } | null>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const icon = getAppIcon(image.name);
+  const isOfficial = image.official || image.name.startsWith('library/') || (image.source || '').includes('docker.io/library/');
+  const { path, ver } = buildPullCmd(image);
+  const cmd = `docker pull ${path}:${ver}`;
+
+  const activeVersionObj = image.versions.find(v => (v.version || v.tag) === currentVer) || image.versions[0];
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(cmd);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = cmd;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const handleVersionChange = (version: string) => {
+    setCurrentVer(version);
+    setShowVersions(false);
+    setDropdownPos(null);
+  };
+
+  const toggleVersions = useCallback(() => {
+    if (!showVersions) {
+      const rect = buttonRef.current?.getBoundingClientRect();
+      if (rect) {
+        setDropdownPos({
+          top: rect.bottom + 4,
+          right: window.innerWidth - rect.right,
+        });
+      }
+    }
+    setShowVersions(v => !v);
+  }, [showVersions]);
+
+  useEffect(() => {
+    if (!showVersions) return;
+
+    const handleScroll = () => {
+      setShowVersions(false);
+      setDropdownPos(null);
+    };
+
+    window.addEventListener('scroll', handleScroll, true);
+    window.addEventListener('resize', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll, true);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [showVersions]);
+
+  const platformsShort = (image.platforms || []).map(p => {
+    const lower = p.toLowerCase();
+    if (lower.includes('amd64')) return 'amd64';
+    if (lower.includes('arm64')) return 'arm64';
+    return lower;
+  }).join(' / ');
+
+  return (
+    <div
+      className="group relative overflow-hidden rounded-xl border border-border bg-card transition-all hover:border-primary/20 hover:shadow-lg animate-fade-in"
+      style={{ animationDelay: `${index * 40}ms` }}
+    >
+      {/* Top gradient bar */}
+      <div className={cn('h-1 w-full bg-gradient-to-r', REGISTRY_COLORS[image.sourceType] || 'from-gray-400 to-gray-500')} />
+
+      <div className="p-5">
+        {/* Header */}
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            {icon ? (
+              <img src={`/public/logo/${icon.file}`} alt={icon.alt} className="h-8 w-8 shrink-0 rounded-lg object-contain" />
+            ) : (
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted text-sm font-bold text-muted-foreground">
+                {image.displayName?.charAt(0) || '?'}
+              </div>
+            )}
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <h3 className="truncate text-base font-semibold text-foreground">{image.displayName}</h3>
+                {isOfficial && (
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
+                  </span>
+                )}
+              </div>
+              {image.description && (
+                <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{image.description}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Version selector */}
+          <div className="relative shrink-0">
+            <button
+              ref={buttonRef}
+              onClick={toggleVersions}
+              className="flex items-center gap-1.5 rounded-md border border-border bg-muted px-2.5 py-1 text-xs font-mono font-medium text-foreground hover:bg-muted/80"
+            >
+              {currentVer}
+              {image.versions.length > 1 && (
+                <ChevronDown className={cn('h-3 w-3 transition-transform', showVersions && 'rotate-180')} />
+              )}
+            </button>
+            {showVersions && dropdownPos && createPortal(
+              <>
+                <div
+                  className="fixed inset-0 z-[100]"
+                  onClick={() => {
+                    setShowVersions(false);
+                    setDropdownPos(null);
+                  }}
+                />
+                <div
+                  className="fixed z-[110] w-44 overflow-hidden rounded-lg border border-border bg-popover shadow-2xl"
+                  style={{ top: dropdownPos.top, right: dropdownPos.right }}
+                >
+                  {image.versions.map(v => {
+                    const tag = v.version || v.tag || '';
+                    return (
+                      <button
+                        key={tag}
+                        onClick={() => handleVersionChange(tag)}
+                        className={cn(
+                          'block w-full px-3 py-2 text-left text-xs font-mono transition-colors',
+                          tag === currentVer ? 'bg-primary/10 text-primary' : 'text-foreground hover:bg-accent'
+                        )}
+                      >
+                        {tag}
+                      </button>
+                    );
+                  })}
+                </div>
+              </>,
+              document.body
+            )}
+          </div>
+        </div>
+
+        {/* Command block */}
+        <div className="mt-4 flex items-center gap-2 rounded-lg bg-black/5 dark:bg-white/5 border border-border/50 px-3 py-2.5">
+          <code className="flex-1 truncate font-mono text-xs text-foreground/90">
+            <span className="select-none text-muted-foreground">$</span> docker pull {path}:{ver}
+          </code>
+          <button
+            onClick={handleCopy}
+            className={cn(
+              'flex h-7 w-7 shrink-0 items-center justify-center rounded-md transition-all',
+              copied
+                ? 'bg-green-500/10 text-green-600'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+            )}
+            title="Copy pull command"
+          >
+            {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+          </button>
+        </div>
+
+        {/* Meta */}
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <span className={cn(
+            'inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider',
+            image.sourceType === 'dockerhub' && 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+            image.sourceType === 'github' && 'bg-gray-500/10 text-gray-600 dark:text-gray-400',
+            image.sourceType === 'google' && 'bg-green-500/10 text-green-600 dark:text-green-400',
+            image.sourceType === 'redhat' && 'bg-red-500/10 text-red-600 dark:text-red-400',
+            image.sourceType === 'aws' && 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+          )}>
+            {REGISTRY_MAP[image.sourceType] || image.sourceType}
+          </span>
+          {platformsShort && (
+            <span className="text-xs text-muted-foreground font-mono">{platformsShort}</span>
+          )}
+          {activeVersionObj?.size && (
+            <span className="text-xs text-muted-foreground">{formatSize(activeVersionObj.size)}</span>
+          )}
+          {image.updated && (
+            <span className="ml-auto text-[11px] text-muted-foreground">{formatRelativeTime(image.updated)}</span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
