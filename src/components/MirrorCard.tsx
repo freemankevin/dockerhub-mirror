@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Copy, Check, ChevronDown, GitBranch } from 'lucide-react';
-import { cn, getAppIcon, formatSize, REGISTRY_MAP, REGISTRY_COLORS, buildPullCmd, formatRelativeTime } from '@/lib/utils';
+import { cn, getAppIcon, formatSize, REGISTRY_COLORS, buildPullCmd } from '@/lib/utils';
 import type { ImageRecord } from '@/types';
 
 interface MirrorCardProps {
@@ -77,13 +77,6 @@ export function MirrorCard({ image, index }: MirrorCardProps) {
       window.removeEventListener('resize', handleScroll);
     };
   }, [showVersions]);
-
-  const platformsShort = (image.platforms || []).map(p => {
-    const lower = p.toLowerCase();
-    if (lower.includes('amd64')) return 'amd64';
-    if (lower.includes('arm64')) return 'arm64';
-    return lower;
-  }).join(' / ');
 
   return (
     <div
