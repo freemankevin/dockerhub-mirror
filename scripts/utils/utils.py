@@ -76,16 +76,18 @@ def parse_image_name(image: str) -> Tuple[str, str, str]:
     return registry, namespace, name
 
 
-def convert_to_ghcr_path(image: str) -> str:
+def convert_to_ghcr_path(image: str, custom_repo: str = None) -> str:
     """将源镜像名称转换为 GHCR 路径格式
     
     新的命名规则：
     - 移除源仓库的主机名部分，只保留命名空间和镜像名
     - 保持命名空间结构，使用 '/' 分隔
     - 使镜像名称更简洁直观
+    - 支持通过 custom_repo 自定义 GHCR 路径
     
     Args:
         image: 源镜像地址，如 'docker.io/library/elasticsearch:9.3.1'
+        custom_repo: 自定义 GHCR 仓库路径（可选），如 'aistor/minio'
     
     Returns:
         GHCR 路径部分，如 'library/elasticsearch'
@@ -94,8 +96,12 @@ def convert_to_ghcr_path(image: str) -> str:
         - docker.io/library/elasticsearch:9.3.1 -> library/elasticsearch
         - gcr.io/google-containers/etcd:3.4.9 -> google-containers/etcd
         - quay.io/minio/aistor/minio:RELEASE.2026-03-26T21-24-40Z -> minio/aistor/minio
+        - quay.io/minio/aistor/minio (custom_repo='aistor/minio') -> aistor/minio
         - registry.k8s.io/pause:3.9 -> pause
     """
+    if custom_repo:
+        return custom_repo
+    
     registry, namespace, name = parse_image_name(image)
     
     # 构建 GHCR 路径（移除 registry 主机名部分）

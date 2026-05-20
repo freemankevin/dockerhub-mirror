@@ -76,6 +76,7 @@ Registry Sync 是一个**多源 Docker 镜像同步服务**，核心功能是将
 
 - `source`: 源镜像完整地址（含标签）
 - `enabled`: 是否启用同步
+- `repository`: 自定义 GHCR 仓库路径（可选，覆盖默认路径转换规则）
 - `description`: 镜像描述
 - `tag_pattern`: 标签匹配正则（用于检测新版本）
 - `exclude_pattern`: 排除标签正则

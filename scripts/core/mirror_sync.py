@@ -300,7 +300,8 @@ class MirrorSync:
         self, 
         image_name: str, 
         version: str,
-        description: str = ''
+        description: str = '',
+        custom_repo: str = None
     ) -> bool:
         """同步单个版本"""
         source_image = f"{image_name}:{version}"
@@ -326,7 +327,7 @@ class MirrorSync:
                 self.success_count += 1
             return True
         
-        ghcr_path = convert_to_ghcr_path(image_name)
+        ghcr_path = convert_to_ghcr_path(image_name, custom_repo)
         repo_name = ghcr_path.replace('/', '__')
         target_image = f"{self.registry}/{self.owner}/{ghcr_path}:{version}"
         
@@ -440,7 +441,8 @@ class MirrorSync:
                 sync_tasks.append({
                     'image_name': image_name,
                     'version': version,
-                    'description': description
+                    'description': description,
+                    'custom_repo': img.get('repository')
                 })
 
         if use_concurrency and sync_tasks:
@@ -457,7 +459,8 @@ class MirrorSync:
                         self.sync_single_version,
                         task['image_name'],
                         task['version'],
-                        task['description']
+                        task['description'],
+                        task.get('custom_repo')
                     )
                     future_to_task[future] = task
 
@@ -475,7 +478,8 @@ class MirrorSync:
                 self.sync_single_version(
                     task['image_name'],
                     task['version'],
-                    task['description']
+                    task['description'],
+                    task.get('custom_repo')
                 )
 
         print(f"\nSummary: {self.success_count} success, {self.fail_count} failed")

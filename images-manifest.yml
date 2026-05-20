@@ -113,6 +113,7 @@ images:
   sync_all_matching: false
 - source: quay.io/minio/aistor/minio:RELEASE.2026-05-04T23-02-27Z
   enabled: true
+  repository: aistor/minio
   description: MinIO AIStor - High-performance object storage for AI workloads
   tag_pattern: ^RELEASE\.[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}-[0-9]{2}-[0-9]{2}Z$
   sync_all_matching: false

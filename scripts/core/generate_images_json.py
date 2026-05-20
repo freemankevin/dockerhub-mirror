@@ -292,6 +292,7 @@ def generate_images_json(
                 'retention': retention,
                 'sync_all': sync_all,
                 'current_version': version,
+                'repository': img.get('repository'),
             }
         if tag_pattern:
             image_groups[image_name]['tag_patterns'].append(tag_pattern)
@@ -306,6 +307,7 @@ def generate_images_json(
         retention = group_info['retention']
         sync_all = group_info.get('sync_all', False)
         current_version = group_info.get('current_version', 'latest')
+        custom_repo = group_info.get('repository')
         
         strategy = retention.get('strategy', default_strategy)
         max_versions = retention.get('max_versions', default_max_versions)
@@ -417,7 +419,7 @@ def generate_images_json(
             # 对于非 GHCR 源镜像，从目标仓库获取标签信息
             # 使用新的命名规则转换为 GHCR 路径（移除域名前缀）
             # 示例: docker.io/library/elasticsearch -> library/elasticsearch
-            ghcr_path = convert_to_ghcr_path(image_name)
+            ghcr_path = convert_to_ghcr_path(image_name, custom_repo)
             
             # 获取 GHCR 中的所有标签信息
             # GitHub API 使用带斜杠的包名路径（不是双下划线）

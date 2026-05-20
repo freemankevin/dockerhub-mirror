@@ -1,4 +1,5 @@
 import { Package, Layers, HardDrive, Cpu } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface StatsBarProps {
   totalImages: number;
@@ -8,10 +9,10 @@ interface StatsBarProps {
 }
 
 const stats = [
-  { key: 'mirrors', label: 'Total Mirrors', icon: Package },
-  { key: 'versions', label: 'Versions', icon: Layers },
-  { key: 'size', label: 'Storage', icon: HardDrive },
-  { key: 'platforms', label: 'Platforms', icon: Cpu },
+  { key: 'mirrors', label: 'Total Mirrors', icon: Package, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-400/10' },
+  { key: 'versions', label: 'Versions', icon: Layers, color: 'text-violet-600 dark:text-violet-400', bg: 'bg-violet-500/10 dark:bg-violet-400/10' },
+  { key: 'size', label: 'Storage', color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-400/10', icon: HardDrive },
+  { key: 'platforms', label: 'Platforms', icon: Cpu, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-400/10' },
 ] as const;
 
 export function StatsBar({ totalImages, totalVersions, totalSize, totalPlatforms }: StatsBarProps) {
@@ -23,24 +24,27 @@ export function StatsBar({ totalImages, totalVersions, totalSize, totalPlatforms
   };
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-      {stats.map(({ key, label, icon: Icon }) => (
-        <div
-          key={key}
-          className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 transition-all hover:border-primary/20 hover:shadow-md"
-        >
-          <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-primary/40 to-primary/10 opacity-0 transition-opacity group-hover:opacity-100" />
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <Icon className="h-4 w-4" />
+    <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm">
+      <div className="grid grid-cols-2 divide-y divide-border/50 sm:grid-cols-4 sm:divide-x sm:divide-y-0">
+        {stats.map(({ key, label, icon: Icon, color, bg }) => (
+          <div
+            key={key}
+            className="group flex items-center gap-4 px-5 py-5 transition-colors hover:bg-muted/20 sm:px-6"
+          >
+            <div className={cn('flex h-11 w-11 shrink-0 items-center justify-center rounded-xl', bg)}>
+              <Icon className={cn('h-5 w-5', color)} />
             </div>
-            <div>
-              <div className="font-mono text-lg font-semibold text-foreground">{values[key]}</div>
-              <div className="text-xs text-muted-foreground">{label}</div>
+            <div className="min-w-0">
+              <div className="font-mono text-2xl font-bold tracking-tight text-foreground tabular-nums">
+                {values[key]}
+              </div>
+              <div className="mt-0.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/80">
+                {label}
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

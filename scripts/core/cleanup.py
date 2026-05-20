@@ -68,6 +68,7 @@ class ImageCleanup:
             
             source = img['source']
             image_name = source.split(':')[0]
+            custom_repo = img.get('repository')
             
             if source.startswith('ghcr.io/'):
                 parts = source.replace('ghcr.io/', '').split('/')
@@ -75,7 +76,7 @@ class ImageCleanup:
                     repo = '/'.join(parts[1:]).split(':')[0]
                     expected.add(repo)
             else:
-                ghcr_path = convert_to_ghcr_path(image_name)
+                ghcr_path = convert_to_ghcr_path(image_name, custom_repo)
                 expected.add(ghcr_path)
         
         return expected
@@ -248,6 +249,8 @@ class ImageCleanup:
             max_versions = local_retention.get('max_versions', default_max_versions)
             major_versions = local_retention.get('major_versions', [])
             
+            custom_repo = img.get('repository')
+            
             if source.startswith('ghcr.io/'):
                 parts = source.replace('ghcr.io/', '').split('/')
                 if len(parts) >= 2:
@@ -256,7 +259,7 @@ class ImageCleanup:
                 else:
                     continue
             else:
-                ghcr_path = convert_to_ghcr_path(image_name)
+                ghcr_path = convert_to_ghcr_path(image_name, custom_repo)
             
             print(f"\n📦 检查 {ghcr_path}...")
             print(f"   策略: {strategy}")
