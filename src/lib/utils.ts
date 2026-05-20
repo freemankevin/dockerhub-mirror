@@ -114,6 +114,7 @@ const APP_ICONS: [RegExp, string, string, boolean?][] = [
   [/^python$/, 'python.svg', 'Python'],
   [/geoserver/, 'geoserver.svg', 'GeoServer'],
   [/harbor/, 'harbor.svg', 'Harbor'],
+  [/nexus/, 'nexus.svg', 'Nexus'],
   [/netkit/, 'netkit.svg', 'Network', true],
   [/freemankevin/, 'freemankevin.svg', 'FreemanKevin'],
 ];
