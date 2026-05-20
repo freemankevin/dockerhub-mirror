@@ -135,7 +135,7 @@ export function MirrorCard({ image, index }: MirrorCardProps) {
                   }}
                 />
                 <div
-                  className="fixed z-[110] w-44 overflow-hidden rounded-lg border border-border bg-popover shadow-2xl"
+                  className="fixed z-[110] min-w-[11rem] w-max max-w-xs overflow-hidden rounded-lg border border-border bg-popover shadow-2xl"
                   style={{ top: dropdownPos.top, right: dropdownPos.right }}
                 >
                   {image.versions.map(v => {
@@ -145,7 +145,7 @@ export function MirrorCard({ image, index }: MirrorCardProps) {
                         key={tag}
                         onClick={() => handleVersionChange(tag)}
                         className={cn(
-                          'block w-full px-3 py-2 text-left text-xs font-mono transition-colors',
+                          'block w-full whitespace-nowrap px-3 py-2 text-left text-xs font-mono transition-colors',
                           tag === currentVer ? 'bg-primary/10 text-primary' : 'text-foreground hover:bg-accent'
                         )}
                       >
