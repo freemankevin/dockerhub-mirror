@@ -17,7 +17,7 @@ export function MirrorCard({ image, index }: MirrorCardProps) {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const icon = getAppIcon(image.name);
-  const isOfficial = image.official || image.name.startsWith('library/') || (image.source || '').includes('docker.io/library/');
+  const isOfficial = image.official || image.name.startsWith('library/') || (image.source || '').includes('docker.io/library/') || (image.source || '').includes('public.ecr.aws/amazoncorretto');
   const { path, ver } = buildPullCmd(image);
   const cmd = `docker pull ${path}:${ver}`;
 
