@@ -9,10 +9,38 @@ interface StatsBarProps {
 }
 
 const stats = [
-  { key: 'mirrors', label: 'Total Mirrors', icon: Package, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-400/10' },
-  { key: 'versions', label: 'Versions', icon: Layers, color: 'text-violet-600 dark:text-violet-400', bg: 'bg-violet-500/10 dark:bg-violet-400/10' },
-  { key: 'size', label: 'Storage', color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-400/10', icon: HardDrive },
-  { key: 'platforms', label: 'Platforms', icon: Cpu, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-400/10' },
+  {
+    key: 'mirrors',
+    label: 'Total Mirrors',
+    icon: Package,
+    gradient: 'from-blue-500/80 to-blue-400/60',
+    iconColor: 'text-blue-600 dark:text-blue-400',
+    iconBg: 'bg-blue-500/10 dark:bg-blue-400/10',
+  },
+  {
+    key: 'versions',
+    label: 'Versions',
+    icon: Layers,
+    gradient: 'from-violet-500/80 to-violet-400/60',
+    iconColor: 'text-violet-600 dark:text-violet-400',
+    iconBg: 'bg-violet-500/10 dark:bg-violet-400/10',
+  },
+  {
+    key: 'size',
+    label: 'Storage',
+    icon: HardDrive,
+    gradient: 'from-emerald-500/80 to-emerald-400/60',
+    iconColor: 'text-emerald-600 dark:text-emerald-400',
+    iconBg: 'bg-emerald-500/10 dark:bg-emerald-400/10',
+  },
+  {
+    key: 'platforms',
+    label: 'Platforms',
+    icon: Cpu,
+    gradient: 'from-amber-500/80 to-amber-400/60',
+    iconColor: 'text-amber-600 dark:text-amber-400',
+    iconBg: 'bg-amber-500/10 dark:bg-amber-400/10',
+  },
 ] as const;
 
 export function StatsBar({ totalImages, totalVersions, totalSize, totalPlatforms }: StatsBarProps) {
@@ -24,27 +52,38 @@ export function StatsBar({ totalImages, totalVersions, totalSize, totalPlatforms
   };
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm">
-      <div className="grid grid-cols-2 divide-y divide-border/50 sm:grid-cols-4 sm:divide-x sm:divide-y-0">
-        {stats.map(({ key, label, icon: Icon, color, bg }) => (
-          <div
-            key={key}
-            className="group flex items-center gap-4 px-5 py-5 transition-colors hover:bg-muted/20 sm:px-6"
-          >
-            <div className={cn('flex h-11 w-11 shrink-0 items-center justify-center rounded-xl', bg)}>
-              <Icon className={cn('h-5 w-5', color)} />
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      {stats.map(({ key, label, icon: Icon, gradient, iconColor, iconBg }) => (
+        <div
+          key={key}
+          className={cn(
+            'group relative overflow-hidden rounded-xl border border-border bg-card',
+            'transition-all hover:border-primary/20 hover:shadow-md'
+          )}
+        >
+          {/* Top gradient bar — mirrors MirrorCard style */}
+          <div className={cn('h-[3px] w-full bg-gradient-to-r', gradient)} />
+
+          <div className="flex items-center gap-3 px-4 py-4">
+            <div
+              className={cn(
+                'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-transform group-hover:scale-105',
+                iconBg
+              )}
+            >
+              <Icon className={cn('h-[18px] w-[18px]', iconColor)} />
             </div>
             <div className="min-w-0">
-              <div className="font-mono text-2xl font-bold tracking-tight text-foreground tabular-nums">
+              <div className="font-display text-xl font-semibold tracking-normal text-foreground tabular-nums">
                 {values[key]}
               </div>
-              <div className="mt-0.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/80">
+              <div className="mt-0.5 text-[11px] font-medium text-muted-foreground/70">
                 {label}
               </div>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 }

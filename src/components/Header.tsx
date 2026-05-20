@@ -17,8 +17,8 @@ export function Header({ onSearchOpen, isDark, onToggleTheme }: HeaderProps) {
             </svg>
           </div>
           <div className="flex flex-col">
-            <h1 className="font-display text-[1.05rem] font-bold tracking-tight text-foreground">Registry Sync</h1>
-            <p className="hidden text-[11px] font-medium leading-none text-muted-foreground/70 sm:block">Fast container image mirror service</p>
+            <h1 className="font-display text-lg font-semibold tracking-normal text-foreground">Registry Sync</h1>
+            <p className="hidden text-[11px] font-normal leading-none text-muted-foreground sm:block">Fast container image mirror service</p>
           </div>
         </div>
 

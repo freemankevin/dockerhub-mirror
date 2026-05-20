@@ -56,7 +56,14 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="relative min-h-screen bg-background text-foreground">
+      {/* Animated ambient background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute -top-[10%] -left-[10%] h-[55vh] w-[55vw] rounded-full bg-gradient-to-br from-primary/[0.07] to-blue-400/[0.03] blur-[120px] animate-float-1 animate-breathe dark:from-primary/[0.05] dark:to-blue-400/[0.02]" />
+        <div className="absolute top-[15%] -right-[5%] h-[45vh] w-[45vw] rounded-full bg-gradient-to-bl from-violet-500/[0.05] to-primary/[0.03] blur-[100px] animate-float-2 animate-breathe dark:from-violet-500/[0.04] dark:to-primary/[0.02]" style={{ animationDelay: '2s' }} />
+        <div className="absolute -bottom-[10%] left-[15%] h-[50vh] w-[50vw] rounded-full bg-gradient-to-tr from-emerald-500/[0.04] to-primary/[0.06] blur-[110px] animate-float-3 animate-breathe dark:from-emerald-500/[0.03] dark:to-primary/[0.04]" style={{ animationDelay: '4s' }} />
+      </div>
+
       <Header
         onSearchOpen={() => setSearchOpen(true)}
         isDark={isDark}
