@@ -1,8 +1,8 @@
 {
-  "updated_at": "2026-05-20T03:12:00.982378+00:00",
+  "updated_at": "2026-05-20T06:27:53.158512+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
-  "total_images": 17,
+  "total_images": 18,
   "total_versions": 33,
   "total_failed": 0,
   "images": [
@@ -253,7 +253,7 @@
       "official": true,
       "total_versions": 2,
       "latest_version": "8.6.3",
-      "updated": "2026-05-11T05:38:20+00:00",
+      "updated": "2026-05-20T03:24:57+00:00",
       "size": "138 MB",
       "layers": 6,
       "stars": 0,
@@ -264,9 +264,9 @@
       "versions": [
         {
           "version": "8.6.3",
-          "digest": "sha256:0c341492924cad6f5483f9133e43bd6c51ecdecbcadfac5b51657393b6a7936c",
-          "created_at": "2026-05-11T05:38:20+00:00",
-          "synced_at": "2026-05-11T05:38:20+00:00",
+          "digest": "sha256:d4a4a4db02748731e6313d60adfd92985b6ad7bc2f2400a6cb0f8b35a2a6b492",
+          "created_at": "2026-05-20T03:24:57+00:00",
+          "synced_at": "2026-05-20T03:24:57+00:00",
           "target": "ghcr.io/freemankevin/library/redis:8.6.3",
           "source": "docker.io/library/redis:8.6.3",
           "size": "138 MB",
@@ -478,28 +478,17 @@
       "name": "ghcr.io/freemankevin/nacos-backup",
       "description": "Backup utility for Nacos configuration and data",
       "repository": "nacos-backup",
-      "total_versions": 1,
-      "latest_version": "latest",
-      "updated": "2026-05-20T01:08:48+00:00",
-      "size": "856 MB",
-      "layers": 15,
+      "total_versions": 0,
+      "latest_version": null,
+      "updated": "",
+      "size": "",
+      "layers": 0,
       "stars": 0,
       "platforms": [
         "AMD64",
         "ARM64"
       ],
-      "versions": [
-        {
-          "version": "latest",
-          "digest": "sha256:3bbca97ed80bd37c8866b6f42770228c5c9abc52b3dba9e0210eeada58abfad9",
-          "created_at": "2026-05-20T01:08:48+00:00",
-          "synced_at": "2026-05-20T01:08:48+00:00",
-          "target": "ghcr.io/freemankevin/nacos-backup:latest",
-          "source": "ghcr.io/freemankevin/nacos-backup:latest",
-          "size": "856 MB",
-          "layers": 15
-        }
-      ]
+      "versions": []
     },
     {
       "name": "ghcr.io/freemankevin/netkit",
@@ -608,6 +597,34 @@
           "target": "ghcr.io/freemankevin/google-containers/etcd:3.4.9",
           "source": "gcr.io/google-containers/etcd:3.4.9",
           "size": "256 MB",
+          "layers": 8
+        }
+      ]
+    },
+    {
+      "name": "quay.io/minio/aistor/minio",
+      "description": "MinIO AIStor - High-performance object storage for AI workloads",
+      "repository": "aistor/minio",
+      "official": true,
+      "total_versions": 1,
+      "latest_version": "RELEASE.2026-05-04T23-02-27Z",
+      "updated": "2026-05-20T03:24:56+00:00",
+      "size": "284 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "RELEASE.2026-05-04T23-02-27Z",
+          "digest": "sha256:9510e5f116c2e507a042f328b77992c651dcdd04ab79e676bb85f13e2aa8363a",
+          "created_at": "2026-05-20T03:24:56+00:00",
+          "synced_at": "2026-05-20T03:24:56+00:00",
+          "target": "ghcr.io/freemankevin/aistor/minio:RELEASE.2026-05-04T23-02-27Z",
+          "source": "quay.io/minio/aistor/minio:RELEASE.2026-05-04T23-02-27Z",
+          "size": "284 MB",
           "layers": 8
         }
       ]
