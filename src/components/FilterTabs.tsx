@@ -3,11 +3,11 @@ import type { RegistryFilter } from '@/types';
 
 const FILTERS: { key: RegistryFilter; icon: string }[] = [
   { key: 'all', icon: '' },
-  { key: 'dockerhub', icon: '/public/logo/docker.svg' },
-  { key: 'github', icon: '/public/logo/GitHub.svg' },
-  { key: 'google', icon: '/public/logo/google.svg' },
-  { key: 'redhat', icon: '/public/logo/redhat.svg' },
-  { key: 'aws', icon: '/public/logo/AWS.svg' },
+  { key: 'dockerhub', icon: '/logo/docker.svg' },
+  { key: 'github', icon: '/logo/GitHub.svg' },
+  { key: 'google', icon: '/logo/google.svg' },
+  { key: 'redhat', icon: '/logo/redhat.svg' },
+  { key: 'aws', icon: '/logo/AWS.svg' },
 ];
 
 interface FilterTabsProps {

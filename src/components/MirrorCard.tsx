@@ -91,7 +91,7 @@ export function MirrorCard({ image, index }: MirrorCardProps) {
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             {icon ? (
-              <img src={`/public/logo/${icon.file}`} alt={icon.alt} className={cn('h-8 w-8 shrink-0 rounded-lg object-contain', icon.invert && 'dark:invert')} />
+              <img src={`/logo/${icon.file}`} alt={icon.alt} className={cn('h-8 w-8 shrink-0 rounded-lg object-contain', icon.invert && 'dark:invert')} />
             ) : (
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted text-sm font-bold text-muted-foreground">
                 {image.displayName?.charAt(0) || '?'}
