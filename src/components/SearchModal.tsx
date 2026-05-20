@@ -89,7 +89,7 @@ export function SearchModal({ images, open, onOpenChange, onSelect }: SearchModa
                         <img
                           src={`/public/logo/${icon.file}`}
                           alt={icon.alt}
-                          className="h-5 w-5 shrink-0 rounded object-contain"
+                          className={cn('h-5 w-5 shrink-0 rounded object-contain', icon.invert && 'dark:invert')}
                         />
                       ) : (
                         <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-muted text-[10px] font-bold text-muted-foreground">

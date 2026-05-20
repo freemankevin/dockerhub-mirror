@@ -91,6 +91,7 @@ const DISPLAY_NAME_MAP: Record<string, string> = {
   netkit: 'NetKit',
   'nexus-cleanup': 'Nexus Cleanup',
   'postgresql-postgis': 'PostgreSQL PostGIS',
+  'nacos-backup': 'Nacos Backup',
   'postgresql-backup': 'PostgreSQL Backup',
 };
 
@@ -99,9 +100,10 @@ export function getDisplayName(name: string): string {
   return DISPLAY_NAME_MAP[rawName] || (rawName.charAt(0).toUpperCase() + rawName.slice(1));
 }
 
-const APP_ICONS: [RegExp, string, string][] = [
-  [/corretto|openjdk|java-local|^java$/, 'java.svg', 'Java'],
+const APP_ICONS: [RegExp, string, string, boolean?][] = [
+  [/corretto|openjdk|^java$/, 'java.svg', 'Java'],
   [/elasticsearch/, 'elasticsearch.svg', 'Elasticsearch'],
+  [/nacos-backup/, 'nacos.svg', 'Nacos Backup'],
   [/nacos/, 'nacos.svg', 'Nacos'],
   [/nginx/, 'nginx.svg', 'Nginx'],
   [/rabbitmq/, 'rabbitmq.svg', 'RabbitMQ'],
@@ -109,18 +111,18 @@ const APP_ICONS: [RegExp, string, string][] = [
   [/postgres|postgis/, 'postgresql.svg', 'PostgreSQL'],
   [/minio/, 'minio-bird.svg', 'MinIO'],
   [/etcd/, 'etcd.svg', 'etcd'],
-  [/python/, 'python.svg', 'Python'],
+  [/^python$/, 'python.svg', 'Python'],
   [/geoserver/, 'geoserver.svg', 'GeoServer'],
   [/harbor/, 'harbor.svg', 'Harbor'],
-  [/netkit/, 'netkit.svg', 'Network'],
+  [/netkit/, 'netkit.svg', 'Network', true],
   [/freemankevin/, 'freemankevin.svg', 'FreemanKevin'],
 ];
 
-export function getAppIcon(name: string): { file: string; alt: string } | null {
+export function getAppIcon(name: string): { file: string; alt: string; invert?: boolean } | null {
   const lower = name.toLowerCase();
-  for (const [pattern, file, alt] of APP_ICONS) {
+  for (const [pattern, file, alt, invert] of APP_ICONS) {
     if (pattern.test(lower)) {
-      return { file, alt };
+      return { file, alt, invert };
     }
   }
   return null;

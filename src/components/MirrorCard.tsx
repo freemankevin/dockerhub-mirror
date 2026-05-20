@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Copy, Check, ChevronDown } from 'lucide-react';
+import { Copy, Check, ChevronDown, GitBranch } from 'lucide-react';
 import { cn, getAppIcon, formatSize, REGISTRY_MAP, REGISTRY_COLORS, buildPullCmd, formatRelativeTime } from '@/lib/utils';
 import type { ImageRecord } from '@/types';
 
@@ -98,7 +98,7 @@ export function MirrorCard({ image, index }: MirrorCardProps) {
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             {icon ? (
-              <img src={`/public/logo/${icon.file}`} alt={icon.alt} className="h-8 w-8 shrink-0 rounded-lg object-contain" />
+              <img src={`/public/logo/${icon.file}`} alt={icon.alt} className={cn('h-8 w-8 shrink-0 rounded-lg object-contain', icon.invert && 'dark:invert')} />
             ) : (
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted text-sm font-bold text-muted-foreground">
                 {image.displayName?.charAt(0) || '?'}
@@ -187,25 +187,15 @@ export function MirrorCard({ image, index }: MirrorCardProps) {
         </div>
 
         {/* Meta */}
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          <span className={cn(
-            'inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider',
-            image.sourceType === 'dockerhub' && 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
-            image.sourceType === 'github' && 'bg-gray-500/10 text-gray-600 dark:text-gray-400',
-            image.sourceType === 'google' && 'bg-green-500/10 text-green-600 dark:text-green-400',
-            image.sourceType === 'redhat' && 'bg-red-500/10 text-red-600 dark:text-red-400',
-            image.sourceType === 'aws' && 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
-          )}>
-            {REGISTRY_MAP[image.sourceType] || image.sourceType}
-          </span>
-          {platformsShort && (
-            <span className="text-xs text-muted-foreground font-mono">{platformsShort}</span>
+        <div className="mt-3 flex items-center justify-between gap-2 pl-3">
+          {image.source && (
+            <div className="flex items-center gap-1.5 min-w-0">
+              <GitBranch className="h-3 w-3 shrink-0 text-muted-foreground/40" />
+              <p className="truncate text-[11px] text-muted-foreground/60 font-mono">{image.source}</p>
+            </div>
           )}
           {activeVersionObj?.size && (
-            <span className="text-xs text-muted-foreground">{formatSize(activeVersionObj.size)}</span>
-          )}
-          {image.updated && (
-            <span className="ml-auto text-[11px] text-muted-foreground">{formatRelativeTime(image.updated)}</span>
+            <span className="ml-auto shrink-0 text-xs text-muted-foreground">{formatSize(activeVersionObj.size)}</span>
           )}
         </div>
       </div>
