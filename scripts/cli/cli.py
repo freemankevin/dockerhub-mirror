@@ -116,7 +116,8 @@ def cmd_sync(args):
     print("\nGenerating images.json...")
     try:
         from scripts.core.generate_images_json import generate_images_json
-        
+        import shutil
+
         token = get_env_variable('GHCR_TOKEN')
         generate_images_json(
             manifest_file,
@@ -128,6 +129,13 @@ def cmd_sync(args):
             failed_images=result.get('failed_images', []),
             synced_images=sync.mirrored_images
         )
+
+        # Sync to public/images.json so the frontend gets updates
+        public_file = PROJECT_ROOT / "public" / "images.json"
+        if output_file.resolve() != public_file.resolve() and output_file.exists():
+            public_file.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(str(output_file), str(public_file))
+            print(f"Synced {output_file.name} -> public/{output_file.name}")
     except Exception as e:
         logger.error(f"生成镜像列表失败: {str(e)}")
         return 1
@@ -182,7 +190,8 @@ def cmd_generate(args):
     
     try:
         from scripts.core.generate_images_json import generate_images_json
-        
+        import shutil
+
         generate_images_json(
             manifest_file,
             output_file,
@@ -191,6 +200,14 @@ def cmd_generate(args):
             token=ghcr_token,
             logger=logger
         )
+
+        # Sync to public/images.json so the frontend gets updates
+        public_file = PROJECT_ROOT / "public" / "images.json"
+        if output_file.resolve() != public_file.resolve() and output_file.exists():
+            public_file.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(str(output_file), str(public_file))
+            print(f"Synced {output_file.name} -> public/{output_file.name}")
+
         return 0
     except Exception as e:
         logger.error(f"生成镜像列表失败: {str(e)}")

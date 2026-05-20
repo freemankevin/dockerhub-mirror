@@ -144,8 +144,10 @@ jobs:
       - name: Commit sync results
         if: always()
         run: |
-          git add public/images.json || true
-          
+          # Sync images.json to public directory so frontend gets updates
+          cp images.json public/images.json 2>/dev/null || true
+          git add images.json public/images.json || true
+
           if ! git diff --staged --quiet; then
             git commit -m "chore: update sync results [skip ci]"
             # Pull remote changes with rebase before push
