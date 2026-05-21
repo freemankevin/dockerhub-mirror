@@ -118,7 +118,8 @@ class MirrorSync:
     """镜像同步管理器"""
 
     def __init__(self, registry: str, owner: str, logger=None, max_workers: int = 3,
-                 max_retries: int = 3, retry_delay: float = 2.0, existing_images: Dict = None):
+                 max_retries: int = 3, retry_delay: float = 2.0, existing_images: Dict = None,
+                 ghcr_api=None):
         self.registry = registry
         self.owner = owner
         self.logger = logger
@@ -131,6 +132,7 @@ class MirrorSync:
         self.fail_count = 0
         self._lock = threading.Lock()
         self.existing_images = existing_images or {}
+        self.ghcr_api = ghcr_api
         self._build_digest_cache()
     
     def _build_digest_cache(self):
@@ -336,6 +338,10 @@ class MirrorSync:
             
             if not source_digest:
                 source_digest = self._get_image_digest(source_image)
+            
+            # 同步成功后，将 GHCR package 设为 public
+            if self.ghcr_api:
+                self.ghcr_api.set_package_visibility(self.owner, ghcr_path, visibility="public")
             
             with self._lock:
                 self.mirrored_images.append({

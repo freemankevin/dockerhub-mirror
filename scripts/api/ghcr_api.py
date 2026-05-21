@@ -496,3 +496,46 @@ class GHCRRegistryAPI:
             if self.logger:
                 self.logger.error(f"删除 package 异常 {owner}/{repository}: {str(e)}")
             return False
+    
+    def set_package_visibility(self, owner: str, repository: str, visibility: str = "public") -> bool:
+        """设置 package 的可见性
+        
+        GitHub API 端点:
+        - PATCH /users/{owner}/packages/container/{package_name}
+        - PATCH /orgs/{org}/packages/container/{package_name}
+        
+        Args:
+            owner: 仓库所有者（用户名或组织名）
+            repository: 仓库名称（例如：aistor/minio）
+            visibility: 可见性，"public" 或 "private"
+            
+        Returns:
+            是否设置成功
+        """
+        try:
+            encoded_repo = encode_package_name(repository)
+            url = f"{self.base_url}/users/{owner}/packages/container/{encoded_repo}"
+            data = {"visibility": visibility}
+            
+            if self.logger:
+                self.logger.debug(f"设置 package {owner}/{repository} 可见性为 {visibility}")
+            
+            response = self.session.patch(url, json=data, timeout=30)
+            
+            # 如果返回 404，尝试组织端点
+            if response.status_code == 404:
+                url = f"{self.base_url}/orgs/{owner}/packages/container/{encoded_repo}"
+                response = self.session.patch(url, json=data, timeout=30)
+            
+            if response.status_code == 200:
+                if self.logger:
+                    self.logger.info(f"成功设置 {owner}/{repository} 可见性为 {visibility}")
+                return True
+            else:
+                if self.logger:
+                    self.logger.warning(f"设置可见性失败 {owner}/{repository}: {response.status_code} - {response.text[:200]}")
+                return False
+        except Exception as e:
+            if self.logger:
+                self.logger.error(f"设置可见性异常 {owner}/{repository}: {str(e)}")
+            return False

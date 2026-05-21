@@ -97,6 +97,12 @@ def cmd_sync(args):
     retry_delay = getattr(args, 'retry_delay', 2.0)
 
     api = RegistryAPI(logger, max_workers=max_workers)
+    
+    ghcr_token = get_env_variable('GHCR_TOKEN')
+    ghcr_api = GHCRRegistryAPI(logger, token=ghcr_token) if ghcr_token else None
+    if not ghcr_api:
+        logger.warning("未设置 GHCR_TOKEN，同步后的镜像将不会自动设为 public")
+    
     sync = MirrorSync(
         args.registry,
         args.owner,
@@ -104,7 +110,8 @@ def cmd_sync(args):
         max_workers=max_workers,
         max_retries=max_retries,
         retry_delay=retry_delay,
-        existing_images=existing_images
+        existing_images=existing_images,
+        ghcr_api=ghcr_api
     )
 
     use_concurrency = getattr(args, 'concurrency', True)
