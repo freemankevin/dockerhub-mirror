@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-21T03:18:25.217707+00:00",
+  "updated_at": "2026-05-21T05:49:45.040695+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 18,
@@ -524,7 +524,7 @@
       "repository": "freemankevin",
       "total_versions": 1,
       "latest_version": "latest",
-      "updated": "2026-05-11T09:19:43+00:00",
+      "updated": "2026-05-21T04:32:34+00:00",
       "size": "256 MB",
       "layers": 8,
       "stars": 0,
@@ -535,9 +535,9 @@
       "versions": [
         {
           "version": "latest",
-          "digest": "sha256:d14324c6ed8473a8cf9a615c1cdd207efa77d6011e20d06f00172536c908e7ef",
-          "created_at": "2026-05-11T09:19:43+00:00",
-          "synced_at": "2026-05-11T09:19:43+00:00",
+          "digest": "sha256:393b36525164607bd874d70167c47364bb9641e34f10365ac2487d42bbad49e3",
+          "created_at": "2026-05-21T04:32:34+00:00",
+          "synced_at": "2026-05-21T04:32:34+00:00",
           "target": "ghcr.io/freemankevin/freemankevin:latest",
           "source": "ghcr.io/freemankevin/freemankevin:latest",
           "size": "256 MB",
