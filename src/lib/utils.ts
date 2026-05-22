@@ -111,6 +111,7 @@ const APP_ICONS: [RegExp, string, string, boolean?][] = [
   [/postgres|postgis/, 'postgresql.svg', 'PostgreSQL'],
   [/minio/, 'minio-bird.svg', 'MinIO'],
   [/etcd/, 'etcd.svg', 'etcd'],
+  [/alpine/, 'alpinelinux.svg', 'Alpine Linux'],
   [/^python$/, 'python.svg', 'Python'],
   [/geoserver/, 'geoserver.svg', 'GeoServer'],
   [/harbor/, 'harbor.svg', 'Harbor'],
