@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-05-22T05:43:13.324376+00:00",
+  "updated_at": "2026-05-22T06:23:20.386923+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
-  "total_images": 18,
-  "total_versions": 33,
+  "total_images": 19,
+  "total_versions": 34,
   "total_failed": 0,
   "images": [
     {
@@ -157,6 +157,34 @@
           "source": "docker.io/nacos/nacos-server:v3.2.0",
           "size": "856 MB",
           "layers": 15
+        }
+      ]
+    },
+    {
+      "name": "library/alpine",
+      "description": "Minimal Linux distribution based on musl libc and BusyBox",
+      "repository": "library/alpine",
+      "official": true,
+      "total_versions": 1,
+      "latest_version": "latest",
+      "updated": "2026-05-22T06:23:12+00:00",
+      "size": "256 MB",
+      "layers": 8,
+      "stars": 0,
+      "platforms": [
+        "AMD64",
+        "ARM64"
+      ],
+      "versions": [
+        {
+          "version": "latest",
+          "digest": "sha256:5b10f432ef3da1b8d4c7eb6c487f2f5a8f096bc91145e68878dd4a5019afde11",
+          "created_at": "2026-05-22T06:23:12+00:00",
+          "synced_at": "2026-05-22T06:23:12+00:00",
+          "target": "ghcr.io/freemankevin/library/alpine:latest",
+          "source": "docker.io/library/alpine:latest",
+          "size": "256 MB",
+          "layers": 8
         }
       ]
     },
