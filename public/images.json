@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-05-22T06:23:20.386923+00:00",
+  "updated_at": "2026-05-23T05:08:47.098958+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 19,
-  "total_versions": 34,
+  "total_versions": 35,
   "total_failed": 0,
   "images": [
     {
@@ -193,9 +193,9 @@
       "description": "High-performance HTTP server and reverse proxy",
       "repository": "library/nginx",
       "official": true,
-      "total_versions": 3,
-      "latest_version": "1.31.0-alpine",
-      "updated": "2026-05-20T02:11:03+00:00",
+      "total_versions": 4,
+      "latest_version": "1.31.1-alpine",
+      "updated": "2026-05-23T05:08:40+00:00",
       "size": "67 MB",
       "layers": 7,
       "stars": 0,
@@ -204,6 +204,16 @@
         "ARM64"
       ],
       "versions": [
+        {
+          "version": "1.31.1-alpine",
+          "digest": "sha256:d1aedbc848110c391df415b27a241ea36159e63b51b151c29ab059867f9f5174",
+          "created_at": "2026-05-23T05:08:40+00:00",
+          "synced_at": "2026-05-23T05:08:40+00:00",
+          "target": "ghcr.io/freemankevin/library/nginx:1.31.1-alpine",
+          "source": "docker.io/library/nginx:1.31.1-alpine",
+          "size": "67 MB",
+          "layers": 7
+        },
         {
           "version": "1.31.0-alpine",
           "digest": "sha256:2f07d83bf561b506400dc183b1b2003803e39efbd22451f848adaba14d28c7c7",
