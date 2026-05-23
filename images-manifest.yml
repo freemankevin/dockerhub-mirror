@@ -28,7 +28,7 @@ images:
   description: Minimal Linux distribution based on musl libc and BusyBox
   tag_pattern: ^latest$
   sync_all_matching: false
-- source: library/nginx:1.31.0-alpine
+- source: library/nginx:1.31.1-alpine
   enabled: true
   description: High-performance HTTP server and reverse proxy
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+-alpine$
@@ -136,4 +136,4 @@ config:
     strategy: max_versions
     max_versions: 3
     cleanup_old_versions: true
-  last_checked: '2026-05-19T06:46:03.351288+00:00'
+  last_checked: '2026-05-23T05:08:09.541493+00:00'
