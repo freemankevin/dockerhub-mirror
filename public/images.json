@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-24T05:40:36.377949+00:00",
+  "updated_at": "2026-05-25T06:03:20.029775+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 19,
@@ -195,7 +195,7 @@
       "official": true,
       "total_versions": 4,
       "latest_version": "1.31.1-alpine",
-      "updated": "2026-05-23T05:08:40+00:00",
+      "updated": "2026-05-25T06:03:08+00:00",
       "size": "67 MB",
       "layers": 7,
       "stars": 0,
@@ -206,9 +206,9 @@
       "versions": [
         {
           "version": "1.31.1-alpine",
-          "digest": "sha256:d1aedbc848110c391df415b27a241ea36159e63b51b151c29ab059867f9f5174",
-          "created_at": "2026-05-23T05:08:40+00:00",
-          "synced_at": "2026-05-23T05:08:40+00:00",
+          "digest": "sha256:8b1e78743a03dbb2c95171cc58639fef29abc8816598e27fb910ed2e621e589a",
+          "created_at": "2026-05-25T06:03:08+00:00",
+          "synced_at": "2026-05-25T06:03:08+00:00",
           "target": "ghcr.io/freemankevin/library/nginx:1.31.1-alpine",
           "source": "docker.io/library/nginx:1.31.1-alpine",
           "size": "67 MB",
