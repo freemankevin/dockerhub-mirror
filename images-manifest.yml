@@ -33,14 +33,14 @@ images:
   description: High-performance HTTP server and reverse proxy
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+-alpine$
   sync_all_matching: false
-- source: library/rabbitmq:4.3.0-management-alpine
+- source: library/rabbitmq:4.3.1-management-alpine
   enabled: true
   description: Message broker with management plugin
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+-management-alpine$
   sync_all_matching: false
   retention:
     max_versions: 5
-- source: library/redis:8.6.3
+- source: library/redis:8.8.0
   enabled: true
   description: In-memory data structure store
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
@@ -136,4 +136,4 @@ config:
     strategy: max_versions
     max_versions: 3
     cleanup_old_versions: true
-  last_checked: '2026-05-23T05:08:09.541493+00:00'
+  last_checked: '2026-05-27T05:55:54.973051+00:00'
