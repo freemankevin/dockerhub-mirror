@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-27T05:56:27.330225+00:00",
+  "updated_at": "2026-05-28T05:52:11.274417+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 19,
@@ -253,7 +253,7 @@
       "official": true,
       "total_versions": 3,
       "latest_version": "4.3.1-management-alpine",
-      "updated": "2026-05-27T05:56:22+00:00",
+      "updated": "2026-05-28T05:52:02+00:00",
       "size": "215 MB",
       "layers": 9,
       "stars": 0,
@@ -264,9 +264,9 @@
       "versions": [
         {
           "version": "4.3.1-management-alpine",
-          "digest": "sha256:5c01f25eb516c1dc4d4801e244dfd5e318ed811801af47bdfa5c64d7b2cd45ba",
-          "created_at": "2026-05-27T05:56:22+00:00",
-          "synced_at": "2026-05-27T05:56:22+00:00",
+          "digest": "sha256:80f86b5b469c84a3a3054568f1ea25f016ab16ad981113a8d2b6fb91b602a4bc",
+          "created_at": "2026-05-28T05:52:02+00:00",
+          "synced_at": "2026-05-28T05:52:02+00:00",
           "target": "ghcr.io/freemankevin/library/rabbitmq:4.3.1-management-alpine",
           "source": "docker.io/library/rabbitmq:4.3.1-management-alpine",
           "size": "215 MB",
