@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-05-28T05:52:11.274417+00:00",
+  "updated_at": "2026-05-29T05:53:43.706055+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 19,
-  "total_versions": 37,
+  "total_versions": 40,
   "total_failed": 0,
   "images": [
     {
@@ -79,9 +79,9 @@
       "description": "Distributed, RESTful search and analytics engine",
       "repository": "library/elasticsearch",
       "official": true,
-      "total_versions": 3,
-      "latest_version": "9.4.1",
-      "updated": "2026-05-27T05:56:12+00:00",
+      "total_versions": 4,
+      "latest_version": "9.4.2",
+      "updated": "2026-05-29T05:53:10+00:00",
       "size": "1.2 GB",
       "layers": 12,
       "stars": 0,
@@ -90,6 +90,16 @@
         "ARM64"
       ],
       "versions": [
+        {
+          "version": "9.4.2",
+          "digest": "sha256:f5c2b9ae3fcc6bf976db587e47f1aaec66640cbf997a33fdd3a8ebc2fd287d47",
+          "created_at": "2026-05-29T05:53:10+00:00",
+          "synced_at": "2026-05-29T05:53:10+00:00",
+          "target": "ghcr.io/freemankevin/library/elasticsearch:9.4.2",
+          "source": "docker.io/library/elasticsearch:9.4.2",
+          "size": "1.2 GB",
+          "layers": 12
+        },
         {
           "version": "9.4.1",
           "digest": "sha256:43b9eb68c147dd82aa0933812103631135aa95d283e46cf6d86f4c5c959ee3b7",
@@ -253,7 +263,7 @@
       "official": true,
       "total_versions": 3,
       "latest_version": "4.3.1-management-alpine",
-      "updated": "2026-05-28T05:52:02+00:00",
+      "updated": "2026-05-29T05:53:09+00:00",
       "size": "215 MB",
       "layers": 9,
       "stars": 0,
@@ -264,9 +274,9 @@
       "versions": [
         {
           "version": "4.3.1-management-alpine",
-          "digest": "sha256:80f86b5b469c84a3a3054568f1ea25f016ab16ad981113a8d2b6fb91b602a4bc",
-          "created_at": "2026-05-28T05:52:02+00:00",
-          "synced_at": "2026-05-28T05:52:02+00:00",
+          "digest": "sha256:eb70bd64440624f8a7b93f619d28900865330996a3204aec97852bbe4bb77573",
+          "created_at": "2026-05-29T05:53:09+00:00",
+          "synced_at": "2026-05-29T05:53:09+00:00",
           "target": "ghcr.io/freemankevin/library/rabbitmq:4.3.1-management-alpine",
           "source": "docker.io/library/rabbitmq:4.3.1-management-alpine",
           "size": "215 MB",
@@ -301,7 +311,7 @@
       "official": true,
       "total_versions": 3,
       "latest_version": "8.8.0",
-      "updated": "2026-05-27T05:56:13+00:00",
+      "updated": "2026-05-29T05:53:09+00:00",
       "size": "138 MB",
       "layers": 6,
       "stars": 0,
@@ -312,9 +322,9 @@
       "versions": [
         {
           "version": "8.8.0",
-          "digest": "sha256:25e102bdf0bd1ea1f5840ce8873275ba12dc544740a1c9bda9fc71001f5c7190",
-          "created_at": "2026-05-27T05:56:13+00:00",
-          "synced_at": "2026-05-27T05:56:13+00:00",
+          "digest": "sha256:aa049e689e141a4358ad1d4562dc49c88a89fbab711fd8fcc33f684c80b26301",
+          "created_at": "2026-05-29T05:53:09+00:00",
+          "synced_at": "2026-05-29T05:53:09+00:00",
           "target": "ghcr.io/freemankevin/library/redis:8.8.0",
           "source": "docker.io/library/redis:8.8.0",
           "size": "138 MB",
@@ -347,9 +357,9 @@
       "description": "Open-source geospatial data server",
       "repository": "kartoza/geoserver",
       "official": true,
-      "total_versions": 2,
-      "latest_version": "2.28.3",
-      "updated": "2026-04-23T01:37:53+00:00",
+      "total_versions": 3,
+      "latest_version": "2.28.4",
+      "updated": "2026-05-29T05:53:39+00:00",
       "size": "1.8 GB",
       "layers": 15,
       "stars": 0,
@@ -358,6 +368,16 @@
         "ARM64"
       ],
       "versions": [
+        {
+          "version": "2.28.4",
+          "digest": "sha256:585449a68486a01fe670e2a80c7dd4f436f439fde766efd81bb25bde6b22e783",
+          "created_at": "2026-05-29T05:53:39+00:00",
+          "synced_at": "2026-05-29T05:53:39+00:00",
+          "target": "ghcr.io/freemankevin/kartoza/geoserver:2.28.4",
+          "source": "docker.io/kartoza/geoserver:2.28.4",
+          "size": "1.8 GB",
+          "layers": 15
+        },
         {
           "version": "2.28.3",
           "digest": "sha256:023476b4c153f9c94d0f8596ac28ad5eea1aac81fc76d7985002d58c0d48c3b3",
@@ -664,9 +684,9 @@
       "description": "MinIO AIStor - High-performance object storage for AI workloads",
       "repository": "aistor/minio",
       "official": true,
-      "total_versions": 1,
-      "latest_version": "RELEASE.2026-05-04T23-02-27Z",
-      "updated": "2026-05-20T03:24:56+00:00",
+      "total_versions": 2,
+      "latest_version": "RELEASE.2026-05-28T20-50-32Z",
+      "updated": "2026-05-29T05:53:26+00:00",
       "size": "284 MB",
       "layers": 8,
       "stars": 0,
@@ -675,6 +695,16 @@
         "ARM64"
       ],
       "versions": [
+        {
+          "version": "RELEASE.2026-05-28T20-50-32Z",
+          "digest": "sha256:2df8f7422bb8e7a97c3bfc7560b5f44f4ceabaec4a946853e877c9ec17ff7470",
+          "created_at": "2026-05-29T05:53:26+00:00",
+          "synced_at": "2026-05-29T05:53:26+00:00",
+          "target": "ghcr.io/freemankevin/aistor/minio:RELEASE.2026-05-28T20-50-32Z",
+          "source": "quay.io/minio/aistor/minio:RELEASE.2026-05-28T20-50-32Z",
+          "size": "284 MB",
+          "layers": 8
+        },
         {
           "version": "RELEASE.2026-05-04T23-02-27Z",
           "digest": "sha256:9510e5f116c2e507a042f328b77992c651dcdd04ab79e676bb85f13e2aa8363a",
