@@ -12,7 +12,7 @@ images:
     - 17
     - 21
     - 25
-- source: library/elasticsearch:9.4.1
+- source: library/elasticsearch:9.4.2
   enabled: true
   description: Distributed, RESTful search and analytics engine
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
@@ -46,7 +46,7 @@ images:
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
   exclude_pattern: .*bookworm.*|.*bullseye.*|.*alpine.*
   sync_all_matching: false
-- source: kartoza/geoserver:2.28.3
+- source: kartoza/geoserver:2.28.4
   enabled: true
   description: Open-source geospatial data server
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
@@ -116,7 +116,7 @@ images:
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
   exclude_pattern: .*-alpha.*|.*-beta.*|.*-rc.*
   sync_all_matching: false
-- source: quay.io/minio/aistor/minio:RELEASE.2026-05-04T23-02-27Z
+- source: quay.io/minio/aistor/minio:RELEASE.2026-05-28T20-50-32Z
   enabled: true
   repository: aistor/minio
   description: MinIO AIStor - High-performance object storage for AI workloads
@@ -136,4 +136,4 @@ config:
     strategy: max_versions
     max_versions: 3
     cleanup_old_versions: true
-  last_checked: '2026-05-27T05:55:54.973051+00:00'
+  last_checked: '2026-05-29T05:53:00.106938+00:00'
