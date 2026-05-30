@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-05-29T05:53:43.706055+00:00",
+  "updated_at": "2026-05-30T05:29:43.956193+00:00",
   "registry": "ghcr.io",
   "owner": "freemankevin",
   "total_images": 19,
-  "total_versions": 40,
+  "total_versions": 41,
   "total_failed": 0,
   "images": [
     {
@@ -137,9 +137,9 @@
       "description": "Dynamic service discovery, configuration and service management",
       "repository": "nacos/nacos-server",
       "official": true,
-      "total_versions": 2,
-      "latest_version": "v3.2.1",
-      "updated": "2026-04-24T03:25:02+00:00",
+      "total_versions": 3,
+      "latest_version": "v3.2.2",
+      "updated": "2026-05-30T05:29:14+00:00",
       "size": "856 MB",
       "layers": 15,
       "stars": 0,
@@ -148,6 +148,16 @@
         "ARM64"
       ],
       "versions": [
+        {
+          "version": "v3.2.2",
+          "digest": "sha256:d6b3087bc2302c2b49c875e1c5ad8c916fc10696ceb355be56cffd715e178d81",
+          "created_at": "2026-05-30T05:29:14+00:00",
+          "synced_at": "2026-05-30T05:29:14+00:00",
+          "target": "ghcr.io/freemankevin/nacos/nacos-server:v3.2.2",
+          "source": "docker.io/nacos/nacos-server:v3.2.2",
+          "size": "856 MB",
+          "layers": 15
+        },
         {
           "version": "v3.2.1",
           "digest": "sha256:8b9bbcf2367b90b14f9657d1b6e3a0d4d12050f2c722e0d64a97259da7cb9d00",
@@ -359,7 +369,7 @@
       "official": true,
       "total_versions": 3,
       "latest_version": "2.28.4",
-      "updated": "2026-05-29T05:53:39+00:00",
+      "updated": "2026-05-30T05:29:40+00:00",
       "size": "1.8 GB",
       "layers": 15,
       "stars": 0,
@@ -370,9 +380,9 @@
       "versions": [
         {
           "version": "2.28.4",
-          "digest": "sha256:585449a68486a01fe670e2a80c7dd4f436f439fde766efd81bb25bde6b22e783",
-          "created_at": "2026-05-29T05:53:39+00:00",
-          "synced_at": "2026-05-29T05:53:39+00:00",
+          "digest": "sha256:e6d687391578cc704dd88e62d917b264c26abe13232e170961eec70a04788918",
+          "created_at": "2026-05-30T05:29:40+00:00",
+          "synced_at": "2026-05-30T05:29:40+00:00",
           "target": "ghcr.io/freemankevin/kartoza/geoserver:2.28.4",
           "source": "docker.io/kartoza/geoserver:2.28.4",
           "size": "1.8 GB",
