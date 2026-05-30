@@ -17,7 +17,7 @@ images:
   description: Distributed, RESTful search and analytics engine
   tag_pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
   sync_all_matching: false
-- source: nacos/nacos-server:v3.2.1
+- source: nacos/nacos-server:v3.2.2
   enabled: true
   description: Dynamic service discovery, configuration and service management
   tag_pattern: ^v[0-9]+\.[0-9]+\.[0-9]+$
@@ -136,4 +136,4 @@ config:
     strategy: max_versions
     max_versions: 3
     cleanup_old_versions: true
-  last_checked: '2026-05-29T05:53:00.106938+00:00'
+  last_checked: '2026-05-30T05:29:00.625975+00:00'
